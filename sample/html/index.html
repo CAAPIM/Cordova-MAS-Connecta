@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css"/>
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <meta charset="utf-8">
+    <!-- iPad/iPhone specific css below, add after your main css >
+       <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
+       <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
+       -->
+    <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-core/www/MASPlugin.js"></script>
+    <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-identitymanagement/www/MASIdentityManagementPlugin.js"></script>
+    <script type="text/javascript">
+         // If you want to prevent dragging, uncomment this section
+         /*
+                    function preventBehavior(e)
+                    {
+                    e.preventDefault();
+                    };
+                    document.addEventListener("touchmove", preventBehavior, false);
+                    */
+         /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+                see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+                for more details -jm */
+         /*
+                function handleOpenURL(url)
+                {
+                // TODO: do something with the url passed in.
+                }
+                */
+         function onBodyLoad()
+         {
+           document.addEventListener("deviceready", onDeviceReady, false);
+         }
+         function onDeviceReady() {
+           var MAS = new MASPlugin.MAS();
+           MAS.initialize(function(result){
+             var MASObj = new MASPlugin.MAS();
+             MASObj.start(function(result){
+             }
+                          ,
+                          function (error){
+             }
+                         );
+           }
+                          ,function (error){
+             alert("Initialization failure");
+           }
+                         );
+         }
+      </script>
+    <script type="text/javascript">
+         $(document).ready(function(){
+           $("#init").bind("click",function(event,ui){
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             MAS.initialize(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                            ,function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                           );
+           }
+                          );
+           $("#setGrantFlowPassword").bind("click",function(event,ui){
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             MAS.grantFlow(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                           ,
+                           function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                           , MASPlugin.MASGrantFlow.MASGrantFlowPassword);
+           }
+                                          );
+           $("#setGrantFlowClientCredential").bind("click",function(event,ui){
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             MAS.grantFlow(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                           ,
+                           function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                           , MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
+           }
+                                                  );
+           $("#setConfigName").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             var configFileName = $("input[name='configName']").val();
+             MAS.configFileName(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                ,
+                                function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                , configFileName);
+           }
+                                   );
+           $("#start").bind("click",function(event,ui){
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             MAS.start(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                       ,
+                       function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                      );
+           }
+                           );
+           $("#startWithDefault").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             var defaultConfiguration = $("input[name='defaultConfiguration']").prop("checked");
+             MAS.startWithDefaultConfiguration(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                               ,
+                                               function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                               , defaultConfiguration);
+           }
+                                      );
+           $("#startWithJSON").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             var jsonObject = thisElement.find("input[name='jsonObject']").val() ? JSON.parse(thisElement.find("input[name='jsonObject']").val()) : null;
+             MAS.startWithJSON(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                               ,
+                               function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                               , jsonObject);
+           }
+                                   );
+           $("#stop").bind("click",function(event,ui){
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MAS = new MASPlugin.MAS();
+             MAS.stop(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                      ,
+                      function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                      , MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
+           }
+                          );
+           $("#userLogin").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASPlugin.MASUser();
+             var username = $("input[name='userLoginUsername']").val();
+             var password = $("input[name='userLoginPassword']").val();
+             MASUser.loginWithUsernameAndPassword(function(result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                                  ,
+                                                  function(error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                                  ,username, password);
+           }
+                               );
+           $("#isUserAuthenticated").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASPlugin.MASUser();
+             MASUser.isAuthenticated(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                     ,
+                                     function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                    );
+           }
+                                         );
+           $("#isDeviceRegistered").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASDevice = new MASPlugin.MASDevice();
+             MASDevice.isDeviceRegistered(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                          ,
+                                          function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                         );
+           }
+                                        );
+           $("#userLogout").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASPlugin.MASUser();
+             MASUser.logoutUser(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                ,
+                                function (error){
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                               );
+           }
+                                );
+           $("#deregisterDevice").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASDevice = new MASPlugin.MASDevice();
+             MASDevice.deregister(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             }
+                                  ,
+                                  function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             }
+                                 );
+           }
+                                      );
+           $("#resetLocally").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASDevice = new MASPlugin.MASDevice();
+             MASDevice.resetLocally(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             });
+           });
+
+           $("#getGroupById").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupId = $("input[name='groupId']").val();
+             MASGroup.getGroupByGroupId(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupId);
+           });
+
+           $("#getGroupsByFilter").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupFilter = $("input[name='groupFilter']").val();
+             MASGroup.getGroupsByFilter(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupFilter);
+           });
+
+           $("#createGroup").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupName = $("input[name='groupName']").val();
+             MASGroup.createGroup(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupName);
+           });
+
+           $("#updateGroup").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupJSON = $("input[name='groupJSON']").val();
+             MASGroup.updateGroup(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupJSON);
+           });
+
+           $("#deleteGroup").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupJSON = $("input[name='groupJSON']").val();
+             MASGroup.deleteGroup(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupJSON);
+           });
+
+           $("#addMemberToGroup").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupJSON = $("input[name='groupJSON']").val();
+             var arrayOfUsers = $("input[name='arrayOfUsers']").val();
+             MASGroup.addMemberToGroup(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupJSON, arrayOfUsers);
+           });
+
+           $("#removeMemberFromGroup").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASGroup = new MASIdentityManagementPlugin.MASGroup();
+             var groupJSON = $("input[name='groupJSON']").val();
+             var arrayOfUsers = $("input[name='arrayOfUsers']").val();
+             MASGroup.removeMemberFromGroup(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },groupJSON, arrayOfUsers);
+           });
+
+           $("#getUserById").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASIdentityManagementPlugin.MASUser();
+             var objectId = $("input[name='objectId']").val();
+             MASUser.getUserByObjectId(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },objectId);
+           });
+
+           $("#getUsersByFilter").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASIdentityManagementPlugin.MASUser();
+             var filterJSON = $("input[name='filterJSON']").val();
+             MASUser.getGroupsByFilter(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             },filterJSON);
+           });
+
+           $("#getThumbnailImage").bind("click",function(event,ui){
+             if($(event.target).context.tagName != 'A') return;
+             $(this).find("textarea.error").hide();
+             var thisElement = $(this);
+             var MASUser = new MASIdentityManagementPlugin.MASUser();
+             MASUser.getThumbnailImage(function (result){
+               thisElement.removeClass("succes").removeClass("failure").addClass("success");
+               displayResult(thisElement, result);
+             },function (error) {
+               thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+               displayError(thisElement, error);
+             });
+           });
+
+           function parseRequestResponseType(type)
+           {
+             if (type == "json")
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeJson;
+             }
+             else if (type == "scimJSON")
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeScimJson;
+             }
+             else if (type == "text")
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeTextPlain;
+             }
+             else if (type == "urlEncoded")
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeWwwFormUrlEncoded;
+             }
+             else if (type == "xml")
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeXml;
+             }
+             else
+             {
+               return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
+             }
+           }
+           function resetAction(element)
+           {
+             element.find("textarea.error").hide();
+             element.removeClass("succes").removeClass("failure");
+           }
+           function displayResult(element, result)
+           {
+             var isJSON = true;
+             try
+             {
+               var json = $.parseJSON(result);
+             }
+             catch(err)
+             {
+               isJSON = false;
+             }
+             if (isJSON)
+             {
+               element.find("textarea.error").show();
+               element.find("textarea.error").html(JSON.stringify(result));
+             }
+             else {
+               element.find("textarea.error").show();
+               element.find("textarea.error").html(result+"");
+             }
+           }
+           function displayError(element, error)
+           {
+             element.find("textarea.error").show();
+             element.find("textarea.error").html(error.errorMessage);
+           }
+         }
+                          );
+      </script>
+    <script type="text/javascript">
+         function getErrorMessage(error){
+           var errorMsgToDisplay="";
+           if(error != null && error!=undefined && error != ""){
+             if(error.errorCode != null && error.errorCode != undefined && !isNaN(error.errorCode)){
+               var errorCodeLastDigits = error.errorCode % 1000;
+               if(errorCodeLastDigits === 140){
+                 errorMsgToDisplay="X-OTP header required";
+               }
+               else if(errorCodeLastDigits === 142){
+                 errorMsgToDisplay="Authentication failed due to an invalid OTP.";
+               }
+               else if(errorCodeLastDigits === 143){
+                 errorMsgToDisplay="The OTP has expired.";
+               }
+               else if(errorCodeLastDigits === 144){
+                 errorMsgToDisplay="You have exceeded the maximum number of invalid attempts.  Please try after some time.";
+               }
+               else if(errorCodeLastDigits === 145){
+                 errorMsgToDisplay="Your account is blocked. Try after some time.";
+               }
+             }
+           }
+           return errorMsgToDisplay;
+         }
+      </script>
+    <style type="text/css">
+         .success {
+         background-color: chartreuse;
+         color: #898989;
+         }
+         .failure {
+         background-color: chocolate;
+         color: #FFFFFF;
+         }
+         .ui-loader-background {
+         width:100%;
+         height:100%;
+         top:0;
+         padding: 0;
+         margin: 0;
+         background: rgba(0, 0, 0, 0.3);
+         display:none;
+         position: fixed;
+         z-index:100;
+         }
+         .ui-loading .ui-loader-background {
+         display:block;
+         }
+      </style>
+</head>
+<body onload="onBodyLoad();">
+<div data-role="page">
+    <div style="margin-top:20px" data-theme="b" data-role="header">
+        <h1>Demo App
+        </h1>
+    </div>
+    <!-- /header -->
+    <div data-role="content">
+        <div align="center">
+            <img src="img/logo.png" alt="Layer7 Logo" width="86" height="72">
+        </div>
+        <ul data-role="listview" data-inset="true" data-filter="false" id="actionsListView">
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>MAS Lifecycle
+                </h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="init">MAS Init
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false" >
+                        <a href="#" id="setGrantFlowPassword" >MAS GrantFlow: password
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="setConfigName">MAS set configuration file name
+                            <input type="text" name="configName" placeholder="configName"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="start">MAS start
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="startWithDefault">MAS start with default configuration
+                            <label>
+                                <input type="checkbox" name="defaultConfiguration" checked>Default
+                            </label>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="startWithJSON">MAS start with JSON
+                            <input type="text" name="jsonObject" placeholder="JSON object in text"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="stop">MAS stop
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="userLogin">MASUser login with username and password
+                            <input type="text" name="userLoginUsername" placeholder="username"/>
+                            <input type="text" name="userLoginPassword" placeholder="password"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="isUserAuthenticated">MASUser isAuthenticated
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="userLogout">MASUser logout
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="deregisterDevice">MASDevice deregister
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="resetLocally">MASDevice resetLocally
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>Identity Management
+                </h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="getGroupById">MASGroup getGroupById
+                            <input type="text" name="groupId" value="" placeholder="Group Id"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="getGroupsByFilter">MASGroup getGroupsByFilter
+                            <input type="text" name="groupFilter" value="" placeholder="Group Filter"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="createGroup">MASGroup createGroup
+                            <input type="text" name="groupName" value="" placeholder="Group Name"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="updateGroup">MASGroup updateGroup
+                            <input type="text" name="groupJSON" value="" placeholder="Group JSON"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="deleteGroup">MASGroup deleteGroup
+                            <input type="text" name="groupJSON" value="" placeholder="Group JSON"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="addMemberToGroup">MASGroup addMemberToGroup
+                            <input type="text" name="groupJSON" value="" placeholder="Group JSON"/>
+                            <input type="text" name="arrayOfUsers" value="" placeholder="Array of Users"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="removeMemberFromGroup">MASGroup removeMemberFromGroup
+                            <input type="text" name="groupJSON" value="" placeholder="Group JSON"/>
+                            <input type="text" name="arrayOfUsers" value="" placeholder="Array of Users"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="getUserById">MASUser getUserById
+                            <input type="text" name="objectId" value="" placeholder="Object Id"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="getUsersByFilter">MASUser getUsersByFilter
+                            <input type="text" name="filterJSON" value="" placeholder="Filter JSON"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="getThumbnailImage">MASUser getThumbnailImage
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- /content -->
+</div>
+<!-- /page -->
+</body>
+</html>
