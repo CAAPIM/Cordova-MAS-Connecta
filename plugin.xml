@@ -21,6 +21,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 	<js-module src="www/MASConnectaUtil.js" name="MASConnectaUtil">
         <clobbers target="MASConnectaUtil" />
     </js-module>
+	<js-module src="www/MASConnectOptions.js" name="MASConnectOptions">
+        <clobbers target="MASConnectOptions" />
+    </js-module>
    
     <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/MAS-Foundation-Cordova.git" commit="develop" />
     

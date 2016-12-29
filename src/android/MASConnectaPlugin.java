@@ -108,6 +108,9 @@ public class MASConnectaPlugin extends CordovaPlugin {
                 }
             };
             this.cordova.getActivity().getApplicationContext().registerReceiver(receiver, intentFilter);
+            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+            result.setKeepCallback(true);
+            callbackContext.sendPluginResult(result);
         } catch (Exception ex) {
             Log.w(TAG, "initMessageReceiver exception: " + ex);
             callbackContext.error("Unable to initialize:" + ex.getMessage());

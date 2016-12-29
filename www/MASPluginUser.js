@@ -15,7 +15,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 * @param topicName : The topic on which the user needs to subscribe.
 	 */
-	 MASPluginUser.prototype.startListeningToTopic = function(successHandler, errorHandler, topicName) {
+	 MASPluginUser.startListeningToTopic = function(successHandler, errorHandler, topicName) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "startListeningToTopic", [topicName]);
 	 };
 
@@ -24,7 +24,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 * @param topicName : The topic on which the user needs to unsubscribe.
 	 */
-	 MASPluginUser.prototype.stopListeningToTopic = function(successHandler, errorHandler, topicName) {
+	 MASPluginUser.stopListeningToTopic = function(successHandler, errorHandler, topicName) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "stopListeningToTopic", [topicName]);
 	 };
 
@@ -32,7 +32,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Subscribe (starts Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
 	 *
 	 */
-	 MASPluginUser.prototype.startListeningToMyMessages = function(successHandler, errorHandler) {
+	 MASPluginUser.startListeningToMyMessages = function(successHandler, errorHandler) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "startListeningToMyMessages", []);
 	 };
 
@@ -40,7 +40,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Unsubscribe (stop Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
 	 *
 	 */
-	 MASPluginUser.prototype.stopListeningToMyMessages = function(successHandler, errorHandler, topicName) {
+	 MASPluginUser.stopListeningToMyMessages = function(successHandler, errorHandler, topicName) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "stopListeningToMyMessages", []);
 	 };
 
@@ -48,10 +48,10 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Send message to a topic
 	 *
 	 * @param topicName : The topic on which the user needs to send the message.
-	 * @param message : The message to be send.
+	 * @param message : The message to be send. The message bytes should be Base64 encoded string, to support sending images also
 	 * @param contentType : The mime type of the message to be send. Choose from MASConnectaContentType.
 	 */
-	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, topicName,message,contentType) {
+	 MASPluginUser.sendMessageToTopic = function(successHandler, errorHandler, topicName,message,contentType) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [topicName,message,contentType]);
 	 };
 
@@ -59,10 +59,10 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Send message to a user
 	 *
 	 * @param userName : The user's name to whom you need to send the message.
-	 * @param message : The message to be send.
+	 * @param message : The message to be send. The message bytes should be Base64 encoded string, to support sending images also
 	 * @param contentType : The mime type of the message to be send. Choose from MASConnectaContentType.
 	 */
-	 MASPluginUser.prototype.sendMessageToUser = function(successHandler, errorHandler, userName,message,contentType) {
+	 MASPluginUser.sendMessageToUser = function(successHandler, errorHandler, userName,message,contentType) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUser", [userName,message,contentType]);
 	 };
 }

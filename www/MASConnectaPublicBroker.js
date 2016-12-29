@@ -46,7 +46,7 @@ var MASConnectaPublicBroker = function(){
 	 * Publish to a topic using the broker connected via connect call.
 	 *
 	 * @param topicName : The topic on which the user needs to send the message.
-	 * @param message : The message to be send.
+	 * @param message : The message to be send. The message bytes should be Base64 encoded string, to support sending images also
 	 * @param contentType : The mime type of the message to be send. Choose from MASConnectaContentType.
 	 */
 	this.publish = function(successHandler,errorHandler,topicName,message,contentType){
