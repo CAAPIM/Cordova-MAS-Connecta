@@ -339,6 +339,7 @@
                // var MASUser = new MASConnectaPlugin.MASUser();
                 var topicName = $("input[name='magSendToTopicName']").val();
                 var message = $("input[name='magSendToTopicMsg']").val();
+                message = btoa(message);
                 var mimeType = thisElement.find("select[name='magSendMsgToTopicMimeType']").val();
 
                 MASPluginUser.sendMessageToTopic(function(result) {
@@ -357,6 +358,7 @@
                // var MASUser = new MASConnectaPlugin.MASUser();
                 var userName = $("input[name='magSendToUser']").val();
                 var message = $("input[name='magSendToUserMsg']").val();
+                message = btoa(message);
                 var mimeType = thisElement.find("select[name='magSendMsgToUserMimeType']").val();
 
                 MASPluginUser.sendMessageToUser(function(result) {
@@ -456,6 +458,7 @@
                 var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
                 var topicName = $("input[name='pubSendToTopicName']").val();
                 var message = $("input[name='pubSendToTopicMsg']").val();
+                message = btoa(message);
                 var mimeType = thisElement.find("select[name='pubSendMsgToTopicMimeType']").val();
 
                 PublicBroker.publish(function(result) {
