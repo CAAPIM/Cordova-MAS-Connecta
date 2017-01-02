@@ -229,6 +229,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
                 @Override
                 public void onError(Throwable throwable) {
+                    throwable.printStackTrace();
                     Log.e(TAG, throwable.getMessage());
                     callbackContext.error(getError(new MASCordovaException("Unable to listen to my messages:" + throwable.getMessage())));
                 }
@@ -251,7 +252,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
                 }
             });
         } else {
-            getCurrentUser().startListeningToMyMessages(new MASCallback<Void>() {
+            getCurrentUser().stopListeningToMyMessages(new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     String message = "Unsubscribed to my messages";
