@@ -45,6 +45,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
             registerReceiver(args, callbackContext);
         } else if (action.equalsIgnoreCase("startListeningToTopic")) {
             startListeningToTopic(args, callbackContext);
+        } else if (action.equalsIgnoreCase("stopListeningToTopic")) {
+            stopListeningToTopic(args, callbackContext);
         } else if (action.equalsIgnoreCase("startListeningToMyMessages")) {
             startListeningToMyMessages(args, callbackContext);
         } else if (action.equalsIgnoreCase("stopListeningToMyMessages")) {
@@ -82,6 +84,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    Log.w(TAG,"Received Intent::"+intent.getAction());
+
                     if (intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
                         try {
                             MASMessage message = MASMessage.newInstance(intent);
@@ -107,7 +111,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
                     }
                 }
             };
-            this.cordova.getActivity().getApplicationContext().registerReceiver(receiver, intentFilter);
+            this.cordova.getActivity().registerReceiver(receiver, intentFilter);
             PluginResult result = new PluginResult(PluginResult.Status.OK, true);
             result.setKeepCallback(true);
             callbackContext.sendPluginResult(result);
