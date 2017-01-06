@@ -1,27 +1,68 @@
-//
-//  MASConnectaPlugin.js
-//
-var MASConnectaPublicBroker = require("./MASConnectaPublicBroker");
-var MASConnectaUtil = require("./MASConnectaUtil");
-var MASConnectOptions = require("./MASConnectOptions");
-var MASPluginUser = require("./MASPluginUser");
+/**
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
+
+var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
+var MASPluginMessage = require("./MASPluginMessage");
+
+var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
+{
+	/**
+	 * Subscribe (starts Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
+	 *
+	 */
+	 MASPluginUser.prototype.startListeningToMyMessages = function(successHandler, errorHandler) {
+	 	
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "startListeningToMyMessages", []);
+	 };
+
+	 /**
+	 * Unsubscribe (stop Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
+	 *
+	 */
+	 MASPluginUser.prototype.stopListeningToMyMessages = function(successHandler, errorHandler) {
+	 	
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "stopListeningToMyMessages", []);
+	 };
+
+	/**
+	 * Send message to a user
+	 *
+	 * @param message : The message to be sent (String / MASPluginMessage).
+	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
+	 */
+	 MASPluginUser.prototype.sendMessageToUser = function(successHandler, errorHandler, message, userObjectId) {
+	 	
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUser", [message, userObjectId]);
+	 };
+
+	/**
+	 * Send message to a user on a topic
+	 *
+	 * @param message : The message to be sent (String / MASPluginMessage).
+	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
+	 * @param topicName : The topic on which the user needs to send the message.	 
+	 */
+	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, message, userObjectId , topicName) {
+	 	
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, userObjectId, topicName]);
+	 };	
+}
 
 var MASConnectaPlugin = {
 
-		 MASConnectaUtil : MASConnectaUtil,
-		/**
-		 MASUser which has the interfaces mapped to the native MASUser class.
-		 */
-		 MASUser : MASPluginUser,
-		/**
-		 MASPublicBroker which can be used to subscribe and publish to any public broker.
-		 */
-		 MASPublicBroker : MASConnectaPublicBroker,
+	MASConnetaConstants: MASConnectaPluginConstants,
 
-		/**
-		 MASConnectaOptions which specifies MQTT options to connect to a public broker.
-		 */
-		 MASConnectOptions : MASConnectOptions
+	MASMessage: MASPluginMessage,
+
+	/**
+	 MASUser which has the interfaces mapped to the native MASConneta extenstion for MASUser class.
+	 */
+	 MASUser: MASPluginUser
 };
 
 module.exports = MASConnectaPlugin;
