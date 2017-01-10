@@ -6,8 +6,21 @@
  */
 
 
+/*
+ * Pub/Sub Architecture with MQTTClient implementation.
+ */
+var MASMQTTClient = require("./MASMQTTClient"); 
+
+var MASMQTTMessage = require("./MASMQTTMessage");
+
+var MASMQTTConstants = require("./MASMQTTConstants");
+
+/*
+ * MASUser Messaging architecture.
+ */
 var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
-var MASPluginMessage = require("./MASPluginMessage");
+
+var MASConnectaPluginMessage = require("./MASConnectaPluginMessage");
 
 var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 {
@@ -55,9 +68,15 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 
 var MASConnectaPlugin = {
 
+	MASMQTTClient: MASPluginMQTTClient,
+
+	MASMQTTMessage: MASPluginMQTTMessage,
+
+	MASMQTTConstants: MASPluginMQTTConstants,
+
 	MASConnetaConstants: MASConnectaPluginConstants,
 
-	MASMessage: MASPluginMessage,
+	MASConnectaMessage: MASConnectaPluginMessage,
 
 	/**
 	 MASUser which has the interfaces mapped to the native MASConneta extenstion for MASUser class.

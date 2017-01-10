@@ -8,7 +8,7 @@
 var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
 
 
-var MASPluginMessage = function() {
+var MASConnectaPluginMessage = function() {
 
 	/**
  	 * The version of the message format.
@@ -127,4 +127,4 @@ var MASPluginMessage = function() {
 	};
 };
 
-module.exports = MASPluginMessage;
+module.exports = MASConnectaPluginMessage;
