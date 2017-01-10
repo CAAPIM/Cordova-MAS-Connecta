@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ca.mas.connecta.client.MASConnectOptions;
 import com.ca.mas.connecta.client.MASConnectaManager;
@@ -80,8 +82,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
         try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
-
-            BroadcastReceiver receiver = new BroadcastReceiver() {
+            LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.w(TAG,"Received Intent::"+intent.getAction());

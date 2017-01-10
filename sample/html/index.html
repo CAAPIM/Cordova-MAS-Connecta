@@ -369,6 +369,25 @@
                     displayError(thisElement, error);
                 }, userName, message, mimeType);
             });
+            $("#registerReceiver").bind("click", function(event, ui) {
+
+
+
+                var thisElement = $(this);
+                var util = new MASConnectaPlugin.MASConnectaUtil();
+                    util.registerReceiver(function(success) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                        console.log("Listener registered!!!:" + JSON.stringify(success));
+                    }, function(error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                        console.log("IListener register failed!!!:" + JSON.stringify(error));
+                    });
+
+
+
+            });
 
             $("#connectBroker").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
@@ -764,6 +783,15 @@
                                 <option value="application/octet-stream">Binary Data</option-->
                             </select>
                             <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message"/>
+                        <textarea class='error' style="display:none;" readonly="">
+                        </textarea>
+                        </a>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="registerReceiver">Register Receiver
+
+
+
                         <textarea class='error' style="display:none;" readonly="">
                         </textarea>
                         </a>
