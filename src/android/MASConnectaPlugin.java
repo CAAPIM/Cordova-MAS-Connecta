@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ca.mas.connecta.client.MASConnectOptions;
 import com.ca.mas.connecta.client.MASConnectaManager;
@@ -80,12 +82,54 @@ public class MASConnectaPlugin extends CordovaPlugin {
         try {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
-
-            BroadcastReceiver receiver = new BroadcastReceiver() {
+            LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     Log.w(TAG,"Received Intent::"+intent.getAction());
+                    if (!intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
+                        return;
+                    }
 
+                    /*try {
+                        MASMessage message = MASMessage.newInstance(intent);
+                        Toast.makeText(context, new String(message.getPayload()), Toast.LENGTH_LONG).show();
+                        //messagesFragment.onMessageReceived(message);
+                    } catch (MASException e) {
+                        Log.d(TAG, e.getMessage());
+                    }*/
+
+
+
+                    try {
+                        MASMessage message = MASMessage.newInstance(intent);
+                        final String senderId = message.getSenderId();
+                        final String contentType = message.getContentType();
+                        if (contentType.startsWith("image")) {
+                            byte[] msg = message.getPayload();
+                            Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
+                        } else {
+                            byte[] msg = message.getPayload();
+                            final String m = new String(Base64.decode(msg, Base64.NO_WRAP));
+                            Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
+                        }
+                        JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
+                        PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
+                        result.setKeepCallback(true);
+                        _messageReceiverCallback.sendPluginResult(result);
+                    } catch (JSONException jce) {
+                        Log.w(TAG, "message parse exception: " + jce);
+                    } catch (MASException me) {
+                        Log.w(TAG, "message receiver exception: " + me);
+                    }
+                }
+            }, intentFilter);
+
+/*
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
+           BroadcastReceiver receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
                     if (intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
                         try {
                             MASMessage message = MASMessage.newInstance(intent);
@@ -111,7 +155,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
                     }
                 }
             };
-            this.cordova.getActivity().registerReceiver(receiver, intentFilter);
+            this.cordova.getActivity().getApplicationContext().registerReceiver(receiver, intentFilter);
+*/
             PluginResult result = new PluginResult(PluginResult.Status.OK, true);
             result.setKeepCallback(true);
             callbackContext.sendPluginResult(result);
