@@ -49,7 +49,11 @@
                     var util = new MASConnectaPlugin.MASConnectaUtil();
                     util.registerReceiver(function (success) {
                         console.log("Listener registered!!!:" + JSON.stringify(success));
-                    }, function (error) {
+                        var title = "Message Received";
+                        var buttonName = "Close";
+                        if (null != success.Payload)
+                            navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
+                    }, function(error) {
                         console.log("IListener register failed!!!:" + JSON.stringify(error));
                     });
                 }, function (error) {
