@@ -9,6 +9,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <license>CA Technologies Ltd.</license>
     <keywords>cordova, MASConnecta, CA Technologies</keywords>
 
+    <!--- MAS-Connecta -->
     <js-module src="www/MASConnectaPlugin.js" name="MASConnectaPlugin">
         <clobbers target="MASConnectaPlugin" />
     </js-module>
@@ -18,27 +19,17 @@ xmlns:android="http://schemas.android.com/apk/res/android"
     <js-module src="www/MASConnectaPluginMessage.js" name="MASConnectaPluginMessage">
         <clobbers target="MASConnectaPluginMessage" />
     </js-module>
-    <js-module src="www/MASMQTTClient.js" name="MASMQTTClient">
-        <clobbers target="MASMQTTClient" />
+
+    <!-- Pub/Sub -->
+    <js-module src="www/MASPluginMQTTClient.js" name="MASPluginMQTTClient">
+        <clobbers target="MASPluginMQTTClient" />
     </js-module>
-    <js-module src="www/MASMQTTConstants.js" name="MASMQTTConstants">
-        <clobbers target="MASMQTTConstants" />
+    <js-module src="www/MASPluginMQTTConstants.js" name="MASPluginMQTTConstants">
+        <clobbers target="MASPluginMQTTConstants" />
     </js-module>
-    <js-module src="www/MASMQTTMessage.js" name="MASMQTTMessage">
-        <clobbers target="MASMQTTMessage" />
+    <js-module src="www/MASPluginMQTTMessage.js" name="MASPluginMQTTMessage">
+        <clobbers target="MASPluginMQTTMessage" />
     </js-module>
-<!--	<js-module src="www/MASPluginUser.js" name="MASPluginUser">-->
-<!--        <clobbers target="MASPluginUser" />-->
-<!--    </js-module>-->
-<!--	<js-module src="www/MASConnectaPublicBroker.js" name="MASConnectaPublicBroker">-->
-<!--        <clobbers target="MASConnectaPublicBroker" />-->
-<!--    </js-module>-->
-<!--	<js-module src="www/MASConnectaUtil.js" name="MASConnectaUtil">-->
-<!--        <clobbers target="MASConnectaUtil" />-->
-<!--    </js-module>-->
-<!--	<js-module src="www/MASConnectOptions.js" name="MASConnectOptions">-->
-<!--        <clobbers target="MASConnectOptions" />-->
-<!--    </js-module>-->
    
     <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/MAS-Foundation-Cordova.git" commit="develop" />
     
@@ -54,6 +45,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         
         <header-file src="src/ios/MASConnectaPlugin.h" />
         <source-file src="src/ios/MASConnectaPlugin.m" />
+        <header-file src="src/ios/MASPluginMQTTClient.h" />
+        <source-file src="src/ios/MASPluginMQTTClient.m" />
+
     </platform>
 
     <!-- Android -->

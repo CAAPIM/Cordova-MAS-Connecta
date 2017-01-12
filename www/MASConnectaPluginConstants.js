@@ -6,7 +6,7 @@
  */
 
 
-var MASConnectaPluginConstants {
+var MASConnectaPluginConstants = {
 
 	/**
  	 * Message Sender Type

@@ -6,7 +6,7 @@
  */
 
 
- var MASMQTTConstants = function(host, port, enableTLS, sslCACert) {
+ var MASPluginMQTTConstants = function(host, port, enableTLS, sslCACert) {
 
  	this.host = host ? host : "";
 
@@ -66,4 +66,4 @@
  	};
  };
 
- module.exports = MASMQTTConstants;
+ module.exports = MASPluginMQTTConstants;

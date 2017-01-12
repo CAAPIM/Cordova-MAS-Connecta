@@ -19,7 +19,7 @@
 
 @end
 
-@implementation MASConnecta
+@implementation MASConnectaPlugin
 
 - (void)sendMessageToUser:(CDVInvokedUrlCommand *)command
 {
