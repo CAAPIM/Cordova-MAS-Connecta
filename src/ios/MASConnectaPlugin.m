@@ -11,141 +11,177 @@
 
 #import "MASConnectaPlugin.h"
 
-#import <MASFoundation/MASFoundation.h>
 #import <MASConnecta/MASConnecta.h>
 #import <MASIdentityManagement/MASIdentityManagement.h>
 
-@interface MASConnectaPlugin (Private)
-
-@end
 
 @implementation MASConnectaPlugin
+
+
+- (void)startListeningToMyMessages:(CDVInvokedUrlCommand *)command
+{
+    __block CDVPluginResult *result;
+    
+    [[MASUser currentUser] startListeningToMyMessages:
+     ^(BOOL success, NSError *error) {
+        
+         if(success && !error) {
+            
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                        messageAsString:@"Started listening to topics"];
+        }
+        else {
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsString:@"Could not start service"];
+        }
+        
+         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
+
+- (void)stopListeningToMyMessages:(CDVInvokedUrlCommand *)command
+{
+    __block CDVPluginResult *result;
+    
+    [[MASUser currentUser] stopListeningToMyMessages:
+     ^(BOOL success, NSError *error){
+        
+         if(success && !error) {
+             
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:@"Stopped listening to messages"];
+        }
+        else {
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                       messageAsString:@"Could not stop service"];
+        }
+         
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }];
+}
+
 
 - (void)sendMessageToUser:(CDVInvokedUrlCommand *)command
 {
     __block CDVPluginResult *result;
     
-    
-    NSDictionary *userDictionary = nil;
-    if (command.arguments.count>0) {
-        userDictionary = [command.arguments objectAtIndex:0];
-    }
-    NSString *sendToUserName = [userDictionary objectForKey:@"userName"];
-    
-    NSObject *messageObject = nil;
-    if (command.arguments.count>1) {
-        messageObject = [command.arguments objectAtIndex:1];
-    }
-    
-    NSString *mimeType = nil;
-    if (command.arguments.count>2) {
-        mimeType = [command.arguments objectAtIndex:2];
-    }
-    
-    MASMessage *message = nil;
-    MASUser *user = [MASUser currentUser];
-    if([mimeType isEqualToString:@"text/plain"]){
-        message = [message initWithPayloadString:(NSString*)messageObject contentType:@"text/plain"];
-
-    }
-    else if([mimeType isEqualToString:@"application/json"]) {
-        message = [message initWithPayloadData:(NSData*)messageObject contentType:@"application/json"];
+    if ([command.arguments count] > 1) {
+        
+        NSObject *message = [command.arguments objectAtIndex:0];
+        
+        NSString *userObjectId = [command.arguments objectAtIndex:1];
+        
+        [MASUser getUserByObjectId:userObjectId
+                        completion:
+         ^(MASUser * _Nullable user, NSError * _Nullable error) {
+         
+             if (user && !error) {
+                 
+                 [user sendMessage:message toUser:user
+                        completion:
+                  ^(BOOL success, NSError * _Nullable error) {
+                      
+                      if (success && !error) {
+                          
+                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+                      }
+                      else {
+                          
+                          NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                      @"errorMessage":[error localizedDescription]};
+                          
+                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                 messageAsDictionary:errorInfo];
+                      }
+                      
+                      [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                 }];
+             }
+             else {
+              
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsDictionary:errorInfo];
+                 
+                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+        }];
     }
     else {
-        message = [message initWithPayloadString:@"" contentType:@"text/plain"];
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"Invalid arguments list"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
-    
-    
-    [MASUser getUserByObjectId:sendToUserName completion:^(MASUser *sendToUser, NSError *error){
-        [user sendMessage:message toUser:sendToUser completion:^(BOOL success, NSError *error){
-            if(error) {
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Could not send message"];
-            }
-            else {
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Message Sent"];
-            }
-            
-            return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-        }];
-    }];
 }
 
 - (void)sendMessageToUserOnTopicCompletion:(CDVInvokedUrlCommand *)command
 {
     __block CDVPluginResult *result;
     
-    
-    NSString *topicName = nil;
-    if (command.arguments.count>0) {
-        topicName = [command.arguments objectAtIndex:0];
-    }
-    NSString *sendToUserName = [MASUser currentUser];
-    
-    NSObject *messageObject = nil;
-    if (command.arguments.count>1) {
-        messageObject = [command.arguments objectAtIndex:1];
-    }
-    
-    NSString *mimeType = nil;
-    if (command.arguments.count>2) {
-        mimeType = [command.arguments objectAtIndex:2];
-    }
-    
-    MASMessage *message = nil;
-    MASUser *user = [MASUser currentUser];
-    if([mimeType isEqualToString:@"text/plain"]){
-        message = [message initWithPayloadString:(NSString*)messageObject contentType:@"text/plain"];
-
-    }
-    else if([mimeType isEqualToString:@"application/json"]) {
-        message = [message initWithPayloadData:(NSData*)messageObject contentType:@"application/json"];
+    if ([command.arguments count] > 2) {
+        
+        NSObject *message = [command.arguments objectAtIndex:0];
+        
+        NSString *userObjectId = [command.arguments objectAtIndex:1];
+        
+        NSString *topicName = [command.arguments objectAtIndex:2];
+        
+        [MASUser getUserByObjectId:userObjectId
+                        completion:
+         ^(MASUser * _Nullable user, NSError * _Nullable error) {
+             
+             if (user && !error) {
+                 
+                 [user sendMessage:message toUser:user onTopic:topicName
+                        completion:
+                  ^(BOOL success, NSError * _Nullable error) {
+                      
+                      if (success && !error) {
+                          
+                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+                      }
+                      else {
+                          
+                          NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                                      @"errorMessage":[error localizedDescription]};
+                          
+                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                 messageAsDictionary:errorInfo];
+                      }
+                      
+                      [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                  }];
+             }
+             else {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsDictionary:errorInfo];
+                 
+                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+             }
+         }];
     }
     else {
-        message = [message initWithPayloadString:@"" contentType:@"text/plain"];
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"Invalid arguments list"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
-    
-    
-    [user sendMessage:message toUser:sendToUserName onTopic:topicName completion:^(BOOL success, NSError *error){
-        if(error) {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Could not send message"];
-        }
-        else {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Message Sent"];
-        }
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
-}
-
-- (void)startListeningToMyMessages:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    MASUser *currentUser = [MASUser currentUser];
-    
-    [currentUser startListeningToMyMessages:^(BOOL success, NSError *error){
-        if(error) {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Could not start service"];
-        }
-        else {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Started listening to topics"];
-        }
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
-}
-
-- (void)stopListeningToMyMessages:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    MASUser *currentUser = [MASUser currentUser];
-    
-    [currentUser stopListeningToMyMessages:^(BOOL success, NSError *error){
-        if(error) {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Could not stop service"];
-        }
-        else {
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Stopped listening to messages"];
-        }
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
 }
 
 

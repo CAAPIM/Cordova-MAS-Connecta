@@ -319,9 +319,9 @@
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                //var MASUser = new MASConnectaPlugin.MASUser();
+                var MASUser = new MASConnectaPlugin.MASUser();
 
-                MASPluginUser.startListeningToMyMessages(function (result) {
+                MASUser.startListeningToMyMessages(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {
@@ -334,9 +334,9 @@
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                // var MASUser = new MASConnectaPlugin.MASUser();
+                var MASUser = new MASConnectaPlugin.MASUser();
 
-                MASPluginUser.stopListeningToMyMessages(function (result) {
+                MASUser.stopListeningToMyMessages(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {

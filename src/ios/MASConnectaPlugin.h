@@ -13,18 +13,32 @@
 
 
 
-@interface MASConnectaPlugin : CDVPlugin
-
 ///--------------------------------------
 /// @name MASConnectaPlugin
 ///--------------------------------------
 
-- (void)sendMessageToUser:(CDVInvokedUrlCommand*)command;
+@interface MASConnectaPlugin : CDVPlugin
 
-- (void)sendMessageToUserOnTopicCompletion:(CDVInvokedUrlCommand*)command;
+
+
+#pragma mark - Message sending
 
 - (void)startListeningToMyMessages:(CDVInvokedUrlCommand*)command;
 
+
+
 - (void)stopListeningToMyMessages:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Message sending
+
+- (void)sendMessageToUser:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)sendMessageToUserOnTopicCompletion:(CDVInvokedUrlCommand*)command;
+
+
 
 @end
