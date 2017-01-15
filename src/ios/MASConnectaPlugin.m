@@ -32,8 +32,11 @@
         }
         else {
             
+            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                        @"errorMessage":[error localizedDescription]};
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                       messageAsString:@"Could not start service"];
+                                   messageAsDictionary:errorInfo];
         }
         
          return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -55,8 +58,11 @@
         }
         else {
             
+            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                        @"errorMessage":[error localizedDescription]};
+            
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                       messageAsString:@"Could not stop service"];
+                                   messageAsDictionary:errorInfo];
         }
          
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -123,7 +129,7 @@
     }
 }
 
-- (void)sendMessageToUserOnTopicCompletion:(CDVInvokedUrlCommand *)command
+- (void)sendMessageToTopic:(CDVInvokedUrlCommand *)command
 {
     __block CDVPluginResult *result;
     

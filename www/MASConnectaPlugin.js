@@ -9,11 +9,11 @@
 /*
  * Pub/Sub Architecture with MQTTClient implementation.
  */
-var MASMQTTClient = require("./MASMQTTClient"); 
+var MASPluginMQTTClient = require("./MASPluginMQTTClient"); 
 
-var MASMQTTMessage = require("./MASMQTTMessage");
+var MASPluginMQTTMessage = require("./MASPluginMQTTMessage");
 
-var MASMQTTConstants = require("./MASMQTTConstants");
+var MASPluginMQTTConstants = require("./MASPluginMQTTConstants");
 
 /*
  * MASUser Messaging architecture.

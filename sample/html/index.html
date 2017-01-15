@@ -6,17 +6,21 @@
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    
     <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    
     <meta charset="utf-8">
     <!-- iPad/iPhone specific css below, add after your main css >
        <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
        <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
        -->
     <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-core/www/MASPlugin.js"></script>
     <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-connecta/www/MASConnectaPlugin.js"></script>
+    
     <script type="text/javascript">
         // If you want to prevent dragging, uncomment this section
         /*
@@ -64,8 +68,10 @@
             });
         }
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
+            
             $("#init").bind("click", function (event, ui) {
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
@@ -78,6 +84,7 @@
                     displayError(thisElement, error);
                 });
             });
+            
             $("#setGrantFlowPassword").bind("click", function (event, ui) {
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
@@ -91,6 +98,7 @@
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
             });
+            
             $("#setGrantFlowClientCredential").bind("click", function (event, ui) {
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
@@ -104,6 +112,7 @@
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
+            
             $("#setConfigName").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -119,6 +128,7 @@
                         displayError(thisElement, error);
                     }, configFileName);
             });
+            
             $("#start").bind("click", function (event, ui) {
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
@@ -133,6 +143,7 @@
                     }
                 );
             });
+            
             $("#startWithDefault").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -148,6 +159,7 @@
                         displayError(thisElement, error);
                     }, defaultConfiguration);
             });
+            
             $("#startWithJSON").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -164,6 +176,7 @@
                         displayError(thisElement, error);
                     }, jsonObject);
             });
+            
             $("#stop").bind("click", function (event, ui) {
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
@@ -177,6 +190,7 @@
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
+            
             $("#userLogin").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -256,6 +270,7 @@
                         displayError(thisElement, error);
                     });
             });
+            
             $("#deregisterDevice").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -271,6 +286,7 @@
                     }
                 );
             });
+            
             $("#resetLocally").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -285,46 +301,54 @@
                 });
             });
 
-            $("#startListeningToTopic").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                //var MASUser = new MASConnectaPlugin.MASUser();
-                var topicName = $("input[name='magSubTopicName']").val();
-                MASPluginUser.startListeningToTopic(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                }, topicName);
-            });
+            // $("#startListeningToTopic").bind("click", function (event, ui) {
+            //     if ($(event.target).context.tagName != 'A') return;
+            //     $(this).find("textarea.error").hide();
+            //     var thisElement = $(this);
+            //     //var MASUser = new MASConnectaPlugin.MASUser();
+            //     var topicName = $("input[name='magSubTopicName']").val();
+            //     MASPluginUser.startListeningToTopic(function (result) {
+            //         thisElement.removeClass("succes").removeClass("failure").addClass("success");
+            //         displayResult(thisElement, result);
+            //     }, function (error) {
+            //         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+            //         displayError(thisElement, error);
+            //     }, topicName);
+            // });
 
-            $("#stopListeningToTopic").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                //var MASUser = new MASConnectaPlugin.MASUser();
-                var topicName = $("input[name='magUnsubTopicName']").val();
-                MASPluginUser.stopListeningToTopic(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                }, topicName);
-            });
+            // $("#stopListeningToTopic").bind("click", function (event, ui) {
+            //     if ($(event.target).context.tagName != 'A') return;
+            //     $(this).find("textarea.error").hide();
+            //     var thisElement = $(this);
+            //     //var MASUser = new MASConnectaPlugin.MASUser();
+            //     var topicName = $("input[name='magUnsubTopicName']").val();
+            //     MASPluginUser.stopListeningToTopic(function (result) {
+            //         thisElement.removeClass("succes").removeClass("failure").addClass("success");
+            //         displayResult(thisElement, result);
+            //     }, function (error) {
+            //         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+            //         displayError(thisElement, error);
+            //     }, topicName);
+            // });
 
             $("#startListeningToMyMessages").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var MASUser = new MASConnectaPlugin.MASUser();
+                
 
-                MASUser.startListeningToMyMessages(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
+                MASPluginUser.currentUser(function(MASUser) {
+
+                    MASUser.startListeningToMyMessages(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    }, function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+                }, 
+                function(error) {
+                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
@@ -334,54 +358,88 @@
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var MASUser = new MASConnectaPlugin.MASUser();
+                
 
-                MASUser.stopListeningToMyMessages(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
+                MASPluginUser.currentUser(function(MASUser) {
+
+                    MASUser.stopListeningToMyMessages(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    }, function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+                },
+                function(error) {
+                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
+                    displayError(thisElement, error);                    
                 });
+
+                
             });
 
             $("#magSendMessageToTopic").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                // var MASUser = new MASConnectaPlugin.MASUser();
+                var thisElement = $(this);                
+                
                 var topicName = $("input[name='magSendToTopicName']").val();
                 var message = $("input[name='magSendToTopicMsg']").val();
                 message = btoa(message);
-                var mimeType = thisElement.find("select[name='magSendMsgToTopicMimeType']").val();
+                var userObjectId = $("input[name='magSendToUserObjectId']").val();
 
-                MASPluginUser.sendMessageToTopic(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
+                MASPluginUser.currentUser(function(MASUser) {
+
+                    MASUser.sendMessageToTopic(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+
+                    }, function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, message, userObjectId, topicName);
+                },
+                function(error) {
+
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, topicName, message, mimeType);
+                });
+
+                
             });
 
             $("#magSendMessageToUser").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                // var MASUser = new MASConnectaPlugin.MASUser();
-                var userName = $("input[name='magSendToUser']").val();
+
+                var userObjectId = $("input[name='magSendToUser']").val();
                 var message = $("input[name='magSendToUserMsg']").val();
                 message = btoa(message);
-                var mimeType = thisElement.find("select[name='magSendMsgToUserMimeType']").val();
 
-                MASPluginUser.sendMessageToUser(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
+                MASPluginUser.currentUser(function(MASUser) {
+
+                    MASUser.sendMessageToUser(function (result) {
+                        
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    }, 
+                    function (error) {
+                        
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }, message, userObjectId);
+                },
+                function(error) {
+
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, userName, message, mimeType);
+                });
+
+                
             });
+
             $("#registerReceiver").bind("click", function (event, ui) {
 
 
@@ -743,7 +801,7 @@
                 <li data-role="collapsible" data-iconpos="right" data-inset="false">
                     <h2>MAG Connecta Service</h2>
                     <ul data-role="listview" data-theme="b">
-                        <li data-icon="false">
+                        <!-- <li data-icon="false">
                             <a href="#" id="startListeningToTopic">Subscribe To Topic
                             <input id="magSubTopicName" type="text" name="magSubTopicName" value="" placeholder="Topic Name"/>
                         <textarea class='error' style="display:none;" readonly="">
@@ -756,7 +814,7 @@
                         <textarea class='error' style="display:none;" readonly="">
                         </textarea>
                         </a>
-                        </li>
+                        </li> -->
                         <li data-icon="false">
                             <a href="#" id="startListeningToMyMessages">Subscribe To My Messages
                         <textarea class='error' style="display:none;" readonly="">
@@ -771,15 +829,8 @@
                         </li>
                         <li data-icon="false">
                             <a href="#" id="magSendMessageToTopic">Send Message To Topic
-                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>
-                            <label for="magSendMsgToTopicMimeType">MIME Type:</label>
-                            <select id="magSendMsgToTopicMimeType" name="magSendMsgToTopicMimeType" onchange="clearInputText(this);" >
-                                <option value="text/plain">Plain Text</option>
-                                <option value="application/json">JSON</option>
-                                <!--option value="image/png">PNG</option>
-                                <option value="image/jpg">JPEG</option>
-                                <option value="application/octet-stream">Binary Data</option-->
-                            </select>
+                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>                            
+                            <input id="magSendToUserObjectId" type="text" name="magSendToUserObjectId" value="" placeholder="User Object Id"/>
                             <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message"/>
                         <textarea class='error' style="display:none;" readonly="">
                         </textarea>
@@ -788,14 +839,7 @@
                         <li data-icon="false">
                             <a href="#" id="magSendMessageToUser">Send Message To User
                             <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name"/>
-                            <label for="magSendMsgToUserMimeType">MIME Type:</label>
-                            <select id="magSendMsgToUserMimeType" name="magSendMsgToUserMimeType" onchange="clearInputText(this);" >
-                                <option value="text/plain">Plain Text</option>
-                                <option value="application/json">JSON</option>
-                                <!--option value="image/png">PNG</option>
-                                <option value="image/jpg">JPEG</option>
-                                <option value="application/octet-stream">Binary Data</option-->
-                            </select>
+                            
                             <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message"/>
                         <textarea class='error' style="display:none;" readonly="">
                         </textarea>
