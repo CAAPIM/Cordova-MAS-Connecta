@@ -9,6 +9,15 @@ var MASPluginMQTTConstants = require("./MASPluginMQTTConstants");
 
 var MASPluginMQTTClient = function (clientId, cleanSession, masMQTTConstants) {
     
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Lifecycle
+    ///------------------------------------------------------------------------------------------------------------------
+
+    this.initializeMQTTClient = function(successHandler, errorHandler, clientId, cleanSession) {
+
+    	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "initializeMQTTClient", [this.clientId, this.cleanSession]);
+    };
+
     // Initialize the client.
     if (clientId) {
 		
@@ -45,16 +54,7 @@ var MASPluginMQTTClient = function (clientId, cleanSession, masMQTTConstants) {
 	this.connected = function(successHandler, errorHandler) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "connected", []);
-	};	
-
-	///------------------------------------------------------------------------------------------------------------------
-    /// @name Lifecycle
-    ///------------------------------------------------------------------------------------------------------------------
-
-    this.initializeMQTTClient = function(successHandler, errorHandler, clientId, cleanSession) {
-
-    	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "initializeMQTTClient", [this.clientId, this.cleanSession]);
-    };
+	};		
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility methods

@@ -14,14 +14,14 @@
     <!-- iPad/iPhone specific css below, add after your main css >
        <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />
        <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />
-       -->
-    <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+   -->
+   <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
 
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-core/www/MASPlugin.js"></script>
-    <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-connecta/www/MASConnectaPlugin.js"></script>
-    
-    <script type="text/javascript">
+   <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+   <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-core/www/MASPlugin.js"></script>
+   <script type="text/javascript" charset="utf-8" src="plugins/cordova-plugin-mas-connecta/www/MASConnectaPlugin.js"></script>
+
+   <script type="text/javascript">
         // If you want to prevent dragging, uncomment this section
         /*
                    function preventBehavior(e)
@@ -39,57 +39,57 @@
                // TODO: do something with the url passed in.
                }
                */
-        function onBodyLoad() {
-            document.addEventListener("deviceready", onDeviceReady, false);
-        }
+               function onBodyLoad() {
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
 
-        function onDeviceReady() {
-            var MAS = new MASPlugin.MAS();
-            MAS.initialize(function (result) {
-                console.log("Init done!!!");
-                var MASObj = new MASPlugin.MAS();
-                MASObj.start(function (result) {
-                    console.log("Start done!!!");
-                    var util = new MASConnectaPlugin.MASConnectaUtil();
-                    util.registerReceiver(function (success) {
-                        console.log("Listener registered!!!:" + JSON.stringify(success));
-                        var title = "Message Received";
-                        var buttonName = "Close";
-                        if (null != success.Payload)
-                            navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
-                    }, function(error) {
-                        console.log("IListener register failed!!!:" + JSON.stringify(error));
-                    });
-                }, function (error) {
-                    console.log("Start failure!!!:" + JSON.stringify(error))
-                });
-            }, function (error) {
-                alert("Initialization failure");
-            });
-        }
-    </script>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            
-            $("#init").bind("click", function (event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
+            function onDeviceReady() {
                 var MAS = new MASPlugin.MAS();
                 MAS.initialize(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
+                    console.log("Init done!!!");
+                    var MASObj = new MASPlugin.MAS();
+                    MASObj.start(function (result) {
+                        console.log("Start done!!!");
+                        var util = new MASConnectaPlugin.MASConnectaUtil();
+                        util.registerReceiver(function (success) {
+                            console.log("Listener registered!!!:" + JSON.stringify(success));
+                            var title = "Message Received";
+                            var buttonName = "Close";
+                            if (null != success.Payload)
+                                navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
+                        }, function(error) {
+                            console.log("IListener register failed!!!:" + JSON.stringify(error));
+                        });
+                    }, function (error) {
+                        console.log("Start failure!!!:" + JSON.stringify(error))
+                    });
                 }, function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
+                    alert("Initialization failure");
                 });
-            });
-            
-            $("#setGrantFlowPassword").bind("click", function (event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.grantFlow(function (result) {
+            }
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#init").bind("click", function (event, ui) {
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    MAS.initialize(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    }, function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+                });
+
+                $("#setGrantFlowPassword").bind("click", function (event, ui) {
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    MAS.grantFlow(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -97,13 +97,13 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
-            });
-            
-            $("#setGrantFlowClientCredential").bind("click", function (event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.grantFlow(function (result) {
+                });
+
+                $("#setGrantFlowClientCredential").bind("click", function (event, ui) {
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    MAS.grantFlow(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -111,15 +111,15 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
-            });
-            
-            $("#setConfigName").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var configFileName = $("input[name='configName']").val();
-                MAS.configFileName(function (result) {
+                });
+
+                $("#setConfigName").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    var configFileName = $("input[name='configName']").val();
+                    MAS.configFileName(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -127,13 +127,13 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, configFileName);
-            });
-            
-            $("#start").bind("click", function (event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.start(function (result) {
+                });
+
+                $("#start").bind("click", function (event, ui) {
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    MAS.start(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -141,16 +141,16 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }
-                );
-            });
-            
-            $("#startWithDefault").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var defaultConfiguration = $("input[name='defaultConfiguration']").prop("checked");
-                MAS.startWithDefaultConfiguration(function (result) {
+                    );
+                });
+
+                $("#startWithDefault").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    var defaultConfiguration = $("input[name='defaultConfiguration']").prop("checked");
+                    MAS.startWithDefaultConfiguration(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -158,16 +158,16 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, defaultConfiguration);
-            });
-            
-            $("#startWithJSON").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                var jsonObject = thisElement.find("input[name='jsonObject']").val() ? JSON.parse(
-                    thisElement.find("input[name='jsonObject']").val()) : null;
-                MAS.startWithJSON(function (result) {
+                });
+
+                $("#startWithJSON").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    var jsonObject = thisElement.find("input[name='jsonObject']").val() ? JSON.parse(
+                        thisElement.find("input[name='jsonObject']").val()) : null;
+                    MAS.startWithJSON(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -175,13 +175,13 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, jsonObject);
-            });
-            
-            $("#stop").bind("click", function (event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.stop(function (result) {
+                });
+
+                $("#stop").bind("click", function (event, ui) {
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MAS = new MASPlugin.MAS();
+                    MAS.stop(function (result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     },
@@ -189,15 +189,15 @@
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
-            });
-            
-            $("#userLogin").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var username = $("input[name='userLoginUsername']").val();
-                var password = $("input[name='userLoginPassword']").val();
-                MASPluginUser.loginWithUsernameAndPassword(function (result) {
+                });
+
+                $("#userLogin").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var username = $("input[name='userLoginUsername']").val();
+                    var password = $("input[name='userLoginPassword']").val();
+                    MASPluginUser.loginWithUsernameAndPassword(function (result) {
                         thisElement.removeClass("success").removeClass("failure").addClass(
                             "success");
                         displayResult(thisElement, result);
@@ -207,99 +207,99 @@
                             "failure");
                         displayError(thisElement, error);
                     }, username, password);
-            });
-
-            $("#isUserAuthenticated").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                MASPluginUser.currentUser(function (result) {
-                        result.isAuthenticated(function (result) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "success");
-                                displayResult(thisElement, result);
-                            },
-                            function (error) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "failure");
-                                displayError(thisElement, error);
-                            });
-                    },
-                    function (error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass(
-                            "failure");
-                        displayError(thisElement, error);
-                    });
-            });
-
-            $("#isDeviceRegistered").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.isDeviceRegistered(function (result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function (error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }
-                );
-            });
-
-            $("#userLogout").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                MASPluginUser.currentUser(function (currentUser) {
-                        currentUser.logout(function (result) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "success");
-                                displayResult(thisElement, result);
-                            },
-                            function (error) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "failure");
-                                displayError(thisElement, error);
-                            });
-                    },
-                    function (error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass(
-                            "failure");
-                        displayError(thisElement, error);
-                    });
-            });
-            
-            $("#deregisterDevice").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.deregister(function (result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function (error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }
-                );
-            });
-            
-            $("#resetLocally").bind("click", function (event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.resetLocally(function (result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
                 });
-            });
+
+                $("#isUserAuthenticated").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    MASPluginUser.currentUser(function (result) {
+                        result.isAuthenticated(function (result) {
+                            thisElement.removeClass("success").removeClass("failure").addClass(
+                                "success");
+                            displayResult(thisElement, result);
+                        },
+                        function (error) {
+                            thisElement.removeClass("success").removeClass("failure").addClass(
+                                "failure");
+                            displayError(thisElement, error);
+                        });
+                    },
+                    function (error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass(
+                            "failure");
+                        displayError(thisElement, error);
+                    });
+                });
+
+                $("#isDeviceRegistered").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MASDevice = new MASPlugin.MASDevice();
+                    MASDevice.isDeviceRegistered(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }
+                    );
+                });
+
+                $("#userLogout").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    MASPluginUser.currentUser(function (currentUser) {
+                        currentUser.logout(function (result) {
+                            thisElement.removeClass("success").removeClass("failure").addClass(
+                                "success");
+                            displayResult(thisElement, result);
+                        },
+                        function (error) {
+                            thisElement.removeClass("success").removeClass("failure").addClass(
+                                "failure");
+                            displayError(thisElement, error);
+                        });
+                    },
+                    function (error) {
+                        thisElement.removeClass("success").removeClass("failure").addClass(
+                            "failure");
+                        displayError(thisElement, error);
+                    });
+                });
+
+                $("#deregisterDevice").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MASDevice = new MASPlugin.MASDevice();
+                    MASDevice.deregister(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    },
+                    function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    }
+                    );
+                });
+
+                $("#resetLocally").bind("click", function (event, ui) {
+                    if ($(event.target).context.tagName != 'A') return;
+                    $(this).find("textarea.error").hide();
+                    var thisElement = $(this);
+                    var MASDevice = new MASPlugin.MASDevice();
+                    MASDevice.resetLocally(function (result) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                        displayResult(thisElement, result);
+                    }, function (error) {
+                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                        displayError(thisElement, error);
+                    });
+                });
 
             // $("#startListeningToTopic").bind("click", function (event, ui) {
             //     if ($(event.target).context.tagName != 'A') return;
@@ -348,7 +348,7 @@
                     });
                 }, 
                 function(error) {
-                    
+
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
@@ -371,7 +371,7 @@
                     });
                 },
                 function(error) {
-                    
+
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);                    
                 });
@@ -421,12 +421,12 @@
                 MASPluginUser.currentUser(function(MASUser) {
 
                     MASUser.sendMessageToUser(function (result) {
-                        
+
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
                         displayResult(thisElement, result);
                     }, 
                     function (error) {
-                        
+
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
                     }, message, userObjectId);
@@ -463,46 +463,58 @@
             $("#connectBroker").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
-                var connOpts = new MASConnectaPlugin.MASConnectOptions();
+                var thisElement = $(this);                                
 
-                var connectURL = $("input[name='connectURL']").val();
+                var host = $("input[name='host']").val();
+                var port = $("input[name='port']").val();
+                
+                var masMQTTConstants = new MASConnectaPlugin.MASMQTTConstants(host, port, false, "");
+
                 var clientId = $("input[name='clientId']").val();
+
                 var userName = $("input[name='username']").val();
                 var password = $("input[name='password']").val();
+                
+                masMQTTConstants.setUserCredentials(userName, password);
+
                 var connectionTimeout = $("input[name='connectionTimeout']").val();
                 var keepAliveInterval = $("input[name='keepAliveInterval']").val();
-                var cleanSessionFalse = thisElement.find("select[name='cleanSessionFalse']").val();
+                
+                masMQTTConstants.connectionTimeout = connectionTimeout;
+                masMQTTConstants.keepAliveInterval = keepAliveInterval;
+
+                var cleanSession = thisElement.find("select[name='cleanSessionFalse']").val();
+                
                 var willTopic = $("input[name='willTopic']").val();
                 var willMessage = $("input[name='willMessage']").val();
                 var willQos = thisElement.find("select[name='willQos']").val();
-                var retained = thisElement.find("select[name='retained']").val();
-                connOpts.setConnectURL(connectURL);
-                connOpts.setUsername(userName);
-                connOpts.setPassword(password);
-                connOpts.setConnectionTimeout(connectionTimeout);
-                connOpts.setKeepAliveInterval(keepAliveInterval);
-                connOpts.setCleanSessionFalse(cleanSessionFalse);
-                connOpts.setWill(willTopic, willMessage, willQos, retained);
-                var finalOptions = connOpts.getMASConnectOptions();
+                var retained = thisElement.find("select[name='retained']").val();                            
+                
+                masMQTTConstants.setWillToTopic(willMessage, willTopic, willQos, retained);
 
-                PublicBroker.connect(function (result) {
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId, cleanSession, masMQTTConstants);
+
+                masMQTTClient.connect(function (result) {
+                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
-                }, function (error) {
+                }, 
+                function (error) {
+                
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, finalOptions, clientId);
+
+                }, clientId);
             });
 
             $("#disconnectBroker").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
+                
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
 
-                PublicBroker.disconnect(function (result) {
+                masMQTTClient.disconnect(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {
@@ -515,24 +527,30 @@
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
+                
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
+                
                 var topicName = $("input[name='pubSubTopicName']").val();
-                PublicBroker.subscribe(function (result) {
+                
+                masMQTTClient.subscribe(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, topicName);
+                }, topicName, 2);
             });
 
             $("#unsubscribeToTopic").bind("click", function (event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
+                
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
+                
                 var topicName = $("input[name='pubUnsubTopicName']").val();
-                PublicBroker.unsubscribe(function (result) {
+                
+                masMQTTClient.unsubscribe(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {
@@ -545,148 +563,150 @@
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
-                var PublicBroker = new MASConnectaPlugin.MASPublicBroker();
+                
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
+                
                 var topicName = $("input[name='pubSendToTopicName']").val();
+                
                 var message = $("input[name='pubSendToTopicMsg']").val();
-                message = btoa(message);
-                var mimeType = thisElement.find("select[name='pubSendMsgToTopicMimeType']").val();
+                message = btoa(message);                            
 
-                PublicBroker.publish(function (result) {
+                masMQTTClient.publish(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, function (error) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, topicName, message, mimeType);
+                }, topicName, message, 2, false);
             });
 
         });
 
-        function parseRequestResponseType(type) {
-            if (type == "json") {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeJson;
-            } else if (type == "scimJSON") {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeScimJson;
-            } else if (type == "text") {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeTextPlain;
-            } else if (type == "urlEncoded") {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeWwwFormUrlEncoded;
-            } else if (type == "xml") {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeXml;
-            } else {
-                return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
-            }
-        }
+function parseRequestResponseType(type) {
+    if (type == "json") {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeJson;
+    } else if (type == "scimJSON") {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeScimJson;
+    } else if (type == "text") {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeTextPlain;
+    } else if (type == "urlEncoded") {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeWwwFormUrlEncoded;
+    } else if (type == "xml") {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeXml;
+    } else {
+        return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
+    }
+}
 
-        function resetAction(element) {
-            element.find("textarea.error").hide();
-            element.removeClass("succes").removeClass("failure");
-        }
+function resetAction(element) {
+    element.find("textarea.error").hide();
+    element.removeClass("succes").removeClass("failure");
+}
 
-        function displayResult(element, result) {
-            var isJSON = true;
-            try {
-                var json = $.parseJSON(result);
-            } catch (err) {
-                isJSON = false;
-            }
-            if (isJSON) {
-                element.find("textarea.error").show();
-                element.find("textarea.error").html(JSON.stringify(result));
-            } else {
-                element.find("textarea.error").show();
-                element.find("textarea.error").html(result + "");
-            }
-        }
+function displayResult(element, result) {
+    var isJSON = true;
+    try {
+        var json = $.parseJSON(result);
+    } catch (err) {
+        isJSON = false;
+    }
+    if (isJSON) {
+        element.find("textarea.error").show();
+        element.find("textarea.error").html(JSON.stringify(result));
+    } else {
+        element.find("textarea.error").show();
+        element.find("textarea.error").html(result + "");
+    }
+}
 
-        function displayError(element, error) {
-            element.find("textarea.error").show();
-            element.find("textarea.error").html(error.errorMessage);
-        }
-    </script>
-    <script type="text/javascript">
-        function getErrorMessage(error) {
-            var errorMsgToDisplay = "";
-            if (error != null && error != undefined && error != "") {
-                if (error.errorCode != null && error.errorCode != undefined && !isNaN(error.errorCode)) {
-                    var errorCodeLastDigits = error.errorCode % 1000;
-                    if (errorCodeLastDigits === 140) {
-                        errorMsgToDisplay = "X-OTP header required";
-                    } else if (errorCodeLastDigits === 142) {
-                        errorMsgToDisplay = "Authentication failed due to an invalid OTP.";
-                    } else if (errorCodeLastDigits === 143) {
-                        errorMsgToDisplay = "The OTP has expired.";
-                    } else if (errorCodeLastDigits === 144) {
-                        errorMsgToDisplay =
-                            "You have exceeded the maximum number of invalid attempts.  Please try after some time.";
-                    } else if (errorCodeLastDigits === 145) {
-                        errorMsgToDisplay = "Your account is blocked. Try after some time.";
-                    }
+function displayError(element, error) {
+    element.find("textarea.error").show();
+    element.find("textarea.error").html(error.errorMessage);
+}
+</script>
+<script type="text/javascript">
+    function getErrorMessage(error) {
+        var errorMsgToDisplay = "";
+        if (error != null && error != undefined && error != "") {
+            if (error.errorCode != null && error.errorCode != undefined && !isNaN(error.errorCode)) {
+                var errorCodeLastDigits = error.errorCode % 1000;
+                if (errorCodeLastDigits === 140) {
+                    errorMsgToDisplay = "X-OTP header required";
+                } else if (errorCodeLastDigits === 142) {
+                    errorMsgToDisplay = "Authentication failed due to an invalid OTP.";
+                } else if (errorCodeLastDigits === 143) {
+                    errorMsgToDisplay = "The OTP has expired.";
+                } else if (errorCodeLastDigits === 144) {
+                    errorMsgToDisplay =
+                    "You have exceeded the maximum number of invalid attempts.  Please try after some time.";
+                } else if (errorCodeLastDigits === 145) {
+                    errorMsgToDisplay = "Your account is blocked. Try after some time.";
                 }
             }
-            return errorMsgToDisplay;
         }
-    </script>
-    <style type="text/css">
-        .success {
-            background-color: chartreuse;
-            color: #898989;
-        }
-        
-        .failure {
-            background-color: chocolate;
-            color: #FFFFFF;
-        }
-        
-        .ui-loader-background {
-            width: 100%;
-            height: 100%;
-            top: 0;
-            padding: 0;
-            margin: 0;
-            background: rgba(0, 0, 0, 0.3);
-            display: none;
-            position: fixed;
-            z-index: 100;
-        }
-        
-        .ui-loading .ui-loader-background {
-            display: block;
-        }
-        
-        select {
-            height: 30px;
-            line-height: 30px;
-            background: #f2f2f2;
-            font-size: 17px;
-            font-weight: bold;
-        }
-        
-        .multiselect {
-            margin-bottom: 25px;
-            width: 290px;
-        }
-        
-        .selectBox {
-            position: relative;
-            height: 25px;
-            line-height: 25px;
-            background: #f4f4f4;
-        }
-        
-        .selectBox select {
-            width: 100%;
-            font-weight: bold;
-        }
-        
-        .overSelect {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-        }
-    </style>
+        return errorMsgToDisplay;
+    }
+</script>
+<style type="text/css">
+    .success {
+        background-color: chartreuse;
+        color: #898989;
+    }
+
+    .failure {
+        background-color: chocolate;
+        color: #FFFFFF;
+    }
+
+    .ui-loader-background {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        padding: 0;
+        margin: 0;
+        background: rgba(0, 0, 0, 0.3);
+        display: none;
+        position: fixed;
+        z-index: 100;
+    }
+
+    .ui-loading .ui-loader-background {
+        display: block;
+    }
+
+    select {
+        height: 30px;
+        line-height: 30px;
+        background: #f2f2f2;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .multiselect {
+        margin-bottom: 25px;
+        width: 290px;
+    }
+
+    .selectBox {
+        position: relative;
+        height: 25px;
+        line-height: 25px;
+        background: #f4f4f4;
+    }
+
+    .selectBox select {
+        width: 100%;
+        font-weight: bold;
+    }
+
+    .overSelect {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+</style>
 </head>
 
 <body onload="onBodyLoad();">
@@ -707,94 +727,94 @@
                     <ul data-role="listview" data-theme="b">
                         <li data-icon="false">
                             <a href="#" id="init">MAS Init
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="setGrantFlowPassword">MAS GrantFlow: password
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="setConfigName">MAS set configuration file name
-                            <input type="text" name="configName" placeholder="configName"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <input type="text" name="configName" placeholder="configName"/>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="start">MAS start
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="startWithDefault">MAS start with default configuration
-                            <label>
-                                <input type="checkbox" name="defaultConfiguration" checked>Default
-                            </label>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <label>
+                                    <input type="checkbox" name="defaultConfiguration" checked>Default
+                                </label>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="startWithJSON">MAS start with JSON
-                            <input type="text" name="jsonObject" placeholder="JSON object in text"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <input type="text" name="jsonObject" placeholder="JSON object in text"/>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="stop">MAS stop
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="userLogin">MASUser login with username and password
-                            <input type="text" name="userLoginUsername" placeholder="username"/>
-                            <input type="text" name="userLoginPassword" placeholder="password"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <input type="text" name="userLoginUsername" placeholder="username"/>
+                                <input type="text" name="userLoginPassword" placeholder="password"/>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="isUserAuthenticated">MASUser isAuthenticated
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="userLogout">MASUser logout
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="deregisterDevice">MASDevice deregister
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                         <li data-icon="false">
                             <a href="#" id="resetLocally">MASDevice resetLocally
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -814,103 +834,116 @@
                         <textarea class='error' style="display:none;" readonly="">
                         </textarea>
                         </a>
-                        </li> -->
-                        <li data-icon="false">
-                            <a href="#" id="startListeningToMyMessages">Subscribe To My Messages
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                    </li> -->
+                    <li data-icon="false">
+                        <a href="#" id="startListeningToMyMessages">Subscribe To My Messages
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="stopListeningToMyMessages">Unsubscribe To My Messages
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="stopListeningToMyMessages">Unsubscribe To My Messages
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="magSendMessageToTopic">Send Message To Topic
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="magSendMessageToTopic">Send Message To Topic
                             <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>                            
                             <input id="magSendToUserObjectId" type="text" name="magSendToUserObjectId" value="" placeholder="User Object Id"/>
                             <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="magSendMessageToUser">Send Message To User
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="magSendMessageToUser">Send Message To User
                             <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name"/>
                             
                             <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="registerReceiver">Register Receiver
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="registerReceiver">Register Receiver
 
 
 
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                    </ul>
-                </li>
-                <li data-role="collapsible" data-iconpos="right" data-inset="false">
-                    <h2>Public Broker Connecta Service</h2>
-                    <ul data-role="listview" data-theme="b">
-                        <li data-icon="false">
-                            <a href="#" id="connectBroker">Connect To Public Broker
-                            <input type="text" id="connectURL" name="connectURL" value="" placeholder="Broker Host URL"/>
+                    </li>
+                </ul>
+            </li>
+            <li data-role="collapsible" data-iconpos="right" data-inset="false">
+                <h2>Public Broker Connecta Service</h2>
+                <ul data-role="listview" data-theme="b">
+                    <li data-icon="false">
+                        <a href="#" id="connectBroker">Connect To Public Broker
+
+                            <input type="text" id="host" name="host" value="" placeholder="MQTT Broker Host "/>
+                            <input type="text" id="port" name="port" value="" placeholder="MQTT Broker Port "/>
+                            
                             <input type="text" id="clientId" name="clientId" value="" placeholder="Client Id"/>
+                            
                             <input type="text" id="username" name="username" value="" placeholder="Broker client username"/>
                             <input type="password" id="password" name="password" value="" placeholder="Broker client password"/>
+                            
                             <input type="text" id="connectionTimeout" name="connectionTimeout" value="" placeholder="Connection Timeout in seconds"/>
+                            
                             <input type="text" id="keepAliveInterval" name="keepAliveInterval" value="" placeholder="Keep Alive Interval in seconds"/>
+                            
                             <label for="cleanSessionFalse">Persist session state across reconnect</label>
                             <select id="cleanSessionFalse" name="cleanSessionFalse" onchange="clearInputText(this);">
                                 <option value="true">Do not persist state</option>
                                 <option value="false">Persist State</option>
                             </select>
+                            
                             <input type="text" id="willTopic" name="willTopic" value="" placeholder="Last will Topic name"/>
+                            
                             <input type="text" id="willMessage" name="willMessage" value="" placeholder="Last will Message"/>
+                            
                             <label for="willQos">Quality Of Service:</label>
                             <select id="willQos" name="willQos" onchange="clearInputText(this);">
                                 <option value="0">At Most Once</option>
                                 <option value="1">At Least Once</option>
                                 <option value="2">Exactly Once</option>
                             </select>
+                            
                             <label for="retained">Message to be Retained:</label>
                             <select id="retained" name="retained" onchange="clearInputText(this);">
                                 <option value="true">Retain</option>
                                 <option value="false">Do Not Retain</option>
                             </select>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="disconnectBroker">Disconnect
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                    </li>
+
+                    <li data-icon="false">
+                        <a href="#" id="disconnectBroker">Disconnect
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="subscribeToTopic">Subscribe To Topic
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="subscribeToTopic">Subscribe To Topic
                             <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="Topic Name"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="unsubscribeToTopic">Unsubscribe To Topic
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="unsubscribeToTopic">Unsubscribe To Topic
                             <input id="pubUnsubTopicName" type="text" name="pubUnsubTopicName" value="" placeholder="Topic Name"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
+                            <textarea class='error' style="display:none;" readonly="">
+                            </textarea>
                         </a>
-                        </li>
-                        <li data-icon="false">
-                            <a href="#" id="pubPublishMsg">Send Message To Topic
+                    </li>
+                    <li data-icon="false">
+                        <a href="#" id="pubPublishMsg">Send Message To Topic
                             <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="Topic Name"/>
                             <label for="pubSendMsgToTopicMimeType">MIME Type:</label>
                             <select id="pubSendMsgToTopicMimeType" name="pubSendMsgToTopicMimeType" onchange="clearInputText(this);" >
@@ -919,11 +952,11 @@
                                 <!--option value="image/png">PNG</option>
                                 <option value="image/jpg">JPEG</option>
                                 <option value="application/octet-stream">Binary Data</option-->
-                            </select>
-                            <input id="pubSendToTopicMsg" type="text" name="message" value="" placeholder="Message"/>
-                        <textarea class='error' style="display:none;" readonly="">
-                        </textarea>
-                        </a>
+                                </select>
+                                <input id="pubSendToTopicMsg" type="text" name="message" value="" placeholder="Message"/>
+                                <textarea class='error' style="display:none;" readonly="">
+                                </textarea>
+                            </a>
                         </li>
                     </ul>
                 </li>

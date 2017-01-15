@@ -41,6 +41,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASConnectaPlugin" >
                 <param name="ios-package" value="MASConnectaPlugin"/>
             </feature>
+            <feature name="MASPluginMQTTClient">
+                <param name="ios-package" value="MASPluginMQTTClient" />
+            </feature>
         </config-file>
         
         <header-file src="src/ios/MASConnectaPlugin.h" />

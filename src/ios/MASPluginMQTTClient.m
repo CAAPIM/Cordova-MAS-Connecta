@@ -309,9 +309,9 @@
     
     __block CDVPluginResult *result;
     
-    NSString *payload = [command.arguments objectAtIndex:0];
-    
-    NSString *topic = [command.arguments objectAtIndex:1];
+    NSString *topic = [command.arguments objectAtIndex:0];
+
+    NSString *payload = [command.arguments objectAtIndex:1];
     
     NSUInteger qos = (NSUInteger)[command.arguments objectAtIndex:2];
     
