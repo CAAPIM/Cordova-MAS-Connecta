@@ -50,6 +50,8 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <source-file src="src/ios/MASConnectaPlugin.m" />
         <header-file src="src/ios/MASPluginMQTTClient.h" />
         <source-file src="src/ios/MASPluginMQTTClient.m" />
+        <header-file src="src/ios/MASPluginMQTTMessage.h" />
+        <source-file src="src/ios/MASPluginMQTTMessage.m" />
 
     </platform>
 
