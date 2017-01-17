@@ -93,4 +93,22 @@
 
 
 
+#pragma mark - Listeners
+
+- (void)onMQTTMessageReceived:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)onMQTTPublishMessage:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)onMQTTClientConnected:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)onMQTTClientDisconnect:(CDVInvokedUrlCommand*)command;
+
+
+
 @end
