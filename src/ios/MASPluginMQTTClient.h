@@ -23,7 +23,7 @@
 
 
 
-- (void)connected:(CDVInvokedUrlCommand*)command;
+- (void)isConnected:(CDVInvokedUrlCommand*)command;
 
 
 

@@ -65,7 +65,7 @@ typedef void (^OnMQTTClientDisconnectHandler)(MQTTConnectionReturnCode rc);
 }
 
 
-- (void)connected:(CDVInvokedUrlCommand*)command {
+- (void)isConnected:(CDVInvokedUrlCommand*)command {
     
     CDVPluginResult *result;
     

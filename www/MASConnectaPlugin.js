@@ -63,7 +63,12 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, message, userObjectId , topicName) {
 	 	
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, userObjectId, topicName]);
-	 };	
+	 };
+
+	 MASPluginUser.registerReceiver = function(successHandler,errorHandler) {
+   
+   		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "registerReceiver", []);
+	}	
 }
 
 var MASConnectaPlugin = {
