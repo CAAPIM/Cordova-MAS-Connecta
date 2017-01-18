@@ -33,8 +33,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
    
     <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/MAS-Foundation-Cordova.git" commit="develop" />
     
-    <dependency id="cordova-plugin-mas-identitymanagement" url="https://github.com/CAAPIM/MAS-IdentityManagement-Cordova.git" commit="develop" />
-    
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
@@ -61,13 +59,17 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASConnectaPlugin" >
                 <param name="android-package" value="com.ca.mas.cordova.connecta.MASConnectaPlugin"/>
             </feature>
+			<feature name="MASPluginMQTTClient" >
+                <param name="android-package" value="com.ca.mas.cordova.connecta.MASPluginMQTTClient"/>
+            </feature>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
             <uses-permission android:name="android.permission.INTERNET"/>
         </config-file>
 		<source-file src="src/android/MASConnectaUtil.java" target-dir="src/com/ca/mas/cordova/connecta" />       
-		<source-file src="src/android/MASConnectaPlugin.java" target-dir="src/com/ca/mas/cordova/connecta" />       
+		<source-file src="src/android/MASConnectaPlugin.java" target-dir="src/com/ca/mas/cordova/connecta" />  
+		<source-file src="src/android/MASPluginMQTTClient.java" target-dir="src/com/ca/mas/cordova/connecta" />  
     </platform>
 </plugin>
 
