@@ -21,7 +21,9 @@
 
 
 
-#pragma mark - Message sending
+#pragma mark - User messaging with MQTT
+
+#pragma mark - Listening to messages
 
 - (void)startListeningToMyMessages:(CDVInvokedUrlCommand*)command;
 
@@ -38,6 +40,88 @@
 
 
 - (void)sendMessageToTopic:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Pub/Sub architecture with MQTT
+
+#pragma mark - Properties
+
+- (void)clientId:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)setClientId:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)isConnected:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)debugMode:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)setDebugMode:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Lifecycle
+
+- (void)initializeMQTTClient:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Utility methods
+
+- (void)setUserCredentials:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)setWillToTopic:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)clearWill:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)setMessageRetry:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)version:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - MQTT Connection methods
+
+- (void)connect:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)disconnect:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)reconnect:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Subscribe methods
+
+- (void)subscribe:(CDVInvokedUrlCommand*)command;
+
+
+
+- (void)unsubscribe:(CDVInvokedUrlCommand*)command;
+
+
+
+#pragma mark - Publish methods
+
+- (void)publish:(CDVInvokedUrlCommand*)command;
 
 
 
