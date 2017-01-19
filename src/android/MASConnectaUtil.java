@@ -1,6 +1,7 @@
 package com.ca.mas.cordova.connecta;
 
 import com.ca.mas.connecta.client.MASConnectOptions;
+import com.ca.mas.connecta.client.MASConnectaClient;
 import com.ca.mas.cordova.core.MASCordovaException;
 import com.ca.mas.core.client.ServerClient;
 import com.ca.mas.core.error.MAGErrorCode;
@@ -22,23 +23,26 @@ import java.io.StringWriter;
 public class MASConnectaUtil {
 
     public static MASConnectOptions getConnectOptions(JSONObject obj) throws MASCordovaException {
+        if(obj == null){
+            return null;
+        }
         MASConnectOptions options = new MASConnectOptions();
         String connectURL = obj.optString("connectURL");
         if (isNullOrEmpty(connectURL)) {
             throw new MASCordovaException("Server URL cannot be null for Broker host");
         }
         options.setServerURIs(new String[]{connectURL});
-        String user = obj.optString("user");
-        String pass = obj.optString("pass");
+        String user = obj.optString("userName");
+        String pass = obj.optString("password");
         if (!isNullOrEmpty(user) && !isNullOrEmpty(pass)) {
             options.setUserName(user);
             options.setPassword(pass.toCharArray());
         }
-        int connectTimeout = obj.optInt("connectTimeout");
+        int connectTimeout = obj.optInt("connectionTimeOut");
         if (connectTimeout > 0) {
             options.setConnectionTimeout(connectTimeout);
         }
-        int keepAliveInterval = obj.optInt("keepAliveInterval");
+        int keepAliveInterval = obj.optInt("keepAlive");
         if (keepAliveInterval > 0) {
             options.setKeepAliveInterval(keepAliveInterval);
         }
@@ -49,11 +53,11 @@ public class MASConnectaUtil {
         if (will != null) {
             String topic = will.optString("topic");
             String message = will.optString("message");
-            int qos = will.optInt("qos");
+            int qos = will.optInt("QoS");
             if (qos < 0 || qos > 2) {
-                qos = 2;
+                qos = MASConnectaClient.EXACTLY_ONCE;
             }
-            boolean retained = will.optBoolean("retained", true);
+            boolean retained = will.optBoolean("retain", true);
             if (!isNullOrEmpty(topic) && !isNullOrEmpty(message)) {
                 options.setWill(topic, message.getBytes(), qos, retained);
             }

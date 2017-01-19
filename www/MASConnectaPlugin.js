@@ -29,7 +29,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 */
 	 MASPluginUser.prototype.startListeningToMyMessages = function(successHandler, errorHandler) {
-	 	
+
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "startListeningToMyMessages", []);
 	 };
 
@@ -38,7 +38,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 */
 	 MASPluginUser.prototype.stopListeningToMyMessages = function(successHandler, errorHandler) {
-	 	
+
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "stopListeningToMyMessages", []);
 	 };
 
@@ -49,7 +49,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
 	 */
 	 MASPluginUser.prototype.sendMessageToUser = function(successHandler, errorHandler, message, userObjectId) {
-	 	
+
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUser", [message, userObjectId]);
 	 };
 
@@ -58,17 +58,17 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 * @param message : The message to be sent (String / MASPluginMessage).
 	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
-	 * @param topicName : The topic on which the user needs to send the message.	 
+	 * @param topicName : The topic on which the user needs to send the message.
 	 */
 	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, message, userObjectId , topicName) {
-	 	
+
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, userObjectId, topicName]);
 	 };
 
 	 MASPluginUser.registerReceiver = function(successHandler,errorHandler) {
-   
+
    		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "registerReceiver", []);
-	}	
+	}
 }
 
 var MASConnectaPlugin = {

@@ -8,7 +8,7 @@
 var MASPluginMQTTConstants = require("./MASPluginMQTTConstants");
 
 var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
-    
+
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Lifecycle
     ///------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 
     // Initialize the client.
     if (this.clientId) {
-		
+
 		this.initializeMQTTClient(function(){}, function(){}, this.clientId, (this.masMQTTConstants ? this.masMQTTConstants.cleanSession : true));
     }
 
@@ -40,7 +40,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	// this.setClientId = function(successHandler, errorHandler, clientId) {
 
 	// 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "setClientId", []);
-	// };		
+	// };
 
 	// this.debugMode = function(successHandler, errorHandler){
 
@@ -50,13 +50,13 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	// this.setDebugMode = function(successHandler, errorHandler, enableDebugMode) {
 
 	// 	this.debugMode = enableDebugMode;
-	// 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "connected", [enableDebugMode]);		
+	// 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "connected", [enableDebugMode]);
 	// };
 
 	this.isConnected = function(successHandler, errorHandler) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "isConnected", []);
-	};		
+	};
 
     ///------------------------------------------------------------------------------------------------------------------
     /// @name Utility methods
@@ -83,8 +83,8 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 
     // this.setMessageRetry = function(successHandler, errorHandler, seconds) {
 
-    // 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "setMessageRetry", [seconds]);	
-    // };    
+    // 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "setMessageRetry", [seconds]);
+    // };
 
     // this.version = function(successHandler, errorHandler) {
 
@@ -102,7 +102,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * @param clientId : The client Id of the MQTT client i.e. this device's identification. This value needs to be unique per broker. If not provided, client_id from msso_config.json is used
 	 */
 	this.connect = function(successHandler, errorHandler) {
-		
+
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "connect", [this.clientId, this.masMQTTConstants]);
 	};
 
@@ -110,13 +110,13 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * Disconnect to the existing connected message broker.
 	 */
 	this.disconnect = function(successHandler,errorHandler){
-		
+
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "disconnect", []);
 	};
 
 	// this.reconnect = function(successHandler, errorHandler) {
 
-	// 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "reconnect", []);	
+	// 	return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "reconnect", []);
 	// };
 
 	///------------------------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * @param topicName : The topic on which the user needs to subscribe.
 	 */
 	this.subscribe = function(successHandler, errorHandler, topic, QoS){
-		
+
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "subscribe", [topic, QoS]);
 	};
 
@@ -139,7 +139,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * @param topicName : The topic on which the user needs to unsubscribe.
 	 */
 	this.unsubscribe = function(successHandler, errorHandler, topic){
-		
+
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "unsubscribe", [topic]);
 	};
 
@@ -151,13 +151,13 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * @param contentType : The mime type of the message to be send. Choose from MASConnectaContentType.
 	 */
 	this.publish = function(successHandler, errorHandler, topic, payload, QoS, retain) {
-		
+
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "publish", [topic, payload, QoS, retain]);
 	};
 };
 
 MASPluginMQTTClient.registerReceiver = function(successHandler,errorHandler){
-   
+
    return Cordova.exec(successHandler, errorHandler, "MASPluginMQTTClient", "registerReceiver", []);
 }
 

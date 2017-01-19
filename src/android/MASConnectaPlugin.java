@@ -7,10 +7,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.ca.mas.connecta.client.MASConnectOptions;
-import com.ca.mas.connecta.client.MASConnectaManager;
 import com.ca.mas.connecta.util.ConnectaConsts;
 import com.ca.mas.cordova.core.MASCordovaException;
 import com.ca.mas.foundation.MASCallback;
@@ -57,16 +54,6 @@ public class MASConnectaPlugin extends CordovaPlugin {
             sendMessageToTopic(args, callbackContext);
         } else if (action.equalsIgnoreCase("sendMessageToUser")) {
             sendMessageToUser(args, callbackContext);
-        } else if (action.equalsIgnoreCase("connect")) {
-            connect(args, callbackContext);
-        } else if (action.equalsIgnoreCase("disconnect")) {
-            disconnect(args, callbackContext);
-        } else if (action.equalsIgnoreCase("subscribe")) {
-            subscribe(args, callbackContext);
-        } else if (action.equalsIgnoreCase("unsubscribe")) {
-            unsubscribe(args, callbackContext);
-        } else if (action.equalsIgnoreCase("publish")) {
-            publish(args, callbackContext);
         } else {
             callbackContext.error("Invalid action");
             return false;
@@ -85,21 +72,9 @@ public class MASConnectaPlugin extends CordovaPlugin {
             LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.w(TAG,"Received Intent::"+intent.getAction());
                     if (!intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
                         return;
                     }
-
-                    /*try {
-                        MASMessage message = MASMessage.newInstance(intent);
-                        Toast.makeText(context, new String(message.getPayload()), Toast.LENGTH_LONG).show();
-                        //messagesFragment.onMessageReceived(message);
-                    } catch (MASException e) {
-                        Log.d(TAG, e.getMessage());
-                    }*/
-
-
-
                     try {
                         MASMessage message = MASMessage.newInstance(intent);
                         final String senderId = message.getSenderId();
@@ -109,7 +84,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
                             Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
                         } else {
                             byte[] msg = message.getPayload();
-                            final String m = new String(Base64.decode(msg, Base64.NO_WRAP));
+                            final String m = new String(Base64.decode(msg, Base64.DEFAULT));
                             Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
                         }
                         JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
@@ -124,39 +99,6 @@ public class MASConnectaPlugin extends CordovaPlugin {
                 }
             }, intentFilter);
 
-/*
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
-           BroadcastReceiver receiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if (intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
-                        try {
-                            MASMessage message = MASMessage.newInstance(intent);
-                            final String senderId = message.getSenderId();
-                            final String contentType = message.getContentType();
-                            if (contentType.startsWith("image")) {
-                                byte[] msg = message.getPayload();
-                                Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
-                            } else {
-                                byte[] msg = message.getPayload();
-                                final String m = new String(Base64.decode(msg, Base64.NO_WRAP));
-                                Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
-                            }
-                            JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
-                            PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
-                            result.setKeepCallback(true);
-                            _messageReceiverCallback.sendPluginResult(result);
-                        } catch (JSONException jce) {
-                            Log.w(TAG, "message parse exception: " + jce);
-                        } catch (MASException me) {
-                            Log.w(TAG, "message receiver exception: " + me);
-                        }
-                    }
-                }
-            };
-            this.cordova.getActivity().getApplicationContext().registerReceiver(receiver, intentFilter);
-*/
             PluginResult result = new PluginResult(PluginResult.Status.OK, true);
             result.setKeepCallback(true);
             callbackContext.sendPluginResult(result);
@@ -338,11 +280,11 @@ public class MASConnectaPlugin extends CordovaPlugin {
             MASTopic masTopic = null;
 
             try {
-                topic = args.getString(0);
+                String message_0 = args.getString(0);
+                message = decodeBase64IncomingMessage(message_0);//TODO: Get userid removed from JS file
+                topic = args.getString(2);
                 masTopic = new MASTopicBuilder().setUserId(getCurrentUser().getId()).setCustomTopic(topic).build();
-                String message_0 = args.getString(1);
-                message = decodeBase64IncomingMessage(message_0);
-                contentType = args.getString(2);
+                contentType = args.optString(3, "text/plain");
             } catch (JSONException e) {
                 callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/contentType missing")));
                 return;
@@ -395,10 +337,10 @@ public class MASConnectaPlugin extends CordovaPlugin {
             final MASTopic masTopic;
 
             try {
-                userName = args.getString(0);
-                String message_0 = args.getString(1);
+                String message_0 = args.getString(0);
+                userName = args.getString(1);
                 message = decodeBase64IncomingMessage(message_0);
-                contentType = args.getString(2);
+                contentType = args.optString(2, "text/plain");
             } catch (JSONException e) {
                 callbackContext.error(getError(new MASCordovaException("Invaid Input, userName/contentType/message missing")));
                 return;
@@ -440,145 +382,6 @@ public class MASConnectaPlugin extends CordovaPlugin {
             });
         }
     }
-
-    private void connect(final JSONArray args, final CallbackContext callbackContext) {
-        JSONObject connOpts;
-        final MASConnectOptions connectOptions;
-        final String clientId;
-        try {
-            connOpts = args.getJSONObject(0);
-            connectOptions = MASConnectaUtil.getConnectOptions(connOpts);
-            clientId = args.getString(1);
-        } catch (MASCordovaException mc) {
-            callbackContext.error(getError(mc));
-            return;
-        } catch (JSONException e) {
-            callbackContext.error(getError(new MASCordovaException("ConnectOptions missing is missing")));
-            return;
-        }
-        if (connectOptions != null) {
-            MASConnectaManager.getInstance().setConnectOptions(connectOptions);
-        }
-        if (!MASConnectaUtil.isNullOrEmpty(clientId)) {
-            MASConnectaManager.getInstance().setClientId(clientId);
-        }
-        MASConnectaManager.getInstance().connect(new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String message = "Successfully connected to host:" + connectOptions.getServerURIs()[0];
-                success(callbackContext, message);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-                callbackContext.error(getError(new MASCordovaException("Unable to connect to host :" + connectOptions.getServerURIs()[0] + "::" + throwable.getMessage())));
-            }
-        });
-    }
-
-    private void disconnect(final JSONArray args, final CallbackContext callbackContext) {
-        MASConnectaManager.getInstance().disconnect(new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String message = "Successfully disconnected from host";
-                success(callbackContext, message);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-                callbackContext.error(getError(new MASCordovaException("Unable to disconnect from host :" + throwable.getMessage())));
-            }
-        });
-    }
-
-    private void subscribe(final JSONArray args, final CallbackContext callbackContext) {
-        final String topicName;
-        try {
-            topicName = args.getString(0);
-        } catch (JSONException e) {
-            callbackContext.error(getError(new MASCordovaException("Topic Name is missing")));
-            return;
-        }
-        MASTopic masTopic = new MASTopicBuilder().setCustomTopic(topicName).enforceTopicStructure(false).build();
-        MASConnectaManager.getInstance().subscribe(masTopic, new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String message = "Successfully subscribed to topic";
-                success(callbackContext, message);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-                callbackContext.error(getError(new MASCordovaException("Unable to subscribe to topic:" + throwable.getMessage())));
-            }
-        });
-    }
-
-    private void unsubscribe(final JSONArray args, final CallbackContext callbackContext) {
-        final String topicName;
-        try {
-            topicName = args.getString(0);
-        } catch (JSONException e) {
-            callbackContext.error(getError(new MASCordovaException("Topic Name is missing")));
-            return;
-        }
-        MASTopic masTopic = new MASTopicBuilder().setCustomTopic(topicName).enforceTopicStructure(false).build();
-        MASConnectaManager.getInstance().unsubscribe(masTopic, new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String message = "Unsubscribed to topic";
-                success(callbackContext, message);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-                callbackContext.error(getError(new MASCordovaException("Unable to unsubscribe to topic:" + throwable.getMessage())));
-            }
-        });
-    }
-
-    private void publish(final JSONArray args, final CallbackContext callbackContext) {
-        String topicName = null;
-        byte[] message = null;
-        String contentType = null;
-        MASTopic masTopic = null;
-
-        try {
-            topicName = args.getString(0);
-            masTopic = new MASTopicBuilder().setCustomTopic(topicName).enforceTopicStructure(false).build();
-            String message_0 = args.getString(1);
-            message = decodeBase64IncomingMessage(message_0);
-            contentType = args.getString(2);
-        } catch (JSONException e) {
-            callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/contentType missing")));
-            return;
-        } catch (MASCordovaException e) {
-            callbackContext.error(getError(e));
-            return;
-        }
-
-        MASMessage masMessage = MASMessage.newInstance();
-        masMessage.setContentType(contentType);
-        masMessage.setPayload(message);
-        MASConnectaManager.getInstance().publish(masTopic, masMessage, new MASCallback<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                String result = "Message send successfully";
-                success(callbackContext, result);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-                callbackContext.error(getError(new MASCordovaException("Message sending failure:" + throwable.getMessage())));
-            }
-        });
-    }
-
 
     private byte[] decodeBase64IncomingMessage(String message) throws MASCordovaException {
         try {

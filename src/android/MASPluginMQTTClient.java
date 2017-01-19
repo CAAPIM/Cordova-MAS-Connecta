@@ -1,11 +1,17 @@
 package com.ca.mas.cordova.connecta;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Base64;
 import android.util.Log;
 
 import com.ca.mas.connecta.client.MASConnectOptions;
 import com.ca.mas.connecta.client.MASConnectaClient;
 import com.ca.mas.connecta.client.MASConnectaManager;
+import com.ca.mas.connecta.util.ConnectaConsts;
 import com.ca.mas.cordova.core.MASCordovaException;
 import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASException;
@@ -29,6 +35,7 @@ import static com.ca.mas.cordova.connecta.MASConnectaUtil.getError;
 
 public class MASPluginMQTTClient extends CordovaPlugin {
     private static final String TAG = MASPluginMQTTClient.class.getCanonicalName();
+    private static CallbackContext _messageReceiverCallback = null;
 
     @Override
     protected void pluginInitialize() {
@@ -37,7 +44,9 @@ public class MASPluginMQTTClient extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equalsIgnoreCase("connect")) {
+        if (action.equalsIgnoreCase("registerReceiver")) {
+            registerReceiver(args, callbackContext);
+        } else if (action.equalsIgnoreCase("connect")) {
             connect(args, callbackContext);
         } else if (action.equalsIgnoreCase("disconnect")) {
             disconnect(args, callbackContext);
@@ -56,6 +65,53 @@ public class MASPluginMQTTClient extends CordovaPlugin {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Register the listener for incoming messages
+     */
+    private void registerReceiver(final JSONArray args, final CallbackContext callbackContext) {
+        _messageReceiverCallback = callbackContext;
+        try {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
+            LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (!intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
+                        return;
+                    }
+                    try {
+                        MASMessage message = MASMessage.newInstance(intent);
+                        final String senderId = message.getSenderId();
+                        final String contentType = message.getContentType();
+                        if (contentType.startsWith("image")) {
+                            byte[] msg = message.getPayload();
+                            Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
+                        } else {
+                            byte[] msg = message.getPayload();
+                            final String m = new String(Base64.decode(msg, Base64.DEFAULT));
+                            Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
+                        }
+                        JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
+                        PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
+                        result.setKeepCallback(true);
+                        _messageReceiverCallback.sendPluginResult(result);
+                    } catch (JSONException jce) {
+                        Log.w(TAG, "message parse exception: " + jce);
+                    } catch (MASException me) {
+                        Log.w(TAG, "message receiver exception: " + me);
+                    }
+                }
+            }, intentFilter);
+
+            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+            result.setKeepCallback(true);
+            callbackContext.sendPluginResult(result);
+        } catch (Exception ex) {
+            Log.w(TAG, "initMessageReceiver exception: " + ex);
+            callbackContext.error("Unable to initialize:" + ex.getMessage());
+        }
     }
 
     private void connect(final JSONArray args, final CallbackContext callbackContext) {
@@ -134,6 +190,7 @@ public class MASPluginMQTTClient extends CordovaPlugin {
 
             @Override
             public void onError(Throwable throwable) {
+                throwable.printStackTrace();
                 Log.e(TAG, throwable.getMessage());
                 callbackContext.error(getError(new MASCordovaException("Unable to subscribe to topic:" + throwable.getMessage())));
             }

@@ -50,15 +50,29 @@
                     var MASObj = new MASPlugin.MAS();
                     MASObj.start(function (result) {
                         console.log("Start done!!!");
-                        var util = new MASConnectaPlugin.MASConnectaUtil();
-                        util.registerReceiver(function (success) {
-                            console.log("Listener registered!!!:" + JSON.stringify(success));
-                            var title = "Message Received";
-                            var buttonName = "Close";
-                            if (null != success.Payload)
-                                navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
+
+                        MASPluginUser.registerReceiver(function (success) {
+                            if (null != success.Payload){
+                                alert(atob(success.Payload));
+                            }
+
+                            //var title = "Message Received";
+                            //var buttonName = "Close";
+                            // navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
                         }, function(error) {
-                            console.log("IListener register failed!!!:" + JSON.stringify(error));
+                            console.log("User Listener register failed!!!:" + JSON.stringify(error));
+                        });
+
+                        MASPluginMQTTClient.registerReceiver(function (success) {
+                            if (null != success.Payload){
+                                alert(atob(success.Payload));
+                            }
+
+                            //var title = "Message Received";
+                            //var buttonName = "Close";
+                            // navigator.notification.confirm(atob(success.Payload), null, "Message Received", [buttonName])
+                        }, function(error) {
+                            console.log("MQTT Client Listener register failed!!!:" + JSON.stringify(error));
                         });
                     }, function (error) {
                         console.log("Start failure!!!:" + JSON.stringify(error))
@@ -429,7 +443,7 @@
 
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                         displayError(thisElement, error);
-                    }, message, userObjectId);
+                    },message,userObjectId);
                 },
                 function(error) {
 
@@ -438,26 +452,6 @@
                 });
 
                 
-            });
-
-            $("#registerReceiver").bind("click", function (event, ui) {
-
-
-
-                var thisElement = $(this);
-                var util = new MASConnectaPlugin.MASConnectaUtil();
-                util.registerReceiver(function (success) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                    console.log("Listener registered!!!:" + JSON.stringify(success));
-                }, function (error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                    console.log("IListener register failed!!!:" + JSON.stringify(error));
-                });
-
-
-
             });
 
             $("#connectBroker").bind("click", function (event, ui) {
@@ -480,10 +474,11 @@
                 var connectionTimeout = $("input[name='connectionTimeout']").val();
                 var keepAliveInterval = $("input[name='keepAliveInterval']").val();
                 
-                masMQTTConstants.connectionTimeout = connectionTimeout;
-                masMQTTConstants.keepAliveInterval = keepAliveInterval;
+                masMQTTConstants.setConnectionTimeOut(connectionTimeout);
+                masMQTTConstants.setKeepAlive(keepAliveInterval);
 
                 var cleanSession = thisElement.find("select[name='cleanSessionFalse']").val();
+                masMQTTConstants.setCleanSession(cleanSession);
                 
                 var willTopic = $("input[name='willTopic']").val();
                 var willMessage = $("input[name='willMessage']").val();
@@ -492,19 +487,17 @@
                 
                 masMQTTConstants.setWillToTopic(willMessage, willTopic, willQos, retained);
 
-                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId, cleanSession, masMQTTConstants);
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId,masMQTTConstants);
 
                 masMQTTClient.connect(function (result) {
-                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, 
                 function (error) {
-                
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
 
-                }, clientId);
+                });
             });
 
             $("#disconnectBroker").bind("click", function (event, ui) {
@@ -512,7 +505,7 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
                 
-                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("",{});
 
                 masMQTTClient.disconnect(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -528,9 +521,10 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
                 
-                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
+                var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", {});
                 
                 var topicName = $("input[name='pubSubTopicName']").val();
+                var qos = thisElement.find("select[name='subTopicQos']").val();
                 
                 masMQTTClient.subscribe(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -538,7 +532,7 @@
                 }, function (error) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, topicName, 2);
+                }, topicName, qos);
             });
 
             $("#unsubscribeToTopic").bind("click", function (event, ui) {
@@ -567,9 +561,11 @@
                 var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
                 
                 var topicName = $("input[name='pubSendToTopicName']").val();
-                
                 var message = $("input[name='pubSendToTopicMsg']").val();
-                message = btoa(message);                            
+                message = btoa(message);
+
+                var qos = thisElement.find("select[name='pubMessageQos']").val();
+                var retained = thisElement.find("select[name='pubMessageRetain']").val();
 
                 masMQTTClient.publish(function (result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -577,7 +573,7 @@
                 }, function (error) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
-                }, topicName, message, 2, false);
+                }, topicName, message, qos, retained);
             });
 
         });
@@ -865,15 +861,6 @@ function displayError(element, error) {
                             </textarea>
                         </a>
                     </li>
-                    <li data-icon="false">
-                        <a href="#" id="registerReceiver">Register Receiver
-
-
-
-                            <textarea class='error' style="display:none;" readonly="">
-                            </textarea>
-                        </a>
-                    </li>
                 </ul>
             </li>
             <li data-role="collapsible" data-iconpos="right" data-inset="false">
@@ -931,6 +918,12 @@ function displayError(element, error) {
                     <li data-icon="false">
                         <a href="#" id="subscribeToTopic">Subscribe To Topic
                             <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="Topic Name"/>
+                            <label for="subTopicQos">Quality Of Service:</label>
+                            <select id="subTopicQos" name="subTopicQos" onchange="clearInputText(this);">
+                                <option value="0">At Most Once</option>
+                                <option value="1">At Least Once</option>
+                                <option value="2">Exactly Once</option>
+                            </select>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
@@ -945,25 +938,35 @@ function displayError(element, error) {
                     <li data-icon="false">
                         <a href="#" id="pubPublishMsg">Send Message To Topic
                             <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="Topic Name"/>
-                            <label for="pubSendMsgToTopicMimeType">MIME Type:</label>
-                            <select id="pubSendMsgToTopicMimeType" name="pubSendMsgToTopicMimeType" onchange="clearInputText(this);" >
+                            <!--label for="pubSendMsgToTopicMimeType">MIME Type:</label>
+                            <select-- id="pubSendMsgToTopicMimeType" name="pubSendMsgToTopicMimeType" onchange="clearInputText(this);" >
                                 <option value="text/plain">Plain Text</option>
                                 <option value="application/json">JSON</option>
-                                <!--option value="image/png">PNG</option>
+                                <option value="image/png">PNG</option>
                                 <option value="image/jpg">JPEG</option>
-                                <option value="application/octet-stream">Binary Data</option-->
-                                </select>
-                                <input id="pubSendToTopicMsg" type="text" name="message" value="" placeholder="Message"/>
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <!-- /content -->
+                                <option value="application/octet-stream">Binary Data</option>
+                            </select-->
+                            <input id="pubSendToTopicMsg" type="text" name="message" value="" placeholder="Message"/>
+                            <label for="pubMessageQos">Quality Of Service:</label>
+                            <select id="pubMessageQos" name="pubMessageQos" onchange="clearInputText(this);">
+                                <option value="0">At Most Once</option>
+                                <option value="1">At Least Once</option>
+                                <option value="2">Exactly Once</option>
+                            </select>
+                            <label for="pubMessageRetain">Message to be Retained:</label>
+                            <select id="pubMessageRetain" name="pubMessageRetain" onchange="clearInputText(this);">
+                                <option value="true">Retain</option>
+                                <option value="false">Do Not Retain</option>
+                            </select>
+                            <textarea class='error' style="display:none;" readonly=""></textarea>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
+        <!-- /content -->
+</div>
     <!-- /page -->
 </body>
 
