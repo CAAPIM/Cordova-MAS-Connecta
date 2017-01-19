@@ -65,7 +65,7 @@ typedef void (^OnMQTTClientDisconnectHandler)(MQTTConnectionReturnCode rc);
 }
 
 
-- (void)isConnected:(CDVInvokedUrlCommand*)command {
+- (void)connected:(CDVInvokedUrlCommand*)command {
     
     CDVPluginResult *result;
     
@@ -365,12 +365,77 @@ typedef void (^OnMQTTClientDisconnectHandler)(MQTTConnectionReturnCode rc);
 
 #pragma mark - Listeners
 
-- (void)onMQTTMessageReceived:(CDVInvokedUrlCommand*)command {
+- (void)registerReceiver:(CDVInvokedUrlCommand*)command {
     
     __block CDVPluginResult *result;
     
     __block MASPluginMQTTClient *blockSelf = self;
-
+    
+    self.onConnectedHandler = ^(MQTTConnectionReturnCode rc) {
+        
+        if (rc == ConnectionAccepted) {
+            
+            NSDictionary *userInfo =
+                [NSDictionary dictionaryWithObjectsAndKeys:
+                 [NSNumber numberWithUnsignedInteger:rc], @"MQTTConnectionReturnCode", nil];
+            
+            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            
+            [payload setObject:@"onDisconnect" forKey:@"callback"];
+            
+            [payload setObject:userInfo forKey:@"payload"];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
+            
+            [result setKeepCallbackAsBool:YES];
+        }
+        else {
+            
+            NSDictionary *errorInfo =
+            @{@"callback":@"onMessageReceived",
+              @"errorMessage":[NSString stringWithFormat:@"Error disconnecting with return code : %lu",(unsigned long)rc]};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+            
+            [result setKeepCallbackAsBool:YES];
+        }
+        
+        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
+    
+    self.onDisconnectHandler = ^(MQTTConnectionReturnCode rc) {
+        
+        if (rc == ConnectionAccepted) {
+            
+            
+            
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                      [NSNumber numberWithUnsignedInteger:rc], @"MQTTConnectionReturnCode", nil];
+            
+            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            
+            [payload setObject:@"onDisconnect" forKey:@"callback"];
+            
+            [payload setObject:userInfo forKey:@"payload"];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
+            
+            [result setKeepCallbackAsBool:YES];
+        }
+        else {
+            
+            NSDictionary *errorInfo =
+            @{@"callback":@"onMessageReceived",
+              @"errorMessage":[NSString stringWithFormat:@"Error disconnecting with return code : %lu",(unsigned long)rc]};
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+            
+            [result setKeepCallbackAsBool:YES];
+        }
+        
+        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    };
+    
     self.onMessageReceivedHandler = ^(MASMQTTMessage *message) {
         
         if (message) {
@@ -382,15 +447,22 @@ typedef void (^OnMQTTClientDisconnectHandler)(MQTTConnectionReturnCode rc);
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"qos"];
             [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"retained"];
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsDictionary:messageInfo];
+            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            
+            [payload setObject:@"onMessageReceived" forKey:@"callback"];
+            
+            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageInfo, @"message", nil]
+                        forKey:@"payload"];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
             
             [result setKeepCallbackAsBool:YES];
         }
         else {
             
             NSDictionary *errorInfo =
-            @{@"errorMessage":@"Error receiving message as nil"};
+            @{@"callback":@"onMessageReceived",
+              @"errorMessage":@"Error receiving message as nil"};
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
@@ -400,83 +472,30 @@ typedef void (^OnMQTTClientDisconnectHandler)(MQTTConnectionReturnCode rc);
         
         [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     };
-}
-
-
-- (void)onMQTTPublishMessage:(CDVInvokedUrlCommand*)command {
-    
-    __block CDVPluginResult *result;
-    
-    __block MASPluginMQTTClient *blockSelf = self;
     
     self.onPublishHandler = ^(NSNumber *messageId) {
-      
+        
         if (messageId) {
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsNSUInteger:[messageId unsignedIntegerValue]];
+            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            
+            [payload setObject:@"onPublishMessage" forKey:@"callback"];
+            
+            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageId, @"messageId", nil]
+                        forKey:@"payload"];
+            
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
             
             [result setKeepCallbackAsBool:YES];
         }
         else {
             
             NSDictionary *errorInfo =
-            @{@"errorMessage":@"Error publishing message as nil"};
+            @{@"callback":@"onMessageReceived",
+              @"errorMessage":@"Error publishing message as nil"};
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                    messageAsDictionary:errorInfo];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        
-        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    };
-}
-
-
-- (void)onMQTTClientConnected:(CDVInvokedUrlCommand*)command {
- 
-    __block CDVPluginResult *result;
-    
-    __block MASPluginMQTTClient *blockSelf = self;
-    
-    self.onConnectedHandler = ^(MQTTConnectionReturnCode rc) {
-      
-        if (rc == ConnectionAccepted) {
-        
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:rc];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        else {
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:rc];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        
-        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    };
-}
-
-
-- (void)onMQTTClientDisconnect:(CDVInvokedUrlCommand*)command {
-    
-    __block CDVPluginResult *result;
-    
-    __block MASPluginMQTTClient *blockSelf = self;
-    
-    self.onDisconnectHandler = ^(MQTTConnectionReturnCode rc) {
-        
-        if (rc == ConnectionAccepted) {
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:rc];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        else {
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:rc];
             
             [result setKeepCallbackAsBool:YES];
         }
