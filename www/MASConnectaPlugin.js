@@ -10,18 +10,14 @@
  * Pub/Sub Architecture with MQTTClient implementation.
  */
 var MASPluginMQTTClient = require("./MASPluginMQTTClient"); 
-
 var MASPluginMQTTMessage = require("./MASPluginMQTTMessage");
-
 var MASPluginMQTTConstants = require("./MASPluginMQTTConstants");
 
 /*
  * MASUser Messaging architecture.
  */
 var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
-
 var MASConnectaPluginMessage = require("./MASConnectaPluginMessage");
-
 var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 {
 	/**
@@ -29,7 +25,6 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 */
 	 MASPluginUser.prototype.startListeningToMyMessages = function(successHandler, errorHandler) {
-
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "startListeningToMyMessages", []);
 	 };
 
@@ -38,7 +33,6 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 */
 	 MASPluginUser.prototype.stopListeningToMyMessages = function(successHandler, errorHandler) {
-
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "stopListeningToMyMessages", []);
 	 };
 
@@ -49,7 +43,6 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
 	 */
 	 MASPluginUser.prototype.sendMessageToUser = function(successHandler, errorHandler, message, userObjectId) {
-
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUser", [message, userObjectId]);
 	 };
 
@@ -57,34 +50,42 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Send message to a user on a topic
 	 *
 	 * @param message : The message to be sent (String / MASPluginMessage).
-	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
 	 * @param topicName : The topic on which the user needs to send the message.
 	 */
-	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, message, userObjectId , topicName) {
-
-	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, userObjectId, topicName]);
+	 MASPluginUser.prototype.sendMessageToTopic = function(successHandler, errorHandler, message,topicName) {
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, topicName]);
 	 };
 }
 
 var MASConnectaPlugin = {
-
+	/**
+	 MASMQTTClient which corresponds to any Public Broker including MAG.
+	 */
 	MASMQTTClient: MASPluginMQTTClient,
-
+	/**
+	 MASMQTTMessage which has the interfaces mapped to the native MASMessage structure.
+	 */
 	MASMQTTMessage: MASPluginMQTTMessage,
-
+	/**
+	 MASMQTTConstants which contains required MQTT connection options for any MQTT broker.
+	 */
 	MASMQTTConstants: MASPluginMQTTConstants,
-
+	/**
+	 MASMQTTConstants which contains required MQTT connection options for any MQTT broker.
+	 */
 	MASConnetaConstants: MASConnectaPluginConstants,
-
+	/**
+	 MASConnectaMessage which contains utility for creating MAS Message.
+	 */
 	MASConnectaMessage: MASConnectaPluginMessage,
-
 	/**
 	 MASUser which has the interfaces mapped to the native MASConneta extenstion for MASUser class.
 	 */
 	 MASUser: MASPluginUser,
-
+	/**
+	 MASRegisterListener : Funtion must to be called before using MASConnecta. This API register the notification receiver for observing the message intended to this client.
+	 */
 	 MASRegisterListener: function(successHandler, errorHandler) {
-
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "registerReceiver", []);
 	 }
 };

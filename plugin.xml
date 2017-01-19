@@ -39,15 +39,10 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASConnectaPlugin" >
                 <param name="ios-package" value="MASConnectaPlugin"/>
             </feature>
-            <feature name="MASPluginMQTTClient">
-                <param name="ios-package" value="MASPluginMQTTClient" />
-            </feature>
         </config-file>
         
         <header-file src="src/ios/MASConnectaPlugin.h" />
         <source-file src="src/ios/MASConnectaPlugin.m" />
-        <header-file src="src/ios/MASPluginMQTTClient.h" />
-        <source-file src="src/ios/MASPluginMQTTClient.m" />
         <header-file src="src/ios/MASPluginMQTTMessage.h" />
         <source-file src="src/ios/MASPluginMQTTMessage.m" />
 
@@ -59,9 +54,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             <feature name="MASConnectaPlugin" >
                 <param name="android-package" value="com.ca.mas.cordova.connecta.MASConnectaPlugin"/>
             </feature>
-			<feature name="MASPluginMQTTClient" >
-                <param name="android-package" value="com.ca.mas.cordova.connecta.MASPluginMQTTClient"/>
-            </feature>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
@@ -69,7 +61,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         </config-file>
 		<source-file src="src/android/MASConnectaUtil.java" target-dir="src/com/ca/mas/cordova/connecta" />       
 		<source-file src="src/android/MASConnectaPlugin.java" target-dir="src/com/ca/mas/cordova/connecta" />  
-		<source-file src="src/android/MASPluginMQTTClient.java" target-dir="src/com/ca/mas/cordova/connecta" />  
     </platform>
 </plugin>
 
