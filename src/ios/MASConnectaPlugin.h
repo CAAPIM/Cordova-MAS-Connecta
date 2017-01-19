@@ -41,4 +41,10 @@
 
 
 
+#pragma mark - Listeners
+
+- (void)registerReceiver:(CDVInvokedUrlCommand*)command;
+
+
+
 @end
