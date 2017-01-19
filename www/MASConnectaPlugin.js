@@ -64,11 +64,6 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToTopic", [message, userObjectId, topicName]);
 	 };
-
-	 MASPluginUser.registerReceiver = function(successHandler,errorHandler) {
-
-   		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "registerReceiver", []);
-	}
 }
 
 var MASConnectaPlugin = {
@@ -86,7 +81,12 @@ var MASConnectaPlugin = {
 	/**
 	 MASUser which has the interfaces mapped to the native MASConneta extenstion for MASUser class.
 	 */
-	 MASUser: MASPluginUser
+	 MASUser: MASPluginUser,
+
+	 MASRegisterListener: function(successHandler, errorHandler) {
+
+	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "registerReceiver", []);
+	 }
 };
 
 module.exports = MASConnectaPlugin;
