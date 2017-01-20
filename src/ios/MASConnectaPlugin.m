@@ -558,7 +558,7 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSString *topic = [command.arguments objectAtIndex:0];
     
-    NSUInteger qos = (NSUInteger)[command.arguments objectAtIndex:1];
+    NSUInteger qos = [[command.arguments objectAtIndex:1] integerValue];
     
     [[MASMQTTClient sharedClient] subscribeToTopic:topic
                                            withQos:qos
@@ -580,6 +580,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
          }
          else
          {
+             [[MASMQTTClient sharedClient] setDelegate:self];
+             
              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQos];
          }
          
@@ -611,11 +613,11 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     __block CDVPluginResult *result;
     
-    NSString *payload = [command.arguments objectAtIndex:0];
+    NSString *topic = [command.arguments objectAtIndex:0];
     
-    NSString *topic = [command.arguments objectAtIndex:1];
+    NSString *payload = [command.arguments objectAtIndex:1];
     
-    NSUInteger qos = (NSUInteger)[command.arguments objectAtIndex:2];
+    NSUInteger qos = [[command.arguments objectAtIndex:2] integerValue];
     
     BOOL retain = (BOOL)[command.arguments objectAtIndex:3];
     

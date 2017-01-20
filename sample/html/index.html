@@ -49,8 +49,8 @@
                 var MASObj = new MASPlugin.MAS();
                 MASObj.start(function(result) {
                     MASConnectaPlugin.MASRegisterListener(function(success) {
-                        if (null != success.Payload) {
-                            alert(atob(success.Payload));
+                        if (null != success.payload) {
+                            alert(atob(success.payload));
                         }
                         //var title = "Message Received";
                         //var buttonName = "Close";
