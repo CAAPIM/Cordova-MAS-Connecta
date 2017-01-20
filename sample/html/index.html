@@ -339,23 +339,24 @@
                     });
             });
 
-            $("#magSendMessageToTopic").bind("click", function(event, ui) {
+            $("#magSendMessageToUserOnTopic").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
+                var userObjectId = $("input[name='magSendToUser']").val();
                 var topicName = $("input[name='magSendToTopicName']").val();
                 var message = $("input[name='magSendToTopicMsg']").val();
                 message = btoa(message);
 
                 MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.sendMessageToTopic(function(result) {
+                        MASUser.sendMessageToUserOnTopic(function(result) {
                             thisElement.removeClass("succes").removeClass("failure").addClass("success");
                             displayResult(thisElement, result);
                         }, function(error) {
                             thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                             displayError(thisElement, error);
-                        }, message, topicName);
+                        }, message, userObjectId, topicName);
                     },
                     function(error) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("failure");
@@ -779,7 +780,8 @@
                         </a>
                     </li>
                     <li data-icon="false">
-                        <a href="#" id="magSendMessageToTopic">Send Message To Topic
+                        <a href="#" id="magSendMessageToUserOnTopic">Send Message To User On a Topic
+                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name"/>
                             <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>
                             <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message"/>
                             <textarea class='error' style="display:none;" readonly="">
