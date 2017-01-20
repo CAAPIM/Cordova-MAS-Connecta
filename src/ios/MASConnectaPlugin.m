@@ -430,26 +430,85 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSDictionary *masMQTTConstants = [command.arguments objectAtIndex:1];
     
-    [MASMQTTClient sharedClient].clientID = clientId;
+    if (clientId && [clientId length])
+        [MASMQTTClient sharedClient].clientID = clientId;
     
-    [[MASMQTTClient sharedClient]
-     connectWithHost:[masMQTTConstants objectForKey:@"host"]
-     withPort:(int)[masMQTTConstants objectForKey:@"port"]
-     enableTLS:(BOOL)[masMQTTConstants objectForKey:@"enableTLS"]
-     usingSSLCACert:[masMQTTConstants objectForKey:@"usingSSLCACert"]
-     completionHandler:^(MQTTConnectionReturnCode code) {
-         
-         if (code == ConnectionAccepted) {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
-         }
-         else {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    NSString *host = [masMQTTConstants objectForKey:@"host"];
+    int port = (int)[[masMQTTConstants objectForKey:@"port"] integerValue];
+    BOOL enableTLS = [[masMQTTConstants objectForKey:@"enableTLS"] boolValue];
+    NSString *sslCACert = [masMQTTConstants objectForKey:@"usingSSLCACert"];
+    
+    // Try port with TLS
+    if (host && !port) {
+        
+        [[MASMQTTClient sharedClient] connectToHost:host withTLS:enableTLS
+                                  completionHandler:
+         ^(MQTTConnectionReturnCode code) {
+            
+            if (code == ConnectionAccepted) {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+            }
+            else {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+            }
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else if (host && port && ![sslCACert length]) {
+        
+        [[MASMQTTClient sharedClient] connectWithHost:host withPort:port enableTLS:enableTLS
+                                    completionHandler:
+         ^(MQTTConnectionReturnCode code) {
+            
+            if (code == ConnectionAccepted) {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+            }
+            else {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+            }
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else if (host && port && [sslCACert length]) {
+        
+        [[MASMQTTClient sharedClient] connectWithHost:host withPort:port enableTLS:enableTLS usingSSLCACert:sslCACert completionHandler:^(MQTTConnectionReturnCode code) {
+            
+            if (code == ConnectionAccepted) {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+            }
+            else {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+            }
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
+    else {
+        
+        [[MASMQTTClient sharedClient] connectToHost:host
+                                  completionHandler:
+         ^(MQTTConnectionReturnCode code) {
+            
+            if (code == ConnectionAccepted) {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+            }
+            else {
+                
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+            }
+            
+            [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        }];
+    }
 }
 
 - (void)disconnect:(CDVInvokedUrlCommand *)command {
