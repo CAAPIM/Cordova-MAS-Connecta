@@ -151,7 +151,7 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
     }
 }
 
-- (void)sendMessageToTopic:(CDVInvokedUrlCommand *)command
+- (void)sendMessageToUserOnTopic:(CDVInvokedUrlCommand *)command
 {
     __block CDVPluginResult *result;
     

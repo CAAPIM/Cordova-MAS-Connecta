@@ -39,7 +39,7 @@
 
 
 
-- (void)sendMessageToTopic:(CDVInvokedUrlCommand*)command;
+- (void)sendMessageToUserOnTopic:(CDVInvokedUrlCommand *)command;
 
 
 
