@@ -36,6 +36,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
     private static final String TAG = MASConnectaPlugin.class.getCanonicalName();
     private static CallbackContext _messageReceiverCallback = null;
+    private boolean isGateway = true;
 
     @Override
     protected void pluginInitialize() {
@@ -54,8 +55,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
             startListeningToMyMessages(args, callbackContext);
         } else if (action.equalsIgnoreCase("stopListeningToMyMessages")) {
             stopListeningToMyMessages(args, callbackContext);
-        } else if (action.equalsIgnoreCase("sendMessageToTopic")) {
-            sendMessageToTopic(args, callbackContext);
+        } else if (action.equalsIgnoreCase("sendMessageToUserOnTopic")) {
+            sendMessageToUserOnTopic(args, callbackContext);
         } else if (action.equalsIgnoreCase("sendMessageToUser")) {
             sendMessageToUser(args, callbackContext);
         } else if (action.equalsIgnoreCase("connect")) {
@@ -225,11 +226,6 @@ public class MASConnectaPlugin extends CordovaPlugin {
             MASUser.login(new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
-                    try {
-                        Log.i(TAG, "MASUser::" + masUser.getAsJSONObject().toString());
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
                     startListeningToMyMessages(args, callbackContext);
                 }
 
@@ -243,6 +239,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
             getCurrentUser().startListeningToMyMessages(new MASCallback<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
+                    isGateway = true;
                     String message = "Started listening to my messages";
                     success(callbackContext, message);
                 }
@@ -288,12 +285,12 @@ public class MASConnectaPlugin extends CordovaPlugin {
         }
     }
 
-    private void sendMessageToTopic(final JSONArray args, final CallbackContext callbackContext) {
+    private void sendMessageToUserOnTopic(final JSONArray args, final CallbackContext callbackContext) {
         if (getCurrentUser() == null) {
             MASUser.login(new MASCallback<MASUser>() {
                 @Override
                 public void onSuccess(MASUser masUser) {
-                    sendMessageToTopic(args, callbackContext);
+                    sendMessageToUserOnTopic(args, callbackContext);
                 }
 
                 @Override
@@ -303,42 +300,56 @@ public class MASConnectaPlugin extends CordovaPlugin {
                 }
             });
         } else {
-            String topic = null;
-            byte[] message = null;
-            String contentType = null;
+            final String topic;
+            String userName = null;
+            final byte[] message;
+            final String contentType;
             MASTopic masTopic = null;
 
             try {
                 String message_0 = args.getString(0);
                 message = decodeBase64IncomingMessage(message_0);
-                topic = args.getString(1);
-                masTopic = new MASTopicBuilder().setUserId(getCurrentUser().getId()).setCustomTopic(topic).build();
-                contentType = args.optString(2, "text/plain");
+                userName = args.getString(1);
+                topic = args.getString(2);
+                contentType = args.optString(3, "text/plain");
             } catch (JSONException e) {
-                callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/contentType missing")));
+                callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/userName missing")));
                 return;
             } catch (MASCordovaException e) {
                 callbackContext.error(getError(e));
                 return;
-            } catch (MASException e) {
-                callbackContext.error(getError(new MASCordovaException("Invaid topic details:" + e.getMessage())));
-                return;
             }
 
-            MASMessage masMessage = MASMessage.newInstance();
-            masMessage.setContentType(contentType);
-            masMessage.setPayload(message);
-            getCurrentUser().sendMessage(masTopic, masMessage, new MASCallback<Void>() {
+            getCurrentUser().getUserById(userName, new MASCallback<MASUser>() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    String result = "Message send successfully";
-                    success(callbackContext, result);
+                public void onSuccess(final MASUser masUser) {
+                    if (masUser == null) {
+                        callbackContext.error(getError(new MASCordovaException("User not Found")));
+                        return;
+                    }
+
+                    MASMessage masMessage = MASMessage.newInstance();
+                    masMessage.setContentType(contentType);
+                    masMessage.setPayload(message);
+                    getCurrentUser().sendMessage(masMessage, masUser, topic, new MASCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            String result = "Message send successfully";
+                            success(callbackContext, result);
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            Log.e(TAG, throwable.getMessage());
+                            callbackContext.error(getError(new MASCordovaException("Message sending failure:" + throwable.getMessage())));
+                        }
+                    });
                 }
 
                 @Override
                 public void onError(Throwable throwable) {
-                    Log.e(TAG, throwable.getMessage());
-                    callbackContext.error(getError(new MASCordovaException("Message sending failure:" + throwable.getMessage())));
+                    callbackContext.error(getError(new MASCordovaException("User not Found")));
+                    return;
                 }
             });
         }
@@ -425,6 +436,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
             connectOptions = MASConnectaUtil.getConnectOptions(connOpts);
             if (connectOptions != null) {
                 MASConnectaManager.getInstance().setConnectOptions(connectOptions);
+                isGateway = false;
             }
         } catch (MASCordovaException mc) {
             callbackContext.error(getError(mc));
@@ -441,6 +453,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
             @Override
             public void onError(Throwable throwable) {
+                isGateway = true;
                 Log.e(TAG, throwable.getMessage());
                 callbackContext.error(getError(new MASCordovaException("Unable to connect to host :" + connectOptions.getServerURIs()[0] + "::" + throwable.getMessage())));
             }
@@ -451,6 +464,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
         MASConnectaManager.getInstance().disconnect(new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                isGateway = true;
                 String message = "Successfully disconnected from host";
                 success(callbackContext, message);
             }
@@ -470,7 +484,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
         try {
             topicName = args.getString(0);
             qos = args.optInt(1, MASConnectaClient.EXACTLY_ONCE);
-            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(false).build();
+            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false).build();
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/qos missing")));
             return;
@@ -533,8 +547,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
             message = decodeBase64IncomingMessage(message_0);
             qos = args.optInt(2, MASConnectaClient.EXACTLY_ONCE);
             retained = args.optBoolean(3, false);
-            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(false).build();
-            contentType = args.optString(4,"text/plain");
+            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false).build();
+            contentType = args.optString(4, "text/plain");
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
             return;

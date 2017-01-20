@@ -344,7 +344,7 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
-                var userObjectId = $("input[name='magSendToUser']").val();
+                var userObjectId = $("input[name='magSendToUserOnTopic']").val();
                 var topicName = $("input[name='magSendToTopicName']").val();
                 var message = $("input[name='magSendToTopicMsg']").val();
                 message = btoa(message);
@@ -781,7 +781,7 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="magSendMessageToUserOnTopic">Send Message To User On a Topic
-                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name"/>
+                            <input id="magSendToUserOnTopic" type="text" name="magSendToUserOnTopic" value="" placeholder="User Name"/>
                             <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>
                             <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message"/>
                             <textarea class='error' style="display:none;" readonly="">
