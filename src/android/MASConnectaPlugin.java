@@ -246,7 +246,6 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
                 @Override
                 public void onError(Throwable throwable) {
-                    throwable.printStackTrace();
                     Log.e(TAG, throwable.getMessage());
                     callbackContext.error(getError(new MASCordovaException("Unable to listen to my messages:" + throwable.getMessage())));
                 }
@@ -484,7 +483,11 @@ public class MASConnectaPlugin extends CordovaPlugin {
         try {
             topicName = args.getString(0);
             qos = args.optInt(1, MASConnectaClient.EXACTLY_ONCE);
-            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false).build();
+            MASTopicBuilder builder = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false);
+            if (isGateway && getCurrentUser()!=null) {
+                builder = builder.setUserId(getCurrentUser().getId());
+            }
+            masTopic = builder.build();
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/qos missing")));
             return;
@@ -511,13 +514,22 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
     private void unsubscribe(final JSONArray args, final CallbackContext callbackContext) {
         final String topicName;
+        MASTopic masTopic = null;
         try {
             topicName = args.getString(0);
+            MASTopicBuilder builder = new MASTopicBuilder().setCustomTopic(topicName).enforceTopicStructure(isGateway ? true : false);
+            if (isGateway && getCurrentUser()!=null) {
+                builder = builder.setUserId(getCurrentUser().getId());
+            }
+            masTopic = builder.build();
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Topic Name is missing")));
             return;
+        } catch (MASException e) {
+            callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/qos missing")));
+            return;
         }
-        MASTopic masTopic = new MASTopicBuilder().setCustomTopic(topicName).enforceTopicStructure(false).build();
+
         MASConnectaManager.getInstance().unsubscribe(masTopic, new MASCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -547,7 +559,12 @@ public class MASConnectaPlugin extends CordovaPlugin {
             message = decodeBase64IncomingMessage(message_0);
             qos = args.optInt(2, MASConnectaClient.EXACTLY_ONCE);
             retained = args.optBoolean(3, false);
-            masTopic = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false).build();
+
+            MASTopicBuilder builder = new MASTopicBuilder().setCustomTopic(topicName).setQos(qos).enforceTopicStructure(isGateway ? true : false);
+            if (isGateway && getCurrentUser()!=null) {
+                builder = builder.setUserId(getCurrentUser().getId());
+            }
+            masTopic = builder.build();
             contentType = args.optString(4, "text/plain");
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
