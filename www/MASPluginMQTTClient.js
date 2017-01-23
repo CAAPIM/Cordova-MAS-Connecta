@@ -63,10 +63,10 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * Subscribe to a topic using the broker connected via connect call.
 	 *
 	 * @param topicName : The topic on which the user needs to subscribe.
-	 * @param Qos : The Quality of Service for the topic.
+     * @param QoS : The Quality of Service for message delivery.0-> Atmost once,1-> At least once, 2: Exactly once. Default is 2.
 	 */
-	this.subscribe = function(successHandler, errorHandler, topic, QoS){
-		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "subscribe", [topic, QoS]);
+	this.subscribe = function(successHandler, errorHandler, topicName, QoS){
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "subscribe", [topicName, QoS]);
 	};
 
 	/**
@@ -74,20 +74,20 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 *
 	 * @param topicName : The topic on which the user needs to unsubscribe.
 	 */
-	this.unsubscribe = function(successHandler, errorHandler, topic){
-		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "unsubscribe", [topic]);
+	this.unsubscribe = function(successHandler, errorHandler, topicName){
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "unsubscribe", [topicName]);
 	};
 
 	/**
 	 * Publish to a topic using the broker connected via connect call.
 	 *
-	 * @param topic : The topic on which the user needs to send the message.
-	 * @param payload : The message to be send. The message bytes should be Base64 encoded string, to support sending images also.
-	 * @param Qos : The Quality of Service for the topic. Not mandatory
-	 * @param retain : The option to retain the message at the broker. Not mandatory
+	 * @param topicName : The topic on which the user needs to send the message.
+	 * @param message : The message to be send. The message bytes should be Base64 encoded string, to support sending images also
+	 * @param QoS : The Quality of Service for message delivery.0-> Atmost once,1-> At least once, 2: Exactly once. Default is 2.
+	 * @param retain : Indication for the broker to persist the messages for a client.
 	 */
-	this.publish = function(successHandler, errorHandler, topic, payload, QoS, retain) {
-		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "publish", [topic, payload, QoS, retain]);
+	this.publish = function(successHandler, errorHandler, topic, message, QoS, retain) {
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "publish", [topic, message, QoS, retain]);
 	};
 };
 

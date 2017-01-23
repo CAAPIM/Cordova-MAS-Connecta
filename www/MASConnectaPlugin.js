@@ -40,7 +40,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 * Send message to a user
 	 *
 	 * @param message : The message to be sent (String / MASPluginMessage).
-	 * @param userObjectId The object id used to locate the 'MASPluginUser'.
+	 * @param userObjectId : Unique Id of the user to whom the message is intended to.
 	 */
 	 MASPluginUser.prototype.sendMessageToUser = function(successHandler, errorHandler, message, userObjectId) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUser", [message, userObjectId]);
@@ -51,6 +51,7 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 *
 	 * @param message : The message to be sent (String / MASPluginMessage).
 	 * @param topicName : The topic on which the user needs to send the message.
+	 * @param userObjectId : Unique Id of the user to whom the message is intended to.
 	 */
 	 MASPluginUser.prototype.sendMessageToUserOnTopic = function(successHandler, errorHandler, message, userObjectId, topicName) {
 	 	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "sendMessageToUserOnTopic", [message, userObjectId, topicName]);
