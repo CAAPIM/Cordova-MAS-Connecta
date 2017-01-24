@@ -49,7 +49,7 @@
                 var MASObj = new MASPlugin.MAS();
                 MASObj.start(function(result) {
                     MASConnectaPlugin.MASRegisterListener(function(success) {
-                        if (null != success.Payload || null != success.payload) {
+                        if (null != success.Payload) {
                             var toAlert = {};
                             toAlert.sender = success.SenderId;
                             var payload = (success.Payload!=null?success.Payload:success.payload);
