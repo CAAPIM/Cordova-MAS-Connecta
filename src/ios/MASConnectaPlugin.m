@@ -829,20 +829,21 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         if (message) {
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
-            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.mid] forKey:@"mid"];
-            [messageInfo setObject:message.topic forKey:@"topic"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"payload"];
-            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"qos"];
-            [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"retained"];
             
-            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.mid] forKey:@"MID"];
+            [messageInfo setObject:message.topic forKey:@"Topic"];
+            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"Payload"];
+            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"QoS"];
+            [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"Retained"];
             
-            [payload setObject:@"onMessageReceived" forKey:@"callback"];
+//            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+//            
+//            [payload setObject:@"onMessageReceived" forKey:@"callback"];
+//            
+//            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageInfo, @"message", nil]
+//                        forKey:@"Payload"];
             
-            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageInfo, @"message", nil]
-                        forKey:@"payload"];
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:messageInfo];
             
             [result setKeepCallbackAsBool:YES];
         }
