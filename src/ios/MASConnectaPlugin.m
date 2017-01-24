@@ -721,23 +721,24 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         if (message) {
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
-            [messageInfo setObject:message.version forKey:@"version"];
-            [messageInfo setObject:message.topic forKey:@"topic"];
-            [messageInfo setObject:message.receiverObjectId forKey:@"receiverObjectId"];
+            
+            [messageInfo setObject:message.version forKey:@"Version"];
+            [messageInfo setObject:message.topic forKey:@"Topic"];
+            [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"];
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.senderType]
-                            forKey:@"senderType"];
-            [messageInfo setObject:message.senderObjectId forKey:@"senderObjectId"];
-            [messageInfo setObject:message.senderDisplayName forKey:@"senderDisplayName"];
+                            forKey:@"SenderType"];
+            [messageInfo setObject:message.senderObjectId forKey:@"SenderId"];
+            [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
             
             NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
             
-            [messageInfo setObject:sentTimeStr forKey:@"sentTime"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"payload"];
-            [messageInfo setObject:message.contentType forKey:@"contentType"];
-            [messageInfo setObject:message.contentEncoding forKey:@"contentEncoding"];
+            [messageInfo setObject:sentTimeStr forKey:@"SentTime"];
+            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"Payload"];
+            [messageInfo setObject:message.contentType forKey:@"ContentType"];
+            [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"];
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                    messageAsDictionary:messageInfo];
