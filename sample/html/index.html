@@ -309,19 +309,17 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.startListeningToMyMessages(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        });
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.startListeningToMyMessages(
+                function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
             });
 
             $("#stopListeningToMyMessages").bind("click", function(event, ui) {
@@ -329,19 +327,17 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.stopListeningToMyMessages(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        });
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.stopListeningToMyMessages(
+                function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
             });
 
             $("#magSendMessageToUserOnTopic").bind("click", function(event, ui) {
@@ -358,19 +354,18 @@
                 }
                 message = btoa(message);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.sendMessageToUserOnTopic(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        }, message, userObjectId, topicName);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.sendMessageToUserOnTopic(
+                function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                            
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, 
+                message, userObjectId, topicName);
             });
 
             $("#magSendMessageToUser").bind("click", function(event, ui) {
@@ -381,25 +376,23 @@
                 var userObjectId = $("input[name='magSendToUser']").val();
                 var message = $("input[name='magSendToUserMsg']").val();
                 var arr = [userObjectId,message];
+                
                 if(validateFields(arr) == false){
                     return;
                 }
                 message = btoa(message);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.sendMessageToUser(function(result) {
-                                thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                                displayResult(thisElement, result);
-                            },
-                            function(error) {
-                                thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                                displayError(thisElement, error);
-                            }, message, userObjectId);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.sendMessageToUser(function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error) {
+                                
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, 
+                message, userObjectId);
             });
 
             $("#connectBroker").bind("click", function(event, ui) {
