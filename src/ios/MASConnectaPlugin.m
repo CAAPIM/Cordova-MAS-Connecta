@@ -736,7 +736,11 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
             
             [messageInfo setObject:sentTimeStr forKey:@"SentTime"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"Payload"];
+            
+            [messageInfo setObject:[[NSString alloc] initWithData:message.payload
+                                                         encoding:NSUTF8StringEncoding]
+                            forKey:@"Payload"];
+            
             [messageInfo setObject:message.contentType forKey:@"ContentType"];
             [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"];
             
