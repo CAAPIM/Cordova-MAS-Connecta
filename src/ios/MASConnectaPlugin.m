@@ -740,7 +740,7 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             [messageInfo setObject:[[NSString alloc] initWithData:message.payload
                                                          encoding:NSUTF8StringEncoding]
                             forKey:@"Payload"];
-            
+
             [messageInfo setObject:message.contentType forKey:@"ContentType"];
             [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"];
             
@@ -836,7 +836,11 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.mid] forKey:@"MID"];
             [messageInfo setObject:message.topic forKey:@"Topic"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"Payload"];
+            
+            [messageInfo setObject:[[NSString alloc] initWithData:message.payload
+                                                         encoding:NSUTF8StringEncoding]
+                            forKey:@"Payload"];
+            
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"QoS"];
             [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"Retained"];
             
