@@ -102,20 +102,6 @@
                     }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
             });
 
-            $("#setGrantFlowClientCredential").bind("click", function(event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.grantFlow(function(result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
-            });
-
             $("#setConfigName").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -311,12 +297,10 @@
 
                 MASConnectaPlugin.MASUser.startListeningToMyMessages(
                 function(result) {
-                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, 
                 function(error) {
-                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
@@ -329,12 +313,10 @@
 
                 MASConnectaPlugin.MASUser.stopListeningToMyMessages(
                 function(result) {
-                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
                 }, 
                 function(error) {
-                    
                     thisElement.removeClass("succes").removeClass("failure").addClass("failure");
                     displayError(thisElement, error);
                 });
@@ -710,12 +692,6 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="setGrantFlowPassword">MAS GrantFlow: password
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
-                        <a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential
                                 <textarea class='error' style="display:none;" readonly="">
                                 </textarea>
                         </a>
