@@ -438,6 +438,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     BOOL enableTLS = [[masMQTTConstants objectForKey:@"enableTLS"] boolValue];
     NSString *sslCACert = [masMQTTConstants objectForKey:@"usingSSLCACert"];
     
+    [[MASMQTTClient sharedClient] setDelegate:self];
+
     // Try port with TLS
     if (host && !port) {
         
@@ -515,6 +517,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     __block CDVPluginResult *result;
     
+    [[MASMQTTClient sharedClient] setDelegate:self];
+    
     if ([[MASMQTTClient sharedClient] disconnectionHandler]) {
         
         [[MASMQTTClient sharedClient]
@@ -579,10 +583,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
              result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
          }
          else
-         {
-             [[MASMQTTClient sharedClient] setDelegate:self];
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQos];
+         {                          
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQos];
          }
          
          [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -840,7 +842,7 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             [messageInfo setObject:[[NSString alloc] initWithData:message.payload
                                                          encoding:NSUTF8StringEncoding]
                             forKey:@"Payload"];
-            
+
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"QoS"];
             [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"Retained"];
             
