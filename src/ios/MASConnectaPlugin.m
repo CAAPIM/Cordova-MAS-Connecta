@@ -38,6 +38,10 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
         
          if(success && !error) {
             
+            [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                             name:MASConnectaMessageReceivedNotification
+                                                           object:nil];
+            
              [[NSNotificationCenter defaultCenter] addObserver:self
                                                       selector:@selector(messageReceivedNotification:)
                                                           name:MASConnectaMessageReceivedNotification
@@ -518,7 +522,7 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     __block CDVPluginResult *result;
     
     [[MASMQTTClient sharedClient] setDelegate:self];
-    
+
     if ([[MASMQTTClient sharedClient] disconnectionHandler]) {
         
         [[MASMQTTClient sharedClient]
