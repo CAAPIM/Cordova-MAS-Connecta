@@ -528,7 +528,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         [[MASMQTTClient sharedClient]
          disconnectWithCompletionHandler:[[MASMQTTClient sharedClient] disconnectionHandler]];
         
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"Disconnected succesfully !!"];
         
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
@@ -537,7 +538,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         [[MASMQTTClient sharedClient] disconnectWithCompletionHandler:
          ^(NSUInteger code) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"Disconnected succesfully !!"];
              
              [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
          }];
