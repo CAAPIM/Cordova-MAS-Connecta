@@ -578,33 +578,47 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSUInteger qos = [[command.arguments objectAtIndex:1] integerValue];
     
-    [[MASMQTTClient sharedClient] subscribeToTopic:topic
-                                           withQos:qos
-                                 completionHandler:
-     ^(NSArray *grantedQos) {
-         
-         NSOrderedSet *availableQoS = [NSOrderedSet orderedSetWithArray:@[@0,@1,@2]];
-         NSOrderedSet *receivedQoS = [NSOrderedSet orderedSetWithArray:grantedQos];
-         
-         //
-         // If the received QoS is within the availables QoS
-         //
-         if (![receivedQoS isSubsetOfOrderedSet:availableQoS])
-         {
-             NSDictionary *errorInfo =
-             @{@"errorMessage":[NSString stringWithFormat:@"Error Subscribing to Topic: %@", topic]};
+    if ([[MASMQTTClient sharedClient] connected]) {
+        
+        [[MASMQTTClient sharedClient] subscribeToTopic:topic
+                                               withQos:qos
+                                     completionHandler:
+         ^(NSArray *grantedQos) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-         }
-         else
-         {                          
-            NSMutableArray *grantedQoSStr = [self toStringQoS:grantedQos];
+             NSOrderedSet *availableQoS = [NSOrderedSet orderedSetWithArray:@[@0,@1,@2]];
+             NSOrderedSet *receivedQoS = [NSOrderedSet orderedSetWithArray:grantedQos];
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQoSStr];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+             //
+             // If the received QoS is within the availables QoS
+             //
+             if (![receivedQoS isSubsetOfOrderedSet:availableQoS])
+             {
+                 NSDictionary *errorInfo =
+                 @{@"errorMessage":[NSString stringWithFormat:@"Error Subscribing to Topic: %@", topic]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+             }
+             else
+             {
+                 NSMutableArray *grantedQoSStr = [self toStringQoS:grantedQos];
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                             messageAsArray:grantedQoSStr];
+             }
+             
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo =
+            @{@"errorMessage":
+                  [NSString stringWithFormat:@"Error Subscribing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -614,15 +628,28 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSString *topic = [command.arguments objectAtIndex:0];
     
-    [[MASMQTTClient sharedClient] unsubscribeFromTopic:topic
-                                 withCompletionHandler:
-     ^(void) {
-         
-         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                    messageAsString:@"Successfully unsubscribed"];
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    if ([[MASMQTTClient sharedClient] connected]) {
+    
+        [[MASMQTTClient sharedClient] unsubscribeFromTopic:topic
+                                     withCompletionHandler:
+         ^(void) {
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                        messageAsString:@"Successfully unsubscribed"];
+             
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+     
+        NSDictionary *errorInfo =
+        @{@"errorMessage":
+              [NSString stringWithFormat:@"Error Unsubscribing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -640,28 +667,41 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     BOOL retain = (BOOL)[command.arguments objectAtIndex:3];
     
-    [[MASMQTTClient sharedClient] publishString:payload
-                                        toTopic:topic
-                                        withQos:qos
-                                         retain:retain
-                              completionHandler:
-     ^(int mid) {
-         
-         if (mid) {
+    if ([[MASMQTTClient sharedClient] connected]) {
+        
+        [[MASMQTTClient sharedClient] publishString:payload
+                                            toTopic:topic
+                                            withQos:qos
+                                             retain:retain
+                                  completionHandler:
+         ^(int mid) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                        messageAsString:
-                       [NSString stringWithFormat:@"Successfully Published - Message with Id : %d", mid]];
-         }
-         else {
+             if (mid) {
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:
+                           [NSString stringWithFormat:@"Successfully Published - Message with Id : %d", mid]];
+             }
+             else {
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                            messageAsString:
+                           [NSString stringWithFormat:@"Failed to publish - Message with Id : %d", mid]];
+             }
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                        messageAsString:
-                       [NSString stringWithFormat:@"Failed to publish - Message with Id : %d", mid]];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo =
+        @{@"errorMessage":
+              [NSString stringWithFormat:@"Error Publishing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
