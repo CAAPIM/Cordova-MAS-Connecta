@@ -453,11 +453,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -471,11 +473,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -487,11 +491,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -505,11 +511,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -610,7 +618,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
                                  withCompletionHandler:
      ^(void) {
          
-         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                    messageAsString:@"Successfully unsubscribed"];
          
          [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
      }];
@@ -640,11 +649,15 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
          
          if (mid) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:mid];
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                        messageAsString:
+                       [NSString stringWithFormat:@"Successfully Published - Message with Id : %d", mid]];
          }
          else {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:mid];
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsString:
+                       [NSString stringWithFormat:@"Failed to publish - Message with Id : %d", mid]];
          }
          
          [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -945,6 +958,53 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     }
     
     return toStringQoS;
+}
+
+
+- (NSString *)toStringConnectionReturnCode:(MQTTConnectionReturnCode)rc {
+    
+    NSString *rcStr = @"None";
+    
+    switch (rc) {
+        
+        case ConnectionAccepted:
+        
+            rcStr = @"ConnectionAccepted";
+        
+        break;
+        
+        case ConnectionRefusedUnacceptableProtocolVersion:
+        
+            rcStr = @"ConnectionRefusedUnacceptableProtocolVersion";
+        
+        break;
+        
+        case ConnectionRefusedIdentifierRejected:
+        
+            rcStr = @"ConnectionRefusedIdentifierRejected";
+        
+        break;
+        
+        case ConnectionRefusedServerUnavailable:
+        
+            rcStr = @"ConnectionRefusedServerUnavailable";
+        
+        break;
+        
+        case ConnectionRefusedBadUserNameOrPassword:
+        
+            rcStr = @"ConnectionRefusedBadUserNameOrPassword";
+        
+        break;
+        
+        case ConnectionRefusedNotAuthorized:
+        
+            rcStr = @"ConnectionRefusedNotAuthorized";
+        
+        break;
+    }
+    
+    return rcStr;
 }
 
 
