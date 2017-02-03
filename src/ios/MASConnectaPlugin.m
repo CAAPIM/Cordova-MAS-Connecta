@@ -590,7 +590,9 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
          }
          else
          {                          
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQos];
+            NSMutableArray *grantedQoSStr = [self toStringQoS:grantedQos];
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQoSStr];
          }
          
          [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -907,6 +909,42 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         
         [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
+}
+
+
+#pragma mark - Utillity
+
+- (NSMutableArray *)toStringQoS:(NSArray *)grantedQoS {
+    
+    NSMutableArray *toStringQoS = [NSMutableArray array];
+    
+    for (int i = 0; i < [grantedQoS count]; i++) {
+        
+        NSNumber *QoS = [grantedQoS objectAtIndex:i];
+        
+        switch ([QoS integerValue]) {
+            
+            case AtMostOnce:
+            
+                [toStringQoS addObject:@"AtMostOnce"];
+            
+                break;
+            
+            case AtLeastOnce:
+            
+                [toStringQoS addObject:@"AtLeastOnce"];
+            
+                break;
+            
+            case ExactlyOnce:
+            
+                [toStringQoS addObject:@"ExactlyOnce"];
+            
+                break;
+        }
+    }
+    
+    return toStringQoS;
 }
 
 
