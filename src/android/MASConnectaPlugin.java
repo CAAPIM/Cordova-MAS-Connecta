@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.ca.mas.cordova.connecta.MASConnectaUtil.getError;
+import static com.ca.mas.core.MAG.DEBUG;
 import static com.ca.mas.foundation.MASUser.getCurrentUser;
 
 
@@ -37,6 +38,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
     private static final String TAG = MASConnectaPlugin.class.getCanonicalName();
     private static CallbackContext _messageReceiverCallback = null;
+    private static volatile boolean isListenerRegistered = false;
 
     @Override
     protected void pluginInitialize() {
@@ -85,51 +87,58 @@ public class MASConnectaPlugin extends CordovaPlugin {
      */
     private void registerReceiver(final JSONArray args, final CallbackContext callbackContext) {
         _messageReceiverCallback = callbackContext;
-        try {
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
-            LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if (!intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
-                        return;
-                    }
-                    try {
-                        MASMessage message = MASMessage.newInstance(intent);
-                        try {
-                            final String senderId = message.getSenderId();
-                            final String contentType = message.getContentType();
-                            if (contentType.startsWith("image")) {
-                                byte[] msg = message.getPayload();
-                                Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
-                            } else {
-                                byte[] msg = message.getPayload();
-                                String m = new String(Base64.decode(msg, Base64.NO_WRAP));
-                                Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
-                            }
-                        } catch (Exception ignore) {
-
+        if (!isListenerRegistered) {
+            try {
+                IntentFilter intentFilter = new IntentFilter();
+                intentFilter.addAction(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED);
+                LocalBroadcastManager.getInstance(this.cordova.getActivity()).registerReceiver(new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (!intent.getAction().equals(ConnectaConsts.MAS_CONNECTA_BROADCAST_MESSAGE_ARRIVED)) {
+                            return;
                         }
-                        JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
-                        PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
-                        result.setKeepCallback(true);
-                        _messageReceiverCallback.sendPluginResult(result);
-                    } catch (Exception jce) {
-                        Log.w(TAG, "message parse exception: " + jce);
-                        JSONObject obj = getError(new MASCordovaException("Invalid Message received"));
-                        PluginResult result = new PluginResult(PluginResult.Status.ERROR, obj);
-                        result.setKeepCallback(true);
-                        _messageReceiverCallback.sendPluginResult(result);
-                    }
-                }
-            }, intentFilter);
+                        try {
+                            MASMessage message = MASMessage.newInstance(intent);
+                            try {
+                                final String senderId = message.getSenderId();
+                                final String contentType = message.getContentType();
+                                if (contentType.startsWith("image")) {
+                                    byte[] msg = message.getPayload();
+                                    if (DEBUG) {
+                                        Log.w(TAG, "message receiver got image from " + senderId + ", image length " + msg.length);
+                                    }
+                                } else {
+                                    byte[] msg = message.getPayload();
+                                    String m = new String(msg);
+                                    if (DEBUG) {
+                                        Log.w(TAG, "message receiver got text message from " + senderId + ", " + m);
+                                    }
+                                }
+                            } catch (Exception ignore) {
 
-            PluginResult result = new PluginResult(PluginResult.Status.OK, true);
-            result.setKeepCallback(true);
-            callbackContext.sendPluginResult(result);
-        } catch (Exception ex) {
-            Log.w(TAG, "initMessageReceiver exception: " + ex);
-            callbackContext.error("Unable to initialize:" + ex.getMessage());
+                            }
+                            JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
+                            PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
+                            result.setKeepCallback(true);
+                            _messageReceiverCallback.sendPluginResult(result);
+                        } catch (Exception jce) {
+                            Log.e(TAG, "message parse exception: " + jce);
+                            JSONObject obj = getError(new MASCordovaException("Invalid Message received"));
+                            PluginResult result = new PluginResult(PluginResult.Status.ERROR, obj);
+                            result.setKeepCallback(true);
+                            _messageReceiverCallback.sendPluginResult(result);
+                        }
+                    }
+                }, intentFilter);
+                isListenerRegistered = true;
+                PluginResult result = new PluginResult(PluginResult.Status.OK, true);
+                result.setKeepCallback(true);
+                callbackContext.sendPluginResult(result);
+            } catch (Exception ex) {
+                isListenerRegistered = false;
+                Log.e(TAG, "initMessageReceiver exception: " + ex);
+                callbackContext.error("Unable to initialize:" + ex.getMessage());
+            }
         }
     }
 
