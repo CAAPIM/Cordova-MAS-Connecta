@@ -785,27 +785,50 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
             
-            [messageInfo setObject:message.version forKey:@"Version"];
-            [messageInfo setObject:message.topic forKey:@"Topic"];
-            [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"];
+            message.version ?
+                [messageInfo setObject:message.version forKey:@"Version"] :
+                [messageInfo setObject:@"" forKey:@"Version"];
+            
+            message.topic ?
+                [messageInfo setObject:message.topic forKey:@"Topic"] :
+                [messageInfo setObject:@"" forKey:@"Topic"];
+            
+            message.receiverObjectId ?
+                [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"] :
+                [messageInfo setObject:@"" forKey:@"ReceiverId"];
+            
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.senderType]
                             forKey:@"SenderType"];
-            [messageInfo setObject:message.senderObjectId forKey:@"SenderId"];
-            [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"];
+            
+            message.senderObjectId ?
+                [messageInfo setObject:message.senderObjectId forKey:@"SenderId"] :
+                [messageInfo setObject:@"" forKey:@"SenderId"];
+            
+            message.senderDisplayName ?
+                [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"] :
+                [messageInfo setObject:@"" forKey:@"DisplayName"];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
             
             NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
             
-            [messageInfo setObject:sentTimeStr forKey:@"SentTime"];
+            sentTimeStr ? [messageInfo setObject:sentTimeStr forKey:@"SentTime"] :
+                            [messageInfo setObject:@"" forKey:@"SentTime"];
             
-            [messageInfo setObject:[[NSString alloc] initWithData:message.payload
-                                                         encoding:NSUTF8StringEncoding]
-                            forKey:@"Payload"];
+            NSString *payloadStr =
+                [[NSString alloc] initWithData:message.payload encoding:NSUTF8StringEncoding];
+            
+            payloadStr ? [messageInfo setObject:payloadStr forKey:@"Payload"] :
+                            [messageInfo setObject:@"" forKey:@"Payload"];
 
-            [messageInfo setObject:message.contentType forKey:@"ContentType"];
-            [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"];
+            message.contentType ?
+                [messageInfo setObject:message.contentType forKey:@"ContentType"] :
+                [messageInfo setObject:@"" forKey:@"ContentType"];
+            
+            message.contentEncoding ?
+                [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"] :
+                [messageInfo setObject:@"" forKey:@"ContentEncoding"];
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                    messageAsDictionary:messageInfo];
