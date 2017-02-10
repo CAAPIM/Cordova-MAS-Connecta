@@ -68,29 +68,41 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 {
     __block CDVPluginResult *result;
     
-    [[MASUser currentUser] stopListeningToMyMessages:
-     ^(BOOL success, NSError *error){
+    if ([MASUser currentUser]) {
         
-         if(success && !error) {
+        [[MASUser currentUser] stopListeningToMyMessages:
+         ^(BOOL success, NSError *error){
              
-             [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                             name:MASConnectaMessageReceivedNotification
-                                                           object:nil];
+             if(success && !error) {
+                 
+                 [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                                 name:MASConnectaMessageReceivedNotification
+                                                               object:nil];
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:@"Stopped listening to messages"];
+             }
+             else {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsDictionary:errorInfo];
+             }
              
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                       messageAsString:@"Stopped listening to messages"];
-        }
-        else {
-            
-            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                        @"errorMessage":[error localizedDescription]};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                   messageAsDictionary:errorInfo];
-        }
-         
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+        
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+    }
 }
 
 
