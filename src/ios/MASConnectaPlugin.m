@@ -805,7 +805,7 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     [MASConnectaPlugin setOnUserMessageReceivedHandler:^(MASMessage *message) {
         
-        if (message) {
+        if (message && ![message.topic hasSuffix:@"error"]) {
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
             
