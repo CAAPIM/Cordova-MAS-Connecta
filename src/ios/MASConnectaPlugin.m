@@ -33,30 +33,46 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 {
     __block CDVPluginResult *result;
     
-    [[MASUser currentUser] startListeningToMyMessages:
-     ^(BOOL success, NSError *error) {
+    if ([MASUser currentUser]) {
         
-         if(success && !error) {
-            
-             [[NSNotificationCenter defaultCenter] addObserver:self
-                                                      selector:@selector(messageReceivedNotification:)
-                                                          name:MASConnectaMessageReceivedNotification
-                                                        object:nil];
+        [[MASUser currentUser] startListeningToMyMessages:
+         ^(BOOL success, NSError *error) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                        messageAsString:@"Started listening to topics"];
-        }
-        else {
-            
-            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                        @"errorMessage":[error localizedDescription]};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                   messageAsDictionary:errorInfo];
-        }
+             if(success && !error) {
+                 
+                 [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                                 name:MASConnectaMessageReceivedNotification
+                                                               object:nil];
+                 
+                 [[NSNotificationCenter defaultCenter] addObserver:self
+                                                          selector:@selector(messageReceivedNotification:)
+                                                              name:MASConnectaMessageReceivedNotification
+                                                            object:nil];
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:@"Started listening to topics"];
+             }
+             else {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsDictionary:errorInfo];
+             }
+             
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
         
-         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+        
+        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -64,29 +80,41 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 {
     __block CDVPluginResult *result;
     
-    [[MASUser currentUser] stopListeningToMyMessages:
-     ^(BOOL success, NSError *error){
+    if ([MASUser currentUser]) {
         
-         if(success && !error) {
+        [[MASUser currentUser] stopListeningToMyMessages:
+         ^(BOOL success, NSError *error){
              
-             [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                             name:MASConnectaMessageReceivedNotification
-                                                           object:nil];
+             if(success && !error) {
+                 
+                 [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                                 name:MASConnectaMessageReceivedNotification
+                                                               object:nil];
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:@"Stopped listening to messages"];
+             }
+             else {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                        messageAsDictionary:errorInfo];
+             }
              
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                       messageAsString:@"Stopped listening to messages"];
-        }
-        else {
-            
-            NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                        @"errorMessage":[error localizedDescription]};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                   messageAsDictionary:errorInfo];
-        }
-         
+             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user"};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                               messageAsDictionary:errorInfo];
+        
         return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+    }
 }
 
 
@@ -438,6 +466,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     BOOL enableTLS = [[masMQTTConstants objectForKey:@"enableTLS"] boolValue];
     NSString *sslCACert = [masMQTTConstants objectForKey:@"usingSSLCACert"];
     
+    [[MASMQTTClient sharedClient] setDelegate:self];
+
     // Try port with TLS
     if (host && !port) {
         
@@ -447,11 +477,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -465,11 +497,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -481,11 +515,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -499,11 +535,13 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
             
             if (code == ConnectionAccepted) {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                       messageAsString:[self toStringConnectionReturnCode:code]];
             }
             else {
                 
-                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsNSUInteger:code];
+                result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                           messageAsString:[self toStringConnectionReturnCode:code]];
             }
             
             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -515,12 +553,15 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     __block CDVPluginResult *result;
     
+    [[MASMQTTClient sharedClient] setDelegate:self];
+
     if ([[MASMQTTClient sharedClient] disconnectionHandler]) {
         
         [[MASMQTTClient sharedClient]
          disconnectWithCompletionHandler:[[MASMQTTClient sharedClient] disconnectionHandler]];
         
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"Disconnected succesfully !!"];
         
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
@@ -529,7 +570,8 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         [[MASMQTTClient sharedClient] disconnectWithCompletionHandler:
          ^(NSUInteger code) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsNSUInteger:code];
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                   messageAsString:@"Disconnected succesfully !!"];
              
              [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
          }];
@@ -560,33 +602,47 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSUInteger qos = [[command.arguments objectAtIndex:1] integerValue];
     
-    [[MASMQTTClient sharedClient] subscribeToTopic:topic
-                                           withQos:qos
-                                 completionHandler:
-     ^(NSArray *grantedQos) {
-         
-         NSOrderedSet *availableQoS = [NSOrderedSet orderedSetWithArray:@[@0,@1,@2]];
-         NSOrderedSet *receivedQoS = [NSOrderedSet orderedSetWithArray:grantedQos];
-         
-         //
-         // If the received QoS is within the availables QoS
-         //
-         if (![receivedQoS isSubsetOfOrderedSet:availableQoS])
-         {
-             NSDictionary *errorInfo =
-             @{@"errorMessage":[NSString stringWithFormat:@"Error Subscribing to Topic: %@", topic]};
+    if ([[MASMQTTClient sharedClient] connected]) {
+        
+        [[MASMQTTClient sharedClient] subscribeToTopic:topic
+                                               withQos:qos
+                                     completionHandler:
+         ^(NSArray *grantedQos) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
-         }
-         else
-         {
-             [[MASMQTTClient sharedClient] setDelegate:self];
+             NSOrderedSet *availableQoS = [NSOrderedSet orderedSetWithArray:@[@0,@1,@2]];
+             NSOrderedSet *receivedQoS = [NSOrderedSet orderedSetWithArray:grantedQos];
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:grantedQos];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+             //
+             // If the received QoS is within the availables QoS
+             //
+             if (![receivedQoS isSubsetOfOrderedSet:availableQoS])
+             {
+                 NSDictionary *errorInfo =
+                 @{@"errorMessage":[NSString stringWithFormat:@"Error Subscribing to Topic: %@", topic]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+             }
+             else
+             {
+                 NSMutableArray *grantedQoSStr = [self toStringQoS:grantedQos];
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                             messageAsArray:grantedQoSStr];
+             }
+             
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo =
+            @{@"errorMessage":
+                  [NSString stringWithFormat:@"Error Subscribing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -596,14 +652,28 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     NSString *topic = [command.arguments objectAtIndex:0];
     
-    [[MASMQTTClient sharedClient] unsubscribeFromTopic:topic
-                                 withCompletionHandler:
-     ^(void) {
-         
-         result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+    if ([[MASMQTTClient sharedClient] connected]) {
+    
+        [[MASMQTTClient sharedClient] unsubscribeFromTopic:topic
+                                     withCompletionHandler:
+         ^(void) {
+             
+             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                        messageAsString:@"Successfully unsubscribed"];
+             
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+     
+        NSDictionary *errorInfo =
+        @{@"errorMessage":
+              [NSString stringWithFormat:@"Error Unsubscribing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -621,24 +691,41 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     BOOL retain = (BOOL)[command.arguments objectAtIndex:3];
     
-    [[MASMQTTClient sharedClient] publishString:payload
-                                        toTopic:topic
-                                        withQos:qos
-                                         retain:retain
-                              completionHandler:
-     ^(int mid) {
-         
-         if (mid) {
+    if ([[MASMQTTClient sharedClient] connected]) {
+        
+        [[MASMQTTClient sharedClient] publishString:payload
+                                            toTopic:topic
+                                            withQos:qos
+                                             retain:retain
+                                  completionHandler:
+         ^(int mid) {
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsInt:mid];
-         }
-         else {
+             if (mid) {
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:
+                           [NSString stringWithFormat:@"Successfully Published - Message with Id : %d", mid]];
+             }
+             else {
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                            messageAsString:
+                           [NSString stringWithFormat:@"Failed to publish - Message with Id : %d", mid]];
+             }
              
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsInt:mid];
-         }
-         
-         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-     }];
+             [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+         }];
+    }
+    else {
+        
+        NSDictionary *errorInfo =
+        @{@"errorMessage":
+              [NSString stringWithFormat:@"Error Publishing to Topic: %@ : Client not connected", topic]};
+        
+        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+        
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
 }
 
 
@@ -718,27 +805,54 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     [MASConnectaPlugin setOnUserMessageReceivedHandler:^(MASMessage *message) {
         
-        if (message) {
+        if (message && ![message.topic hasSuffix:@"error"]) {
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
             
-            [messageInfo setObject:message.version forKey:@"Version"];
-            [messageInfo setObject:message.topic forKey:@"Topic"];
-            [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"];
+            message.version ?
+                [messageInfo setObject:message.version forKey:@"Version"] :
+                [messageInfo setObject:@"" forKey:@"Version"];
+            
+            message.topic ?
+                [messageInfo setObject:message.topic forKey:@"Topic"] :
+                [messageInfo setObject:@"" forKey:@"Topic"];
+            
+            message.receiverObjectId ?
+                [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"] :
+                [messageInfo setObject:@"" forKey:@"ReceiverId"];
+            
             [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.senderType]
                             forKey:@"SenderType"];
-            [messageInfo setObject:message.senderObjectId forKey:@"SenderId"];
-            [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"];
+            
+            message.senderObjectId ?
+                [messageInfo setObject:message.senderObjectId forKey:@"SenderId"] :
+                [messageInfo setObject:@"" forKey:@"SenderId"];
+            
+            message.senderDisplayName ?
+                [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"] :
+                [messageInfo setObject:@"" forKey:@"DisplayName"];
             
             NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
             [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
             
             NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
             
-            [messageInfo setObject:sentTimeStr forKey:@"SentTime"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"Payload"];
-            [messageInfo setObject:message.contentType forKey:@"ContentType"];
-            [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"];
+            sentTimeStr ? [messageInfo setObject:sentTimeStr forKey:@"SentTime"] :
+                            [messageInfo setObject:@"" forKey:@"SentTime"];
+            
+            NSString *payloadStr =
+                [[NSString alloc] initWithData:message.payload encoding:NSUTF8StringEncoding];
+            
+            payloadStr ? [messageInfo setObject:payloadStr forKey:@"Payload"] :
+                            [messageInfo setObject:@"" forKey:@"Payload"];
+
+            message.contentType ?
+                [messageInfo setObject:message.contentType forKey:@"ContentType"] :
+                [messageInfo setObject:@"" forKey:@"ContentType"];
+            
+            message.contentEncoding ?
+                [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"] :
+                [messageInfo setObject:@"" forKey:@"ContentEncoding"];
             
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                    messageAsDictionary:messageInfo];
@@ -829,20 +943,25 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         if (message) {
             
             NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
-            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.mid] forKey:@"mid"];
-            [messageInfo setObject:message.topic forKey:@"topic"];
-            [messageInfo setObject:[message.payload base64EncodedStringWithOptions:0] forKey:@"payload"];
-            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"qos"];
-            [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"retained"];
             
-            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.mid] forKey:@"MID"];
+            [messageInfo setObject:message.topic forKey:@"Topic"];
             
-            [payload setObject:@"onMessageReceived" forKey:@"callback"];
+            [messageInfo setObject:[[NSString alloc] initWithData:message.payload
+                                                         encoding:NSUTF8StringEncoding]
+                            forKey:@"Payload"];
+
+            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.qos] forKey:@"QoS"];
+            [messageInfo setObject:[NSNumber numberWithBool:message.retained] forKey:@"Retained"];
             
-            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageInfo, @"message", nil]
-                        forKey:@"payload"];
+//            NSMutableDictionary * payload = [NSMutableDictionary dictionary];
+//            
+//            [payload setObject:@"onMessageReceived" forKey:@"callback"];
+//            
+//            [payload setObject:[NSDictionary dictionaryWithObjectsAndKeys:messageInfo, @"message", nil]
+//                        forKey:@"Payload"];
             
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:payload];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:messageInfo];
             
             [result setKeepCallbackAsBool:YES];
         }
@@ -890,6 +1009,89 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
         
         [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
+}
+
+
+#pragma mark - Utillity
+
+- (NSMutableArray *)toStringQoS:(NSArray *)grantedQoS {
+    
+    NSMutableArray *toStringQoS = [NSMutableArray array];
+    
+    for (int i = 0; i < [grantedQoS count]; i++) {
+        
+        NSNumber *QoS = [grantedQoS objectAtIndex:i];
+        
+        switch ([QoS integerValue]) {
+            
+            case AtMostOnce:
+            
+                [toStringQoS addObject:@"AtMostOnce"];
+            
+                break;
+            
+            case AtLeastOnce:
+            
+                [toStringQoS addObject:@"AtLeastOnce"];
+            
+                break;
+            
+            case ExactlyOnce:
+            
+                [toStringQoS addObject:@"ExactlyOnce"];
+            
+                break;
+        }
+    }
+    
+    return toStringQoS;
+}
+
+
+- (NSString *)toStringConnectionReturnCode:(MQTTConnectionReturnCode)rc {
+    
+    NSString *rcStr = @"None";
+    
+    switch (rc) {
+        
+        case ConnectionAccepted:
+        
+            rcStr = @"ConnectionAccepted";
+        
+        break;
+        
+        case ConnectionRefusedUnacceptableProtocolVersion:
+        
+            rcStr = @"ConnectionRefusedUnacceptableProtocolVersion";
+        
+        break;
+        
+        case ConnectionRefusedIdentifierRejected:
+        
+            rcStr = @"ConnectionRefusedIdentifierRejected";
+        
+        break;
+        
+        case ConnectionRefusedServerUnavailable:
+        
+            rcStr = @"ConnectionRefusedServerUnavailable";
+        
+        break;
+        
+        case ConnectionRefusedBadUserNameOrPassword:
+        
+            rcStr = @"ConnectionRefusedBadUserNameOrPassword";
+        
+        break;
+        
+        case ConnectionRefusedNotAuthorized:
+        
+            rcStr = @"ConnectionRefusedNotAuthorized";
+        
+        break;
+    }
+    
+    return rcStr;
 }
 
 

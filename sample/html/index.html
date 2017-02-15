@@ -102,20 +102,6 @@
                     }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
             });
 
-            $("#setGrantFlowClientCredential").bind("click", function(event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.grantFlow(function(result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
-            });
-
             $("#setConfigName").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -309,19 +295,15 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.startListeningToMyMessages(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        });
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.startListeningToMyMessages(
+                function(result) {
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
             });
 
             $("#stopListeningToMyMessages").bind("click", function(event, ui) {
@@ -329,19 +311,15 @@
                 $(this).find("textarea.error").hide();
                 var thisElement = $(this);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.stopListeningToMyMessages(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        });
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.stopListeningToMyMessages(
+                function(result) {
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                });
             });
 
             $("#magSendMessageToUserOnTopic").bind("click", function(event, ui) {
@@ -352,21 +330,24 @@
                 var userObjectId = $("input[name='magSendToUserOnTopic']").val();
                 var topicName = $("input[name='magSendToTopicName']").val();
                 var message = $("input[name='magSendToTopicMsg']").val();
+                var arr = [userObjectId,topicName,message];
+                if(validateFields(arr) == false){
+                    return;
+                }
                 message = btoa(message);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.sendMessageToUserOnTopic(function(result) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                            displayResult(thisElement, result);
-                        }, function(error) {
-                            thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                        }, message, userObjectId, topicName);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.sendMessageToUserOnTopic(
+                function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                }, 
+                function(error) {
+                            
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, 
+                message, userObjectId, topicName);
             });
 
             $("#magSendMessageToUser").bind("click", function(event, ui) {
@@ -376,22 +357,24 @@
 
                 var userObjectId = $("input[name='magSendToUser']").val();
                 var message = $("input[name='magSendToUserMsg']").val();
+                var arr = [userObjectId,message];
+                
+                if(validateFields(arr) == false){
+                    return;
+                }
                 message = btoa(message);
 
-                MASPluginUser.currentUser(function(MASUser) {
-                        MASUser.sendMessageToUser(function(result) {
-                                thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                                displayResult(thisElement, result);
-                            },
-                            function(error) {
-                                thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                                displayError(thisElement, error);
-                            }, message, userObjectId);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    });
+                MASConnectaPlugin.MASUser.sendMessageToUser(function(result) {
+                    
+                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
+                    displayResult(thisElement, result);
+                },
+                function(error) {
+                                
+                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
+                    displayError(thisElement, error);
+                }, 
+                message, userObjectId);
             });
 
             $("#connectBroker").bind("click", function(event, ui) {
@@ -401,6 +384,10 @@
 
                 var host = $("input[name='host']").val();
                 var port = $("input[name='port']").val();
+                var arr = [host,port];
+                if(validateFields(arr) == false){
+                    return;
+                }
 
                 var masMQTTConstants = new MASConnectaPlugin.MASMQTTConstants(host, port, false, "");
 
@@ -479,6 +466,10 @@
                 var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", {});
 
                 var topicName = $("input[name='pubSubTopicName']").val();
+                var arr = [topicName];
+                if(validateFields(arr) == false){
+                    return;
+                }
                 var qos = thisElement.find("select[name='subTopicQos']").val();
 
                 masMQTTClient.subscribe(function(result) {
@@ -498,7 +489,10 @@
                 var masMQTTClient = new MASConnectaPlugin.MASMQTTClient("", false, {});
 
                 var topicName = $("input[name='pubUnsubTopicName']").val();
-
+                var arr = [topicName];
+                if(validateFields(arr) == false){
+                    return;
+                }
                 masMQTTClient.unsubscribe(function(result) {
                     thisElement.removeClass("succes").removeClass("failure").addClass("success");
                     displayResult(thisElement, result);
@@ -517,6 +511,10 @@
 
                 var topicName = $("input[name='pubSendToTopicName']").val();
                 var message = $("input[name='pubSendToTopicMsg']").val();
+                var arr = [topicName,message];
+                if(validateFields(arr) == false){
+                    return;
+                }
                 message = btoa(message);
 
                 var qos = thisElement.find("select[name='pubMessageQos']").val();
@@ -546,6 +544,16 @@
                 return MASPlugin.MASRequestResponseType.MASRequestResponseTypeXml;
             } else {
                 return MASPlugin.MASRequestResponseType.MASRequestResponseTypeUnknown;
+            }
+        }
+
+        function validateFields(arr){
+            for(var i in arr){
+                var val = arr[i];
+                if(val == null || val == undefined || val == ""){
+                    alert("Invalid value(s) entered");
+                    return false;
+                }
             }
         }
 
@@ -689,12 +697,6 @@
                         </a>
                     </li>
                     <li data-icon="false">
-                        <a href="#" id="setGrantFlowClientCredential">MAS GrantFlow: client credential
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
                         <a href="#" id="setConfigName">MAS set configuration file name
                             <input type="text" name="configName" placeholder="configName"/>
                                 <textarea class='error' style="display:none;" readonly="">
@@ -786,17 +788,17 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="magSendMessageToUserOnTopic">Send Message To User On a Topic
-                            <input id="magSendToUserOnTopic" type="text" name="magSendToUserOnTopic" value="" placeholder="User Name"/>
-                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name"/>
-                            <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message"/>
+                            <input id="magSendToUserOnTopic" type="text" name="magSendToUserOnTopic" value="" placeholder="User Name [Required]"/>
+                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name [Required]" />
+                            <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
                     </li>
                     <li data-icon="false">
                         <a href="#" id="magSendMessageToUser">Send Message To User
-                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name"/>
-                            <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message"/>
+                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name [Required]"/>
+                            <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
@@ -808,8 +810,8 @@
                 <ul data-role="listview" data-theme="b">
                     <li data-icon="false">
                         <a href="#" id="connectBroker">Connect To Public Broker
-                            <input type="text" id="host" name="host" value="" placeholder="MQTT Broker Host "/>
-                            <input type="text" id="port" name="port" value="" placeholder="MQTT Broker Port "/>
+                            <input type="text" id="host" name="host" value="" placeholder="MQTT Broker Host [Required]"/>
+                            <input type="text" id="port" name="port" value="" placeholder="MQTT Broker Port [Required]"/>
                             <input type="text" id="clientId" name="clientId" value="" placeholder="Client Id"/>
                             <input type="text" id="username" name="username" value="" placeholder="Broker client username"/>
                             <input type="password" id="password" name="password" value="" placeholder="Broker client password"/>
@@ -851,7 +853,7 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="subscribeToTopic">Subscribe To Topic
-                            <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="Topic Name"/>
+                            <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="Topic Name [Required]"/>
                             <label for="subTopicQos">Quality Of Service</label>
                             <select id="subTopicQos" name="subTopicQos" onchange="clearInputText(this);">
                                 <option value="0">At Most Once</option>
@@ -864,14 +866,14 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="unsubscribeToTopic">Unsubscribe To Topic
-                            <input id="pubUnsubTopicName" type="text" name="pubUnsubTopicName" value="" placeholder="Topic Name"/>
+                            <input id="pubUnsubTopicName" type="text" name="pubUnsubTopicName" value="" placeholder="Topic Name [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
                     </li>
                     <li data-icon="false">
                         <a href="#" id="pubPublishMsg">Send Message To Topic
-                            <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="Topic Name"/>
+                            <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="Topic Name [Required]"/>
                             <!--label for="pubSendMsgToTopicMimeType">MIME Type:</label>
                             <select-- id="pubSendMsgToTopicMimeType" name="pubSendMsgToTopicMimeType" onchange="clearInputText(this);" >
                                 <option value="text/plain">Plain Text</option>
@@ -880,7 +882,7 @@
                                 <option value="image/jpg">JPEG</option>
                                 <option value="application/octet-stream">Binary Data</option>
                             </select-->
-                            <input id="pubSendToTopicMsg" type="text" name="pubSendToTopicMsg" value="" placeholder="Message"/>
+                            <input id="pubSendToTopicMsg" type="text" name="pubSendToTopicMsg" value="" placeholder="Message [Required]"/>
                             <label for="pubMessageQos">Quality Of Service</label>
                             <select id="pubMessageQos" name="pubMessageQos" onchange="clearInputText(this);">
                                 <option value="0">At Most Once</option>
