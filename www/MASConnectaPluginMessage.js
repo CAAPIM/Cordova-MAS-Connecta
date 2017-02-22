@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2016 CA, Inc. All rights reserved.
  * This software may be modified and distributed under the terms
  * of the MIT license. See the LICENSE file for details.
@@ -11,52 +11,62 @@ var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
 var MASConnectaPluginMessage = function() {
 
 	/**
- 	 * The version of the message format.
+ 	 * The version of the message format
+ 	 * @member {string}
  	 */
 	this.version;
 
 	/**
  	 *  The topic of the message
+ 	 * @member {string}
  	 */
 	this.topic;
 
 	/**
- 	 * The object identifier of the message receiver.
+ 	 * The object identifier of the message receiver
+ 	 * @member {string}
  	 */
 	this.receiverObjectId;
 
 	/**
- 	 * The MASPluginSenderType representing the sender.
+ 	 * The MASPluginSenderType representing the sender
+ 	 * @member {string}
  	 */
 	this.senderType;
 
 	/**
- 	 * The object identifier of the message sender.
+ 	 * The object identifier of the message sender
+ 	 * @member {string}
  	 */
 	this.senderObjectId;
 
 	/**
- 	 *  The DisplayName (field in the /UserInfo mapping in the Gateway) of the message sender.
+ 	 *  The DisplayName (field in the /UserInfo mapping in the Gateway) of the message sender
+ 	 *  @member {string}
  	 */
 	this.senderDisplayName;
 
 	/**
- 	 * The timestamp when the message was sent in UTC format.
+ 	 * The timestamp when the message was sent in UTC format
+ 	 * @member {integer}
  	 */
 	this.sentTime;
 
 	/**
- 	 * The payload in binary format.
+ 	 * The payload in binary format
+ 	 * @member {binary}
  	 */
 	this.payload;
 
 	/**
- 	 * The content type of the payload.
+ 	 * The content type of the payload
+ 	 * @member {string}
  	 */
 	this.contentType;
 
 	/**
- 	 *  The content encoding of the payload.
+ 	 * The content encoding of the payload.
+ 	 * @member {string}
  	 */
 	this.contentEncoding;
 
@@ -65,16 +75,34 @@ var MASConnectaPluginMessage = function() {
 	/// @name Lifecycle
 	///------------------------------------------------------------------------------------------------------------------
 
+	/**
+	*	Initialize a message with a payload
+	* 	@param {function} successHandler user defined success callback
+	* 	@param {function} errorHandler user defined error callback
+	* 	@param {binary} payload payload as binary
+	*/
 	this.initializeWithPayloadData = function(successHandler, errorHandler, payload, contentType) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadData", [payload, contentType]);
 	};
 
+	/**
+	*	Initialize a message with a payload
+	* 	@param {function} successHandler user defined success callback
+	* 	@param {function} errorHandler user defined error callback
+	* 	@param {string} payload payload as a string
+	*/
 	this.initializeWithPayloadString = function(successHandler, errorHandler, payload, contentType) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadString", [payload, contentType]);
 	};
 
+	/**
+	*	Initialize a message with a payload
+	* 	@param {function} successHandler user defined success callback
+	* 	@param {function} errorHandler user defined error callback
+	* 	@param {base64} payload payload as an image
+	*/
 	this.initializeWithPayloadImage = function(successHandler, errorHandler, payload, contentType) {
 
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadImage", [payload, contentType]);
@@ -87,7 +115,8 @@ var MASConnectaPluginMessage = function() {
 
 	/**
  	 * The payload property in String format.
- 	 *
+ 	 * @param {function} successHandler user defined success callback
+ 	 * @param {function} errorHandler user defined error callback
  	 * @return String.
  	 */
 	this.payloadTypeAsString = function(successHandler, errorHandler) {
@@ -97,7 +126,8 @@ var MASConnectaPluginMessage = function() {
 
 	/**
  	 *  The payload property in image src format.
- 	 *
+ 	 *  @param {function} successHandler user defined success callback
+ 	 *  @param {function} errorHandler user defined error callback
  	 *  @return base64 string
  	 */
 	this.payloadTypeAsImage = function(successHandler, errorHandler) {
@@ -107,7 +137,8 @@ var MASConnectaPluginMessage = function() {
 
 	/**
  	 * The senderType property in String format.
- 	 *
+ 	 * @param {function} successHandler user defined success callback
+ 	 * @param {function} errorHandler user defined error callback
  	 * @return String.
  	 */
 	this.senderTypeAsString = function(successHandler, errorHandler) {
@@ -117,8 +148,9 @@ var MASConnectaPluginMessage = function() {
 
 	/**
  	 * The MASConnectaPluginConstants.MASSenderType in String format.
- 	 *
- 	 * @param type MASConnectaPluginConstants.MASSenderType.
+ 	 * @param {function} successHandler user defined success callback
+ 	 * @param {function} errorHandler user defined error callback
+ 	 * @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the mas sender type
  	 * @return String.
  	 */
 	this.stringFromSenderType = function(successHandler, errorHandler, masSenderType) {
