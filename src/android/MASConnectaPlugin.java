@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2016 CA, Inc.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 package com.ca.mas.cordova.connecta;
 
 import android.content.BroadcastReceiver;
@@ -40,9 +46,16 @@ public class MASConnectaPlugin extends CordovaPlugin {
     private static CallbackContext _messageReceiverCallback = null;
     private static volatile boolean isListenerRegistered = false;
 
+	private static MASConnectaPlugin _plugin = null;
+
     @Override
     protected void pluginInitialize() {
         super.pluginInitialize();
+        _plugin = this;
+    }
+
+    public static Context getCordovaContext() {
+        return _plugin.cordova.getActivity().getApplicationContext();
     }
 
     @Override

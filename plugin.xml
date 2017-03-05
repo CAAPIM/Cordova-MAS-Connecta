@@ -31,7 +31,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginMQTTMessage" />
     </js-module>
    
-    <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/MAS-Foundation-Cordova.git" commit="develop" />
+    <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/Cordova-MAS-Foundation.git" commit="develop" />
     
     <!-- iOS -->
     <platform name="ios" >

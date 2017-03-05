@@ -579,9 +579,19 @@
         }
 
         function displayError(element, error) {
-            element.find("textarea.error").show();
-            element.find("textarea.error").html(error.errorMessage);
-        }
+                element.find("textarea.error").show();
+                var errorMessage = "";
+                if (typeof error === 'undefined' || typeof error.errorMessage === 'undefined') {
+                    errorMessage = "Unknown error";
+                } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail === 'undefined') {
+                    errorMessage = error.errorMessage;
+                } else if (error.errorMessage === 'Internal Server Error' && typeof error.errorMessageDetail !== 'undefined') {
+                    errorMessage = error.errorMessageDetail;
+                } else {
+                    errorMessage = error.errorMessage;
+                }
+                element.find("textarea.error").html(errorMessage);
+         }
     </script>
     <script type="text/javascript">
         function getErrorMessage(error) {
