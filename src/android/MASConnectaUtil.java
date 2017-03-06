@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2016 CA, Inc.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
 package com.ca.mas.cordova.connecta;
 
 import com.ca.mas.connecta.client.MASConnectOptions;
@@ -107,6 +113,8 @@ public class MASConnectaUtil {
         } else if (throwable != null && throwable instanceof MASCordovaException) {
             errorMessage = throwable.getMessage();
 
+        } else if ((throwable instanceof NullPointerException || throwable instanceof IllegalStateException) && (MAS.getContext() == null || MAS.getState(MASConnectaPlugin.getCordovaContext()) != MASConstants.MAS_STATE_STARTED)) {
+            errorMessageDetail = "Mobile SSO has not been initialized.";
         } else {
             errorMessageDetail = throwable.getMessage();
         }
