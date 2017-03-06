@@ -17,15 +17,15 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
     *	Initializes the MQTT client
     * 	@param {function} successHandler user defined success callback
     * 	@param {function} errorHandler user defined error callback
-    *	@param {string} clientId clientId of the client to be initialized
-    * 	@param {boolean} cleanSession specify whether or not to clean the previous session
+    *	@param {string} clientId specifies the client ID to initialize the client
+    * 	@param {boolean} cleanSession specifies whether to clean the previous session
     */
     this.initializeMQTTClient = function(successHandler, errorHandler, clientId, cleanSession) {
     	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "initializeMQTTClient", [clientId, cleanSession]);
     };
 
     /**
-    *	Client id of the current object
+    *	Client ID of the current object
     *	@member {string}
     */
     this.clientId = clientId;
@@ -33,7 +33,7 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 
     this.masMQTTConstants = masMQTTConstants;
 
-    // Initialize the client.
+    // Initialize the client
     if (this.clientId) {
 		this.initializeMQTTClient(function(){}, function(){}, this.clientId, (this.masMQTTConstants ? this.masMQTTConstants.cleanSession : true));
     }
@@ -56,18 +56,18 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
     ///------------------------------------------------------------------------------------------------------------------
 
     /**
-	 * Connect to a message broker using connect options and client id
+	 * Connects to a message broker using the connect options and client id
 	 * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-	 * @param {masConnectaOptions} masConnectaOptions MQTT connect options for Client initialization. Use MASConnectaPlugin.MASConnectOptions() to create it.
-	 * @param {string} clientId client Id of the MQTT client i.e. this device's identification. This value needs to be unique per broker. If not provided, client_id from msso_config.json is used
+	 * @param {masConnectaOptions} masConnectaOptions MQTT connect options for client initialization. Use the MASConnectaPlugin.MASConnectOptions() method to create it.
+	 * @param {string} clientId Client ID of the MQTT client i.e. this device's identification. This value must be unique per broker. If not provided, client_id from msso_config.json is used
 	 */
 	this.connect = function(successHandler, errorHandler) {
 		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "connect", [this.clientId, this.masMQTTConstants]);
 	};
 
 	/**
-	 * Disconnect to the existing connected message broker
+	 * Disconnects from the existing connected message broker
 	 * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
 	 */
@@ -85,14 +85,14 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	 * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
 	 * @param {string} topicName topic to which the user needs to subscribe
-     * @param {integer} QoS Quality of Service for message delivery.0-> Atmost once,1-> At least once, 2: Exactly once. Default is 2.
+     * @param {integer} QoS Quality of Service for message delivery.0-> At most once,1-> At least once, 2: Exactly once. Default is 2.
 	 */
 	this.subscribe = function(successHandler, errorHandler, topicName, QoS){
 		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "subscribe", [topicName, QoS]);
 	};
 
 	/**
-	 * Unsubscribe to a topic.
+	 * Unsubscribe from a topic
 	 * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
 	 * @param {string} topicName topic to which the user needs to unsubscribe.
@@ -102,12 +102,12 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	};
 
 	/**
-	 * Publish to a topic using the broker connected via connect call.
+	 * Publish to a topic using the broker connected via connect call
 	 * @param {function} successHandler user defined success callback
      * @param {function} errorHandler user defined error callback
-	 * @param {string} topicName topic to which the user needs to send the message
-	 * @param {string} message message to be sent. The message bytes should be Base64 encoded string, to support sending images also
-	 * @param {integer} QoS Quality of Service for message delivery.0-> Atmost once,1-> At least once, 2: Exactly once. Default is 2
+	 * @param {string} topicName topic to which the user sends the message
+	 * @param {string} message specified the message to be sent. The message bytes should be a base64 encoded string to support sending images
+	 * @param {integer} QoS Quality of Service for message delivery.0-> At most once,1-> At least once, 2: Exactly once. Default is 2
 	 * @param {boolean} retain indication for the broker to persist the messages for a client
 	 */
 	this.publish = function(successHandler, errorHandler, topic, message, QoS, retain) {

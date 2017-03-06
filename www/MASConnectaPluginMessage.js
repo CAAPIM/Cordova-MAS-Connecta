@@ -29,7 +29,7 @@ var MASConnectaPluginMessage = function() {
 	this.receiverObjectId;
 
 	/**
- 	 * The MASPluginSenderType representing the sender
+ 	 * The MASPluginSenderType that represents the sender
  	 * @member {string}
  	 */
 	this.senderType;
@@ -47,7 +47,7 @@ var MASConnectaPluginMessage = function() {
 	this.senderDisplayName;
 
 	/**
- 	 * The timestamp when the message was sent in UTC format
+ 	 * The timestamp in UTC format when the message was sent
  	 * @member {integer}
  	 */
 	this.sentTime;
@@ -65,7 +65,7 @@ var MASConnectaPluginMessage = function() {
 	this.contentType;
 
 	/**
- 	 * The content encoding of the payload.
+ 	 * The content encoding of the payload
  	 * @member {string}
  	 */
 	this.contentEncoding;
@@ -114,10 +114,10 @@ var MASConnectaPluginMessage = function() {
 	///------------------------------------------------------------------------------------------------------------------
 
 	/**
- 	 * The payload property in String format.
+ 	 * The payload property in a string format
  	 * @param {function} successHandler user defined success callback
  	 * @param {function} errorHandler user defined error callback
- 	 * @return String.
+ 	 * @return String
  	 */
 	this.payloadTypeAsString = function(successHandler, errorHandler) {
 
@@ -125,7 +125,7 @@ var MASConnectaPluginMessage = function() {
 	};
 
 	/**
- 	 *  The payload property in image src format.
+ 	 *  The payload property in an image src format
  	 *  @param {function} successHandler user defined success callback
  	 *  @param {function} errorHandler user defined error callback
  	 *  @return base64 string
@@ -136,10 +136,10 @@ var MASConnectaPluginMessage = function() {
 	};
 
 	/**
- 	 * The senderType property in String format.
+ 	 * The senderType property in a string format
  	 * @param {function} successHandler user defined success callback
  	 * @param {function} errorHandler user defined error callback
- 	 * @return String.
+ 	 * @return String
  	 */
 	this.senderTypeAsString = function(successHandler, errorHandler) {
 
@@ -147,11 +147,11 @@ var MASConnectaPluginMessage = function() {
 	};
 
 	/**
- 	 * The MASConnectaPluginConstants.MASSenderType in String format.
+ 	 * The MASConnectaPluginConstants.MASSenderType in a string format
  	 * @param {function} successHandler user defined success callback
  	 * @param {function} errorHandler user defined error callback
- 	 * @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the mas sender type
- 	 * @return String.
+ 	 * @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the MAS sender type
+ 	 * @return String
  	 */
 	this.stringFromSenderType = function(successHandler, errorHandler, masSenderType) {
 
