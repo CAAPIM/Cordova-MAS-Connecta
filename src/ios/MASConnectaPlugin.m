@@ -136,7 +136,7 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
          
              if (user && !error) {
                  
-                 [user sendMessage:message toUser:user
+                 [[MASUser currentUser] sendMessage:message toUser:user
                         completion:
                   ^(BOOL success, NSError * _Nullable error) {
                       
@@ -197,7 +197,7 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
              
              if (user && !error) {
                  
-                 [user sendMessage:message toUser:user onTopic:topicName
+                 [[MASUser currentUser] sendMessage:message toUser:user onTopic:topicName
                         completion:
                   ^(BOOL success, NSError * _Nullable error) {
                       
