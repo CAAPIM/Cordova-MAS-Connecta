@@ -22,6 +22,11 @@ typedef void (^OnUserMessageReceivedHandler)(MASMessage *message);
 static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 
 
+@interface MASConnectaPlugin (Private)
+    <MASConnectaMessagingClientDelegate>
+
+@end
+
 @implementation MASConnectaPlugin
 
 
@@ -656,13 +661,24 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
         [[MASMQTTClient sharedClient] unsubscribeFromTopic:topic
                                      withCompletionHandler:
-         ^(void) {
-             
-             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                        messageAsString:@"Successfully unsubscribed"];
+         ^(BOOL completed, NSError * _Nullable error) {
+            
+             if (completed && !error) {
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsString:@"Successfully unsubscribed"];
+             }
+             else {
+                 
+                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
+                                             @"errorMessage":[error localizedDescription],
+                                             @"errorInfo":[error userInfo]};
+                 
+                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:errorInfo];
+             }
              
              [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-         }];
+        }];
     }
     else {
      
