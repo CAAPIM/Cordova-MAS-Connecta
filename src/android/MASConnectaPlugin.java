@@ -23,6 +23,7 @@ import com.ca.mas.foundation.MASCallback;
 import com.ca.mas.foundation.MASException;
 import com.ca.mas.foundation.MASFoundationStrings;
 import com.ca.mas.foundation.MASUser;
+import com.ca.mas.foundation.MAS;
 import com.ca.mas.messaging.MASMessage;
 import com.ca.mas.messaging.topic.MASTopic;
 import com.ca.mas.messaging.topic.MASTopicBuilder;
@@ -184,7 +185,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
                     callbackContext.error(getError(new MASCordovaException("Unable to subscribe to topic:" + throwable.getMessage())));
                 }
             });
-        } catch (MASException mex) {
+        } catch (Exception mex) {
             Log.e(TAG, mex.getMessage());
             callbackContext.error(getError(new MASCordovaException("Unable to subscribe to topic:" + mex.getMessage())));
         }
@@ -219,7 +220,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
                     callbackContext.error(getError(new MASCordovaException("Unable to unsubscribe to topic:" + throwable.getMessage())));
                 }
             });
-        } catch (MASException mex) {
+        } catch (Exception mex) {
             Log.e(TAG, mex.getMessage());
             callbackContext.error(getError(new MASCordovaException("Unable to unsubscribe to topic:" + mex.getMessage())));
         }
@@ -452,7 +453,7 @@ public class MASConnectaPlugin extends CordovaPlugin {
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/qos missing")));
             return;
-        } catch (MASException e) {
+        } catch (Exception e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/qos missing")));
             return;
         }
@@ -521,13 +522,13 @@ public class MASConnectaPlugin extends CordovaPlugin {
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
             return;
-        } catch (MASException e) {
-            callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
-            return;
         } catch (MASCordovaException e) {
             callbackContext.error(getError(e));
             return;
-        }
+        } catch (Exception e) {
+            callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
+            return;
+        } 
 
         MASMessage masMessage = MASMessage.newInstance();
         masMessage.setContentType(contentType);

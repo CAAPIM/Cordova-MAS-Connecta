@@ -15,6 +15,8 @@ import com.ca.mas.core.error.MAGException;
 import com.ca.mas.core.error.MAGRuntimeException;
 import com.ca.mas.core.error.MAGServerException;
 import com.ca.mas.core.error.TargetApiException;
+import com.ca.mas.foundation.MAS;
+import com.ca.mas.foundation.MASConstants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
