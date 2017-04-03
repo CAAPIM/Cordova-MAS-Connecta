@@ -132,6 +132,10 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
                             }
                             JSONObject obj = new JSONObject(message.createJSONStringFromMASMessage(context));
+                            String payload = obj.getString("Payload");
+                            byte[] payloadBytes = decodeBase64IncomingMessage(payload);
+                            payload = new String(payloadBytes);
+                            obj.put("Payload",payload);
                             PluginResult result = new PluginResult(PluginResult.Status.OK, obj);
                             result.setKeepCallback(true);
                             _messageReceiverCallback.sendPluginResult(result);
@@ -285,17 +289,18 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
         try {
             String message_0 = args.getString(0);
-            message = decodeBase64IncomingMessage(message_0);
+            //message = decodeBase64IncomingMessage(message_0);
+            message = message_0.getBytes();
             userName = args.getString(1);
             topic = args.getString(2);
             contentType = args.optString(3, "text/plain");
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/userName missing")));
             return;
-        } catch (MASCordovaException e) {
+        } /*catch (MASCordovaException e) {
             callbackContext.error(getError(e));
             return;
-        }
+        }*/
 
         getCurrentUser().getUserById(userName, new MASCallback<MASUser>() {
             @Override
@@ -346,16 +351,17 @@ public class MASConnectaPlugin extends CordovaPlugin {
 
         try {
             String message_0 = args.getString(0);
-            message = decodeBase64IncomingMessage(message_0);
+            //message = decodeBase64IncomingMessage(message_0);
+            message = message_0.getBytes();
             userName = args.getString(1);
             contentType = args.optString(2, "text/plain");
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, userName/contentType/message missing")));
             return;
-        } catch (MASCordovaException e) {
+        } /*catch (MASCordovaException e) {
             callbackContext.error(getError(e));
             return;
-        }
+        }*/
         getCurrentUser().getUserById(userName, new MASCallback<MASUser>() {
             @Override
             public void onSuccess(final MASUser masUser) {
@@ -512,7 +518,8 @@ public class MASConnectaPlugin extends CordovaPlugin {
         try {
             topicName = args.getString(0);
             String message_0 = args.getString(1);
-            message = decodeBase64IncomingMessage(message_0);
+            //message = decodeBase64IncomingMessage(message_0);
+            message = message_0.getBytes();
             qos = args.optInt(2, MASConnectaClient.EXACTLY_ONCE);
             retained = args.optBoolean(3, false);
 
@@ -522,10 +529,10 @@ public class MASConnectaPlugin extends CordovaPlugin {
         } catch (JSONException e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
             return;
-        } catch (MASCordovaException e) {
+        }/* catch (MASCordovaException e) {
             callbackContext.error(getError(e));
             return;
-        } catch (Exception e) {
+        }*/ catch (Exception e) {
             callbackContext.error(getError(new MASCordovaException("Invaid Input, topic/message/qos/retained missing")));
             return;
         } 
