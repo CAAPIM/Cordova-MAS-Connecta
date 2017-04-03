@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: MASPluginMQTTClient.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: MASPluginMQTTClient.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * Copyright (c) 2016 CA, Inc. All rights reserved.
+ * This software may be modified and distributed under the terms
+ * of the MIT license. See the LICENSE file for details.
+ *
+ */
+
+var MASPluginMQTTConstants = require("./MASPluginMQTTConstants");
+
+var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Lifecycle
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+    *	Initializes the MQTT client
+    * 	@param {function} successHandler user defined success callback
+    * 	@param {function} errorHandler user defined error callback
+    *	@param {string} clientId specifies the client ID to initialize the client
+    * 	@param {boolean} cleanSession specifies whether to clean the previous session
+    */
+    this.initializeMQTTClient = function(successHandler, errorHandler, clientId, cleanSession) {
+    	return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "initializeMQTTClient", [clientId, cleanSession]);
+    };
+
+    /**
+    *	Client ID of the current object
+    *	@member {string}
+    */
+    this.clientId = clientId;
+
+
+    this.masMQTTConstants = masMQTTConstants;
+
+    // Initialize the client
+    if (this.clientId) {
+		this.initializeMQTTClient(function(){}, function(){}, this.clientId, (this.masMQTTConstants ? this.masMQTTConstants.cleanSession : true));
+    }
+
+    ///------------------------------------------------------------------------------------------------------------------
+    /// @name Properties
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+    *	Checks if device is connected to client
+    * 	@param {function} successHandler user defined success callback
+    * 	@param {function} errorHandler user defined error callback	
+    */
+	this.isConnected = function(successHandler, errorHandler) {
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "isConnected", []);
+	};
+
+	///------------------------------------------------------------------------------------------------------------------
+    /// @name MQTT Connection methods
+    ///------------------------------------------------------------------------------------------------------------------
+
+    /**
+	 * Connects to a message broker using the connect options and client id
+	 * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+	 * @param {masConnectaOptions} masConnectaOptions MQTT connect options for client initialization. Use the MASConnectaPlugin.MASConnectOptions() method to create it.
+	 * @param {string} clientId Client ID of the MQTT client i.e. this device's identification. This value must be unique per broker. If not provided, client_id from msso_config.json is used
+	 */
+	this.connect = function(successHandler, errorHandler) {
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "connect", [this.clientId, this.masMQTTConstants]);
+	};
+
+	/**
+	 * Disconnects from the existing connected message broker
+	 * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+	 */
+	this.disconnect = function(successHandler,errorHandler){
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "disconnect", []);
+	};
+
+
+	///------------------------------------------------------------------------------------------------------------------
+    /// @name Subscribe methods
+    ///------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Subscribe to a topic using the broker connected via connect call
+	 * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+	 * @param {string} topicName topic to which the user needs to subscribe
+     * @param {integer} QoS Quality of Service for message delivery.0-> At most once,1-> At least once, 2: Exactly once. Default is 2.
+	 */
+	this.subscribe = function(successHandler, errorHandler, topicName, QoS){
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "subscribe", [topicName, QoS]);
+	};
+
+	/**
+	 * Unsubscribe from a topic
+	 * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+	 * @param {string} topicName topic to which the user needs to unsubscribe.
+	 */
+	this.unsubscribe = function(successHandler, errorHandler, topicName){
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "unsubscribe", [topicName]);
+	};
+
+	/**
+	 * Publish to a topic using the broker connected via connect call
+	 * @param {function} successHandler user defined success callback
+     * @param {function} errorHandler user defined error callback
+	 * @param {string} topicName topic to which the user sends the message
+	 * @param {string} message specified the message to be sent. The message bytes should be a base64 encoded string to support sending images
+	 * @param {integer} QoS Quality of Service for message delivery.0-> At most once,1-> At least once, 2: Exactly once. Default is 2
+	 * @param {boolean} retain indication for the broker to persist the messages for a client
+	 */
+	this.publish = function(successHandler, errorHandler, topic, message, QoS, retain) {
+		return Cordova.exec(successHandler, errorHandler, "MASConnectaPlugin", "publish", [topic, message, QoS, retain]);
+	};
+};
+
+module.exports = MASPluginMQTTClient;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#clientId">clientId</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#contentEncoding">contentEncoding</a></li><li><a href="global.html#contentType">contentType</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#initializeMQTTClient">initializeMQTTClient</a></li><li><a href="global.html#initializeWithPayloadData">initializeWithPayloadData</a></li><li><a href="global.html#initializeWithPayloadImage">initializeWithPayloadImage</a></li><li><a href="global.html#initializeWithPayloadString">initializeWithPayloadString</a></li><li><a href="global.html#isConnected">isConnected</a></li><li><a href="global.html#payload">payload</a></li><li><a href="global.html#payloadTypeAsImage">payloadTypeAsImage</a></li><li><a href="global.html#payloadTypeAsString">payloadTypeAsString</a></li><li><a href="global.html#publish">publish</a></li><li><a href="global.html#receiverObjectId">receiverObjectId</a></li><li><a href="global.html#senderDisplayName">senderDisplayName</a></li><li><a href="global.html#senderObjectId">senderObjectId</a></li><li><a href="global.html#senderType">senderType</a></li><li><a href="global.html#senderTypeAsString">senderTypeAsString</a></li><li><a href="global.html#sentTime">sentTime</a></li><li><a href="global.html#stringFromSenderType">stringFromSenderType</a></li><li><a href="global.html#subscribe">subscribe</a></li><li><a href="global.html#topic">topic</a></li><li><a href="global.html#unsubscribe">unsubscribe</a></li><li><a href="global.html#version">version</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.0-dev</a> on Mon Mar 06 2017 15:01:32 GMT+0530 (IST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

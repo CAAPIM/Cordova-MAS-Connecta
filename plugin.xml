@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+xmlns:android="http://schemas.android.com/apk/res/android"
+           id="cordova-plugin-mas-connecta"
+      version="0.1.0">
+    <name>MASConnecta</name>
+    <description>Cordova MAS Connecta Plugin</description>
+    <license>CA Technologies Ltd.</license>
+    <keywords>cordova, MASConnecta, CA Technologies</keywords>
+
+    <!--- MAS-Connecta -->
+    <js-module src="www/MASConnectaPlugin.js" name="MASConnectaPlugin">
+        <clobbers target="MASConnectaPlugin" />
+    </js-module>
+    <js-module src="www/MASConnectaPluginConstants.js" name="MASConnectaPluginConstants">
+        <clobbers target="MASConnectaPluginConstants" />
+    </js-module>
+    <js-module src="www/MASConnectaPluginMessage.js" name="MASConnectaPluginMessage">
+        <clobbers target="MASConnectaPluginMessage" />
+    </js-module>
+
+    <!-- Pub/Sub -->
+    <js-module src="www/MASPluginMQTTClient.js" name="MASPluginMQTTClient">
+        <clobbers target="MASPluginMQTTClient" />
+    </js-module>
+    <js-module src="www/MASPluginMQTTConstants.js" name="MASPluginMQTTConstants">
+        <clobbers target="MASPluginMQTTConstants" />
+    </js-module>
+    <js-module src="www/MASPluginMQTTMessage.js" name="MASPluginMQTTMessage">
+        <clobbers target="MASPluginMQTTMessage" />
+    </js-module>
+   
+    <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/Cordova-MAS-Foundation.git" commit="master" />
+    
+    <!-- iOS -->
+    <platform name="ios" >
+        <config-file target="config.xml" parent="/*" >
+            <feature name="MASConnectaPlugin" >
+                <param name="ios-package" value="MASConnectaPlugin"/>
+            </feature>
+        </config-file>
+        
+        <header-file src="src/ios/MASConnectaPlugin.h" />
+        <source-file src="src/ios/MASConnectaPlugin.m" />
+        <header-file src="src/ios/MASPluginMQTTMessage.h" />
+        <source-file src="src/ios/MASPluginMQTTMessage.m" />
+
+    </platform>
+
+    <!-- Android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="MASConnectaPlugin" >
+                <param name="android-package" value="com.ca.mas.cordova.connecta.MASConnectaPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET"/>
+        </config-file>
+		<source-file src="src/android/MASConnectaUtil.java" target-dir="src/com/ca/mas/cordova/connecta" />       
+		<source-file src="src/android/MASConnectaPlugin.java" target-dir="src/com/ca/mas/cordova/connecta" />  
+    </platform>
+</plugin>
+
