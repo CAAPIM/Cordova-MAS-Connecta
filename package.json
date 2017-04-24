@@ -1,0 +1,30 @@
+{
+  "name": "cordova-plugin-mas-connecta",
+  "version": "1.0.0",
+  "description": "Cordova MAS Connecta Plugin",
+  "cordova": {
+    "id": "cordova-plugin-mas-connecta",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CAAPIM/MAS-Connecta-Cordova.git"
+  },
+  "keywords": [
+    "cordova",
+    "MASConnecta",
+    "CA Technologies",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "Mohammed Mujeeb Kaladgi",
+  "license": "CA Technologies Ltd.",
+  "bugs": {
+    "url": "https://github.com/CAAPIM/MAS-Connecta-Cordova/issues"
+  },
+  "homepage": "https://github.com/CAAPIM/MAS-Connecta-Cordova#readme"
+}
