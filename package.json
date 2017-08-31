@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mas-connecta",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cordova MAS Connecta Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-connecta",
@@ -21,7 +21,7 @@
     "cordova-ios",
     "cordova-android"
   ],
-  "author": "Mohammed Mujeeb Kaladgi",
+  "author": "CA Technologies Ltd.",
   "license": "CA Technologies Ltd.",
   "bugs": {
     "url": "https://github.com/CAAPIM/MAS-Connecta-Cordova/issues"
