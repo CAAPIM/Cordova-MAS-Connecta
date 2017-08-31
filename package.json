@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mas-connecta",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cordova MAS Connecta Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-connecta",
