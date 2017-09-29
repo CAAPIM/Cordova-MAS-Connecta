@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-mas-connecta",
-  "version": "1.0.2",
+  "version": "1.5.0",
   "description": "Cordova MAS Connecta Plugin",
   "cordova": {
     "id": "cordova-plugin-mas-connecta",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CAAPIM/MAS-Connecta-Cordova.git"
+    "url": "git+https://github.com/CAAPIM/MAS-Connecta-Cordova.git#master"
   },
   "keywords": [
     "cordova",
