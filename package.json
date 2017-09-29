@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CAAPIM/MAS-Connecta-Cordova.git#master"
+    "url": "git+https://github.com/CAAPIM/MAS-Connecta-Cordova.git"
   },
   "keywords": [
     "cordova",
