@@ -1,8 +1,5 @@
 # Cordova-MAS-Connecta
-*********************************************************
-
-## Overview
-Cordova-MAS-Connecta is the core messaging framework of the Cordova Mobile SDK, which is part of [CA Mobile App Services](http://www.ca.com/us/developers/mas.html). It gives developers the ability to create social collaborative apps where users can message and send data to each other.
+Cordova-MAS-Connecta is the core messaging framework of the Cordova Mobile SDK, which is part of the CA Mobile API Gateway. It gives developers the ability to create social collaborative apps where users can message and send data to each other.
 *********************************************************
 
 ## Features
@@ -36,7 +33,7 @@ An annotated comment for validateOTP method is as follows:
   * @param {function} errorHandler user defined error callback
   * @param {string} otp user defined one-time password to verify
   */
-```   
+```
 **Param** – Specifies a parameter.
 **{string}**  – Specifies the return type of the method.
 **otp** – Specifies the variable name.
@@ -49,6 +46,12 @@ jsdoc www/ -d jsdocs
 where “www/” is the location of the js file, and “-d jsdocs” is the location where the generated reference documents are placed.
 
 For more information about how to write and compile the JSDoc reference documents, see the [JSDoc](http://usejsdoc.org/) website.
+
+## Communication
+
+- *Have general questions or need help?*, use [Stack Overflow][StackOverflow]. (Tag 'massdk')
+- *Find a bug?*, open an issue with the steps to reproduce it.
+- *Request a feature or have an idea?*, open an issue.
 
 ## License
 Copyright (c) 2016 CA. All rights reserved.

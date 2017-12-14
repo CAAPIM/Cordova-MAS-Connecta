@@ -1,3 +1,14 @@
+# Version 1.5
+
+### Bug fixes
+
+- None
+
+### New features
+
+- Now available as npm package "cordova-plugin-mas-connecta".
+
+
 # Version 1.4
 
 ### Bug fixes
