@@ -1,3 +1,14 @@
+# Version 1.6
+
+### Bug fixes
+
+- None
+
+### New features
+
+- None
+
+
 # Version 1.5
 
 ### Bug fixes
