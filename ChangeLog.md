@@ -1,3 +1,13 @@
+# Version 1.6.10
+
+### Bug fixes
+
+DE348742 - Post subscription, send message to topic fails giving "Unknown error"
+
+### New features
+
+- None
+
 # Version 1.6
 
 ### Bug fixes
