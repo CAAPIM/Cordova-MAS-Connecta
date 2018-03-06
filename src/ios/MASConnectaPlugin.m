@@ -713,10 +713,9 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
                                             toTopic:topic
                                             withQos:qos
                                              retain:retain
-                                  completionHandler:
-         ^(int mid) {
-             
-             if (mid) {
+                                         completion:^(BOOL completed, NSError * _Nullable error, int mid) {
+                                             
+             if (completed) {
                  
                  result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                             messageAsString:
