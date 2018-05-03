@@ -1,3 +1,17 @@
+# Version 1.7
+
+## Bug fixes
+
+- None
+
+### New features
+
+- Dependencies are now downloaded from NPM repository instead of Github
+
+### Deprecated classes
+
+- None
+
 # Version 1.6.10
 
 ### Bug fixes
