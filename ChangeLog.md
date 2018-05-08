@@ -6,7 +6,12 @@
 
 ### New features
 
-- Dependencies are now downloaded from NPM repository instead of Github
+- Dependencies are now downloaded from NPM repository instead of Github.
+
+- Config file preference to specify the iOS deployment target.
+
+- CocoaPods integration with framework podspec for 'MASIdentityManagement'.
+
 
 ### Deprecated classes
 
