@@ -31,20 +31,26 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginMQTTMessage" />
     </js-module>
    
-    <dependency id="cordova-plugin-mas-core" url="https://github.com/CAAPIM/Cordova-MAS-Foundation.git" commit="master" />
+    <dependency id="cordova-plugin-mas-core" />
     
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
+
+            <preference name="deployment-target" value="9.0"/>
+
             <feature name="MASConnectaPlugin" >
                 <param name="ios-package" value="MASConnectaPlugin"/>
             </feature>
+
         </config-file>
         
         <header-file src="src/ios/MASConnectaPlugin.h" />
         <source-file src="src/ios/MASConnectaPlugin.m" />
         <header-file src="src/ios/MASPluginMQTTMessage.h" />
         <source-file src="src/ios/MASPluginMQTTMessage.m" />
+
+        <framework src="MASConnecta" type="podspec" spec="~> 1.7.00" />
 
     </platform>
 

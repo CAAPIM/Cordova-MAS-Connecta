@@ -1,3 +1,22 @@
+# Version 1.7
+
+## Bug fixes
+
+- None
+
+### New features
+
+- Dependencies are now downloaded from NPM repository instead of Github.
+
+- Config file preference to specify the iOS deployment target.
+
+- CocoaPods integration with framework podspec for iOS 'MASConnecta' framework.
+
+
+### Deprecated classes
+
+- None
+
 # Version 1.6.10
 
 ### Bug fixes
