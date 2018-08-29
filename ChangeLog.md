@@ -8,7 +8,7 @@
 
 - None.
 
-### Deprecated classes
+### Deprecated methods
 
 - None
 
@@ -23,7 +23,7 @@
 
 - None.
 
-### Deprecated classes
+### Deprecated methods
 
 - None
 
@@ -43,7 +43,7 @@
 - CocoaPods integration with framework podspec for iOS 'MASConnecta' framework.
 
 
-### Deprecated classes
+### Deprecated methods
 
 - None
 
