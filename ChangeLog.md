@@ -1,3 +1,18 @@
+# Version 1.8.00
+
+## Bug fixes
+
+- None.
+
+### New features
+
+- None.
+
+### Deprecated methods
+
+- None
+
+
 # Version 1.7.10
 
 ## Bug fixes
@@ -8,7 +23,7 @@
 
 - None.
 
-### Deprecated classes
+### Deprecated methods
 
 - None
 
@@ -28,7 +43,7 @@
 - CocoaPods integration with framework podspec for iOS 'MASConnecta' framework.
 
 
-### Deprecated classes
+### Deprecated methods
 
 - None
 
