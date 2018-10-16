@@ -10,7 +10,7 @@ var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
 /**
 * @class MASConnectaPluginMessage
 * @hideconstructor
-* @classdesc A Utility class which helps in creating and managing a MQTT Message. Specific to Cordova-iOS only.
+* @classdesc A Utility class that helps in creating and managing a MQTT Message. Specific to Cordova-iOS only.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>MASConnectaPluginMessage Construtor</th></tr>
 *	<tr><td><i>var MASConnectaMessage = new MASConnectaPlugin.MASConnectaMessage();</i></td></tr>
@@ -102,8 +102,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function initializeWithPayloadData
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @param {byte[]} payload payload as binary
 	* @param {string} contentType The content type of the message
 	*/
@@ -116,8 +116,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function initializeWithPayloadString
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @param {string} payload payload as a string
 	* @param {string} contentType The content type of the message
 	*/
@@ -130,8 +130,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function initializeWithPayloadImage
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @param {string} payload payload of an image as a Base64 String.
 	* @param {string} contentType The content type of the message
 	*/
@@ -144,8 +144,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function payloadTypeAsString
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  	* @return String
  	*/
 	this.payloadTypeAsString = function(successHandler, errorHandler) {
@@ -157,8 +157,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function payloadTypeAsImage
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  	* @return base64 string
  	*/
 	this.payloadTypeAsImage = function(successHandler, errorHandler) {
@@ -170,8 +170,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function senderTypeAsString
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  	* @return String
  	*/
 	this.senderTypeAsString = function(successHandler, errorHandler) {
@@ -183,8 +183,8 @@ var MASConnectaPluginMessage = function() {
     * @memberOf MASConnectaPluginMessage
 	* @function stringFromSenderType
 	* @instance
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
  	* @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the MAS sender type
  	* @return String
  	*/

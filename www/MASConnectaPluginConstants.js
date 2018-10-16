@@ -8,7 +8,7 @@
 /**
 * @class MASConnectaPluginConstants
 * @hideconstructor
-* @classdesc MAS Connecta constanst
+* @classdesc MAS Connecta constansts.
 * <table>
 *	<tr bgcolor="#D3D3D3"><th>How to access this class's variables</th></tr>
 *	<tr><td><i>var QosVal = MASConnectaPlugin.MASConnetaConstants.MQTTQualityOfService.AtLeastOnce;</i></td></tr>
