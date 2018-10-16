@@ -11,7 +11,7 @@
 * @param {string} host Hostname of the MQTT broker.
 * @param {number} port Port on which the MQTT broker is listening.
 * @param {boolean} enableTLS Enable TLS support for the connection.
-* @param {string} sslCACert Base64 encoded certificate, if the MQTT broker requires Client certificate.
+* @param {string} sslCACert Base64 encoded certificate, if the MQTT broker requires client certificate.
 */
 var MASPluginMQTTConstants = function(host, port, enableTLS, sslCACert) {
  		this.host = host ? host : "";
@@ -69,9 +69,9 @@ var MASPluginMQTTConstants = function(host, port, enableTLS, sslCACert) {
 		* @memberOf MASPluginMQTTConstants
 		* @function setWillToTopic
 		* @instance
-		* @param {string} payload The final message which broker sends to all connected clients before it dies due to abrupt reasons.
-		* @param {string} toTopic Last Will topic name.
-		* @param {number} willQoS Quality of service for the last will.
+		* @param {string} payload The final message that broker sends to all the connected clients before it dies due to abrupt reasons.
+		* @param {string} toTopic Name of the Last Will topic.
+		* @param {number} willQoS Quality of service for the Last Will.
 		* @param {boolean} retain Whether to retain the message if sending fails or not.
 		*/
  	    this.setWillToTopic = function(payload, toTopic, willQoS, retain) {

@@ -14,16 +14,16 @@ var MASConnectaPluginMessage = require("./MASConnectaPluginMessage");
 /**
 * @class MASPluginUser
 * @hideconstructor
-* @classdesc An extension of cordova-plugin-mas-core.MASPluginUser which exposes new APIs for MAS Messaging. The methods are static hence can be called directly on MASPluginUser class.
+* @classdesc An extension of cordova-plugin-mas-core.MASPluginUser that exposes the new APIs for MAS Messaging. The methods are static hence can be called directly on MASPluginUser class.
 */
 var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 {
 	/**
-	* Subscribe (starts Listening) to user's own custom topic. Topic name defaults to userid of the logged in user
+	* Subscribes (starts Listening) to user's own custom topic. Topic name defaults to userid of the logged in user
     * @memberOf MASPluginUser
 	* @function startListeningToMyMessages
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @example
 	* MASConnectaPlugin.MASUser.startListeningToMyMessages(successHandler, errorHandler);
 	*/
@@ -32,11 +32,11 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	 };
 
     /**
-	* Unsubscribe (stop Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
+	* Unsubscribes (stop Listening) to user's own custom topic. Topic name defaults to userid of the logged in user.
     * @memberOf MASPluginUser
 	* @function stopListeningToMyMessages
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-	* @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @example
 	* MASConnectaPlugin.MASUser.stopListeningToMyMessages(successHandler, errorHandler);
 	*/
@@ -48,10 +48,10 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	* Send message to a user
     * @memberOf MASPluginUser
 	* @function sendMessageToUser
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @param {string} message message to be sent (String / MASPluginMessage)
-	* @param {string} userObjectId Unique Id of the user to whom the message is intended to
+	* @param {string} userObjectId Unique ID of the user to whom the message is intended to
 	* @example
 	* MASConnectaPlugin.MASUser.sendMessageToUser(successHandler, errorHandler,message,userObjectId);
 	*/
@@ -63,11 +63,11 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 	* Send message to a user on a topic
     * @memberOf MASPluginUser
 	* @function sendMessageToUserOnTopic
-    * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-    * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	* @param {string} message  message to be sent (String / MASPluginMessage)
 	* @param {string} topicName topic on which the user wants to send the message
-	* @param {string} userObjectId Unique Id of the user to whom the message is intended to
+	* @param {string} userObjectId Unique ID of the user to whom the message is intended to
 	* @example
 	* MASConnectaPlugin.MASUser.sendMessageToUserOnTopic(successHandler, errorHandler,message, userObjectId, topicName);
 	*/
@@ -79,21 +79,21 @@ var MASPluginUser = require("cordova-plugin-mas-core.MASPluginUser");
 /**
 * @class MASConnectaPlugin
 * @hideconstructor
-* @classdesc The parent Connecta interface to get objects of MAS Messaging and PubSub interfaces.
+* @classdesc The parent Connecta interface to get the objects of MAS Messaging and PubSub interfaces.
 * @example
-* <caption>To get instance of {@link MASPluginMQTTConstants} : An interfaces which contains required MQTT connection options for any MQTT broker</caption>
+* <caption>To get instance of {@link MASPluginMQTTConstants} : An interface that contains the required MQTT connection options for MQTT broker</caption>
 var masMQTTConstants = new MASConnectaPlugin.MASMQTTConstants(host, port, false, "");
 * @example
-* <caption>To get instance of {@link MASPluginMQTTClient}: An interface which corresponds to any Public Broker including MAG</caption>
+* <caption>To get instance of {@link MASPluginMQTTClient}: An interface that corresponds to a Public Broker including MAG</caption>
 var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId, masMQTTConstants);
 * @example
-* <caption>Access {@link MASConnectaPluginConstants}: A static utility containing the plugin related constants and Global callbacks</caption>
+* <caption>Access {@link MASConnectaPluginConstants}: A static utility that contains the plugin related constants and Global callbacks</caption>
 var MASConnetaConstants = MASConnectaPlugin.MASConnetaConstants;
 * @example
-* <caption>To get instance of {@link MASConnectaPluginMessage}: An interfaces mapped to the native MASMessage structure</caption>
+* <caption>To get instance of {@link MASConnectaPluginMessage}: An interface that is mapped to the native MASMessage structure</caption>
 var MASConnectaMessage = new MASConnectaPlugin.MASConnectaMessage();
 * @example
-* <caption>MASConnecta {@link MASPluginUser} APIs are static API which can be called directly using the class reference as below</caption>
+* <caption>MASConnecta {@link MASPluginUser} APIs are static API that are called directly using the class reference as follows</caption>
 * MASConnectaPlugin.MASUser.sendMessageToUser(successHandler, errorHandler, message, userObjectId);
 */
 var MASConnectaPlugin = {
@@ -104,11 +104,11 @@ var MASConnectaPlugin = {
 	MASConnectaMessage: MASConnectaPluginMessage,
     MASUser: MASPluginUser,
 	 /**
-	 * This funtion must to be called before using MASConnecta messaging APIs. This API register the notification receiver for observing the message intended to this client
+	 * Call this function before using the MASConnecta messaging APIs. This API registers the notification receiver for observing the messages that are intended for the client.
 	 * @memberOf MASConnectaPlugin
 	 * @function MASRegisterListener
-     * @param {successCallbackFunction} successHandler user defined success callback which will be invoked on success scenario.
-     * @param {errorCallbackFunction} errorHandler user defined error callback which will be invoked on failure scenario.
+     * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+     * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
 	 * @example
 	 * <caption>Initializing and registering the listener</caption>
 	MASConnectaPlugin.MASRegisterListener(
