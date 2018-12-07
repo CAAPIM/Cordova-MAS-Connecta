@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: MASPluginMQTTClient</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: MASPluginMQTTClient</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>MASPluginMQTTClient<span class="signature">(clientId, masMQTTConstants)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">The MAS Messaging client that connects to any Public Broker including MAG</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="MASPluginMQTTClient"><span class="type-signature"></span>new MASPluginMQTTClient<span class="signature">(clientId, masMQTTConstants)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>clientId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Unique broker-client ID for this client. Default clientId is the one picked from msso_config.json</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masMQTTConstants</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An instance of populated MASPluginMQTTConstants object.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="connect"><span class="type-signature"></span>connect<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Connects to a message broker using the MASPluginMQTTConstants that is provided during construction of this object.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="disconnect"><span class="type-signature"></span>disconnect<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Disconnects from the connected message broker
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line65">line 65</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="isConnected"><span class="type-signature"></span>isConnected<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Checks if device is connected to the MQTT broker.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="publish"><span class="type-signature"></span>publish<span class="signature">(successHandler, errorHandler, topicName, message, QoS, retain)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Publish to a topic via the connected MQTT broker.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topicName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">topic to which the user sends the message</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">specifies the message to be sent. The message bytes should be a base64 encoded string to support sending images</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>QoS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Quality of Service for message delivery.0-> At most once,1-> At least once, 2: Exactly once. Default is 2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>retain</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">indication for the broker to persist the messages for a client</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="subscribe"><span class="type-signature"></span>subscribe<span class="signature">(successHandler, errorHandler, topicName, QoS)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Subscribes to a topic via the connected MQTT broker.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topicName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">topic to which the user wants to subscribe</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>QoS</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MASConnectaPluginConstants.html#.MQTTQualityOfService">MASConnectaPluginConstants.MQTTQualityOfService</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Quality of Service for message delivery.Default value is 2.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="unsubscribe"><span class="type-signature"></span>unsubscribe<span class="signature">(successHandler, errorHandler, topicName)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Unsubscribe from a topic
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>topicName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">topic to which the user needs to unsubscribe.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASPluginMQTTClient.js.html">MASPluginMQTTClient.js</a>, <a href="MASPluginMQTTClient.js.html#line91">line 91</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASConnectaPlugin.html">MASConnectaPlugin</a></li><li><a href="MASConnectaPluginConstants.html">MASConnectaPluginConstants</a></li><li><a href="MASConnectaPluginMessage.html">MASConnectaPluginMessage</a></li><li><a href="MASPluginMQTTClient.html">MASPluginMQTTClient</a></li><li><a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 16 2018 14:32:35 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

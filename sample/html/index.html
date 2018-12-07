@@ -750,8 +750,8 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="userLogin">MASUser login with username and password
-                            <input type="text" name="userLoginUsername" placeholder="username"/>
-                            <input type="text" name="userLoginPassword" placeholder="password"/>
+                            <input type="text" name="userLoginUsername" placeholder="userLoginUsername:username"/>
+                            <input type="text" name="userLoginPassword" placeholder="userLoginUsername:password"/>
                                 <textarea class='error' style="display:none;" readonly="">
                                 </textarea>
                         </a>
@@ -813,17 +813,17 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="magSendMessageToUserOnTopic">Send Message To User On a Topic
-                            <input id="magSendToUserOnTopic" type="text" name="magSendToUserOnTopic" value="" placeholder="User Name [Required]"/>
-                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="Topic Name [Required]" />
-                            <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="Message [Required]"/>
+                            <input id="magSendToUserOnTopic" type="text" name="magSendToUserOnTopic" value="" placeholder="toUserOnTopic:User Name [Required]"/>
+                            <input id="magSendToTopicName" type="text" name="magSendToTopicName" value="" placeholder="toUserOnTopic:Topic Name [Required]" />
+                            <input id="magSendToTopicMsg" type="text" name="magSendToTopicMsg" value="" placeholder="toUserOnTopic:Message [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
                     </li>
                     <li data-icon="false">
                         <a href="#" id="magSendMessageToUser">Send Message To User
-                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="User Name [Required]"/>
-                            <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="Message [Required]"/>
+                            <input id="magSendToUser" type="text" name="magSendToUser" value="" placeholder="toUser:User Name [Required]"/>
+                            <input id="magSendToUserMsg" type="text" name="magSendToUserMsg" value="" placeholder="toUser:Message [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
@@ -878,7 +878,7 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="subscribeToTopic">Subscribe To Topic
-                            <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="Topic Name [Required]"/>
+                            <input id="pubSubTopicName" type="text" name="pubSubTopicName" value="" placeholder="subToTopic:Topic Name [Required]"/>
                             <label for="subTopicQos">Quality Of Service</label>
                             <select id="subTopicQos" name="subTopicQos" onchange="clearInputText(this);">
                                 <option value="0">At Most Once</option>
@@ -891,23 +891,15 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="unsubscribeToTopic">Unsubscribe To Topic
-                            <input id="pubUnsubTopicName" type="text" name="pubUnsubTopicName" value="" placeholder="Topic Name [Required]"/>
+                            <input id="pubUnsubTopicName" type="text" name="pubUnsubTopicName" value="" placeholder="unsubToTopic:Topic Name [Required]"/>
                             <textarea class='error' style="display:none;" readonly="">
                             </textarea>
                         </a>
                     </li>
                     <li data-icon="false">
                         <a href="#" id="pubPublishMsg">Send Message To Topic
-                            <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="Topic Name [Required]"/>
-                            <!--label for="pubSendMsgToTopicMimeType">MIME Type:</label>
-                            <select-- id="pubSendMsgToTopicMimeType" name="pubSendMsgToTopicMimeType" onchange="clearInputText(this);" >
-                                <option value="text/plain">Plain Text</option>
-                                <option value="application/json">JSON</option>
-                                <option value="image/png">PNG</option>
-                                <option value="image/jpg">JPEG</option>
-                                <option value="application/octet-stream">Binary Data</option>
-                            </select-->
-                            <input id="pubSendToTopicMsg" type="text" name="pubSendToTopicMsg" value="" placeholder="Message [Required]"/>
+                            <input id="pubSendToTopicName" type="text" name="pubSendToTopicName" value="" placeholder="pubToTopic:Topic Name [Required]"/>
+                            <input id="pubSendToTopicMsg" type="text" name="pubSendToTopicMsg" value="" placeholder="pubToTopic:Message [Required]"/>
                             <label for="pubMessageQos">Quality Of Service</label>
                             <select id="pubMessageQos" name="pubMessageQos" onchange="clearInputText(this);">
                                 <option value="0">At Most Once</option>

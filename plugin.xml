@@ -3,7 +3,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-mas-connecta"
-      version="0.1.0">
+      version="1.9.00">
     <name>MASConnecta</name>
     <description>Cordova MAS Connecta Plugin</description>
     <license>CA Technologies Ltd.</license>
@@ -31,7 +31,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginMQTTMessage" />
     </js-module>
    
-    <dependency id="cordova-plugin-mas-core" />
+    <dependency id="cordova-plugin-mas-core" version="1.9.00" />
     
     <!-- iOS -->
     <platform name="ios" >
@@ -50,7 +50,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <header-file src="src/ios/MASPluginMQTTMessage.h" />
         <source-file src="src/ios/MASPluginMQTTMessage.m" />
 
-        <framework src="MASConnecta" type="podspec" spec="~> 1.8.00" />
+        <framework src="MASConnecta" type="podspec" spec="~> 1.9.00" />
 
     </platform>
 

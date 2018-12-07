@@ -33,49 +33,57 @@
  *
  */
 
-
+/**
+* @class MASConnectaPluginConstants
+* @hideconstructor
+* @classdesc MAS Connecta constansts.
+* &lt;table>
+*	&lt;tr bgcolor="#D3D3D3">&lt;th>How to access this class's variables&lt;/th>&lt;/tr>
+*	&lt;tr>&lt;td>&lt;i>var QosVal = MASConnectaPlugin.MASConnetaConstants.MQTTQualityOfService.AtLeastOnce;&lt;/i>&lt;/td>&lt;/tr>
+* &lt;/table>
+*/
 var MASConnectaPluginConstants = {
 
-	/**
- 	 * Message Sender Type
- 	 */
 	MASPluginSenderType: {
-
-		/**
-     	 * Unknown
-     	 */
 		MASSenderTypeUnknown: -1,
-
-		/**
-     	 * MASApplication
-     	 */
 		MASSenderTypeApplication: 0,
-
-		/**
-     	 * MASDevice
-     	 */
 		MASSenderTypeDevice: 1,
-
-		/**
-     	 * MASGroup
-     	 */
 		MASSenderTypeGroup: 2,
-
-		/**
-     	 * MASUser
-     	 */
 		MASSenderTypeUser: 3
 	},
 
 	MASSenderTypeApplicationValue: "APPLICATION",
-
 	MASSenderTypeDeviceValue: "DEVICE",
-
 	MASSenderTypeGroupValue: "GROUP",
+	MASSenderTypeUserValue: "USER",
 
-	MASSenderTypeUserValue: "USER"
+	/**
+ 	 * The Quality of Service constant (QoS)
+	 * @typedef {Object} MQTTQualityOfService
+	 * @memberOf MASConnectaPluginConstants
+	 * @property {number} AtMostOnce=0 The message should be tried at the most one time.
+	 * @property {number} AtLeastOnce=1 The message should be tried at least one time.
+	 * @property {number} ExactlyOnce=2 The message should be tried only once.
+  	 */
+	MQTTQualityOfService : {
+		AtMostOnce: 0,
+		AtLeastOnce: 1,
+		ExactlyOnce: 2
+    }
 };
+ /**
+ * A user defined success callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a structure based on operation type.
+ * @callback successCallbackFunction
+ * @param {Object} result The result object can take any form. It can be an object, or a plain string, a boolean or a number based on the API.
+ * Developer may check for existance of result object to define success in such case and must not rely on the exact response format.&lt;br>
+ * To know about specific result for each API see {@link http://mas.ca.com/docs/cordova/latest/guides}
+ */
 
+ /**
+ * A user defined error callback function. The contract of the function is out of scope for Mobile SDK, but the object passed to that function by Mobile SDK will conform to a strict structure.
+ * @callback errorCallbackFunction
+ * @param {Object} error A Json Object with below structure &lt;br>{&lt;br>&amp;nbsp;&amp;nbsp;"errorCode": &amp;lt;The error code. For ex. 3003123&amp;gt;,&lt;br>&amp;nbsp;&amp;nbsp;"errorMessage": "&amp;lt;The error message&amp;gt;"&lt;br>&amp;nbsp;&amp;nbsp;"errorInfo":"&amp;lt;The Error Info&amp;gt;"&lt;br>}&lt;br>
+ */
 module.exports = MASConnectaPluginConstants;</code></pre>
         </article>
     </section>
@@ -86,13 +94,13 @@ module.exports = MASConnectaPluginConstants;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#clientId">clientId</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#contentEncoding">contentEncoding</a></li><li><a href="global.html#contentType">contentType</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#initializeMQTTClient">initializeMQTTClient</a></li><li><a href="global.html#initializeWithPayloadData">initializeWithPayloadData</a></li><li><a href="global.html#initializeWithPayloadImage">initializeWithPayloadImage</a></li><li><a href="global.html#initializeWithPayloadString">initializeWithPayloadString</a></li><li><a href="global.html#isConnected">isConnected</a></li><li><a href="global.html#payload">payload</a></li><li><a href="global.html#payloadTypeAsImage">payloadTypeAsImage</a></li><li><a href="global.html#payloadTypeAsString">payloadTypeAsString</a></li><li><a href="global.html#publish">publish</a></li><li><a href="global.html#receiverObjectId">receiverObjectId</a></li><li><a href="global.html#senderDisplayName">senderDisplayName</a></li><li><a href="global.html#senderObjectId">senderObjectId</a></li><li><a href="global.html#senderType">senderType</a></li><li><a href="global.html#senderTypeAsString">senderTypeAsString</a></li><li><a href="global.html#sentTime">sentTime</a></li><li><a href="global.html#stringFromSenderType">stringFromSenderType</a></li><li><a href="global.html#subscribe">subscribe</a></li><li><a href="global.html#topic">topic</a></li><li><a href="global.html#unsubscribe">unsubscribe</a></li><li><a href="global.html#version">version</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASConnectaPlugin.html">MASConnectaPlugin</a></li><li><a href="MASConnectaPluginConstants.html">MASConnectaPluginConstants</a></li><li><a href="MASConnectaPluginMessage.html">MASConnectaPluginMessage</a></li><li><a href="MASPluginMQTTClient.html">MASPluginMQTTClient</a></li><li><a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 29 2018 12:30:38 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 16 2018 14:32:34 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: MASConnectaPlugin</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: MASConnectaPlugin</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>MASConnectaPlugin</h2>
+        
+            <div class="class-description">The parent Connecta interface to get the objects of MAS Messaging and PubSub interfaces.</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASConnectaPlugin.js.html">MASConnectaPlugin.js</a>, <a href="MASConnectaPlugin.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+        <p class="code-caption">To get instance of <a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a> : An interface that contains the required MQTT connection options for MQTT broker</p>
+    
+    <pre class="prettyprint"><code>var masMQTTConstants = new MASConnectaPlugin.MASMQTTConstants(host, port, false, "");</code></pre>
+
+        <p class="code-caption">To get instance of <a href="MASPluginMQTTClient.html">MASPluginMQTTClient</a>: An interface that corresponds to a Public Broker including MAG</p>
+    
+    <pre class="prettyprint"><code>var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId, masMQTTConstants);</code></pre>
+
+        <p class="code-caption">Access <a href="MASConnectaPluginConstants.html">MASConnectaPluginConstants</a>: A static utility that contains the plugin related constants and Global callbacks</p>
+    
+    <pre class="prettyprint"><code>var MASConnetaConstants = MASConnectaPlugin.MASConnetaConstants;</code></pre>
+
+        <p class="code-caption">To get instance of <a href="MASConnectaPluginMessage.html">MASConnectaPluginMessage</a>: An interface that is mapped to the native MASMessage structure</p>
+    
+    <pre class="prettyprint"><code>var MASConnectaMessage = new MASConnectaPlugin.MASConnectaMessage();</code></pre>
+
+        <p class="code-caption">MASConnecta <a href="MASPluginUser.html">MASPluginUser</a> APIs are static API that are called directly using the class reference as follows</p>
+    
+    <pre class="prettyprint"><code>MASConnectaPlugin.MASUser.sendMessageToUser(successHandler, errorHandler, message, userObjectId);</code></pre>
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".MASRegisterListener"><span class="type-signature">(static) </span>MASRegisterListener<span class="signature">(successHandler, errorHandler)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Call this function before using the MASConnecta messaging APIs. This API registers the notification receiver for observing the messages that are intended for the client.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>successHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#successCallbackFunction">successCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined success callback that is invoked on success scenario.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#errorCallbackFunction">errorCallbackFunction</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">user defined error callback that is invoked on failure scenario.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MASConnectaPlugin.js.html">MASConnectaPlugin.js</a>, <a href="MASConnectaPlugin.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+        <p class="code-caption">Initializing and registering the listener</p>
+    
+    <pre class="prettyprint"><code>	MASConnectaPlugin.MASRegisterListener(
+		function(success) {
+			if (null != success.Payload) {
+				var toAlert = {};
+				toAlert.sender = success.SenderId;
+				var payload = (success.Payload!=null?success.Payload:success.payload);
+				toAlert.payload = atob(payload);
+				toAlert.topic = success.Topic;
+				alert(JSON.stringify(toAlert));
+            }
+        }, function(error) {
+			console.log("Listener registration failed!!!:" + JSON.stringify(error));
+        }
+	);</code></pre>
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASConnectaPlugin.html">MASConnectaPlugin</a></li><li><a href="MASConnectaPluginConstants.html">MASConnectaPluginConstants</a></li><li><a href="MASConnectaPluginMessage.html">MASConnectaPluginMessage</a></li><li><a href="MASPluginMQTTClient.html">MASPluginMQTTClient</a></li><li><a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 16 2018 14:32:34 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

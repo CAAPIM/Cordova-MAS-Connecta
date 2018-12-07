@@ -35,154 +35,188 @@
 
 var MASConnectaPluginConstants = require("./MASConnectaPluginConstants");
 
-
+/**
+* @class MASConnectaPluginMessage
+* @hideconstructor
+* @classdesc A Utility class that helps in creating and managing a MQTT Message. Specific to Cordova-iOS only.
+* &lt;table>
+*	&lt;tr bgcolor="#D3D3D3">&lt;th>MASConnectaPluginMessage Construtor&lt;/th>&lt;/tr>
+*	&lt;tr>&lt;td>&lt;i>var MASConnectaMessage = new MASConnectaPlugin.MASConnectaMessage();&lt;/i>&lt;/td>&lt;/tr>
+* &lt;/table>
+*/
 var MASConnectaPluginMessage = function() {
-
 	/**
- 	 * The version of the message format
- 	 * @member {string}
- 	 */
+     * The version of the message format
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} version
+	 * @instance
+     */
 	this.version;
 
 	/**
- 	 *  The topic of the message
- 	 * @member {string}
+ 	 * The topic of the message
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} topic
+	 * @instance
  	 */
 	this.topic;
 
 	/**
  	 * The object identifier of the message receiver
- 	 * @member {string}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} receiverObjectId
+	 * @instance
  	 */
 	this.receiverObjectId;
 
 	/**
  	 * The MASPluginSenderType that represents the sender
- 	 * @member {string}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} senderType
+	 * @instance
  	 */
 	this.senderType;
 
 	/**
  	 * The object identifier of the message sender
- 	 * @member {string}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} senderObjectId
+	 * @instance
  	 */
 	this.senderObjectId;
 
 	/**
- 	 *  The DisplayName (field in the /UserInfo mapping in the Gateway) of the message sender
- 	 *  @member {string}
+ 	 * The DisplayName (field in the /UserInfo mapping in the Gateway) of the message sender
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} senderDisplayName
+	 * @instance
  	 */
 	this.senderDisplayName;
 
 	/**
  	 * The timestamp in UTC format when the message was sent
- 	 * @member {integer}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {integer} sentTime
+	 * @instance
  	 */
 	this.sentTime;
 
 	/**
  	 * The payload in binary format
- 	 * @member {binary}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {byte[]} payload
+	 * @instance
  	 */
 	this.payload;
 
 	/**
  	 * The content type of the payload
- 	 * @member {string}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} contentType
+	 * @instance
  	 */
 	this.contentType;
 
 	/**
  	 * The content encoding of the payload
- 	 * @member {string}
+	 * @memberOf MASConnectaPluginMessage
+     * @member {string} contentEncoding
+	 * @instance
  	 */
 	this.contentEncoding;
 
-
-	///------------------------------------------------------------------------------------------------------------------
-	/// @name Lifecycle
-	///------------------------------------------------------------------------------------------------------------------
-
 	/**
-	*	Initialize a message with a payload
-	* 	@param {function} successHandler user defined success callback
-	* 	@param {function} errorHandler user defined error callback
-	* 	@param {binary} payload payload as binary
+	* Initialize a message with a payload
+    * @memberOf MASConnectaPluginMessage
+	* @function initializeWithPayloadData
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+	* @param {byte[]} payload payload as binary
+	* @param {string} contentType The content type of the message
 	*/
 	this.initializeWithPayloadData = function(successHandler, errorHandler, payload, contentType) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadData", [payload, contentType]);
 	};
 
 	/**
-	*	Initialize a message with a payload
-	* 	@param {function} successHandler user defined success callback
-	* 	@param {function} errorHandler user defined error callback
-	* 	@param {string} payload payload as a string
+	* Initialize a message with a payload
+    * @memberOf MASConnectaPluginMessage
+	* @function initializeWithPayloadString
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+	* @param {string} payload payload as a string
+	* @param {string} contentType The content type of the message
 	*/
 	this.initializeWithPayloadString = function(successHandler, errorHandler, payload, contentType) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadString", [payload, contentType]);
 	};
 
 	/**
-	*	Initialize a message with a payload
-	* 	@param {function} successHandler user defined success callback
-	* 	@param {function} errorHandler user defined error callback
-	* 	@param {base64} payload payload as an image
+	* Initialize a message with a payload
+    * @memberOf MASConnectaPluginMessage
+	* @function initializeWithPayloadImage
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+	* @param {string} payload payload of an image as a Base64 String.
+	* @param {string} contentType The content type of the message
 	*/
 	this.initializeWithPayloadImage = function(successHandler, errorHandler, payload, contentType) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "initializeWithPayloadImage", [payload, contentType]);
 	};
 
-
-	///------------------------------------------------------------------------------------------------------------------
-	/// @name Public
-	///------------------------------------------------------------------------------------------------------------------
-
 	/**
- 	 * The payload property in a string format
- 	 * @param {function} successHandler user defined success callback
- 	 * @param {function} errorHandler user defined error callback
- 	 * @return String
- 	 */
+ 	* The payload property in a string format
+    * @memberOf MASConnectaPluginMessage
+	* @function payloadTypeAsString
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ 	* @return String
+ 	*/
 	this.payloadTypeAsString = function(successHandler, errorHandler) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "payloadTypeAsString", []);
 	};
 
 	/**
- 	 *  The payload property in an image src format
- 	 *  @param {function} successHandler user defined success callback
- 	 *  @param {function} errorHandler user defined error callback
- 	 *  @return base64 string
- 	 */
+ 	* The payload property in an image src format
+    * @memberOf MASConnectaPluginMessage
+	* @function payloadTypeAsImage
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ 	* @return base64 string
+ 	*/
 	this.payloadTypeAsImage = function(successHandler, errorHandler) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "payloadTypeAsImage", []);
 	};
 
 	/**
- 	 * The senderType property in a string format
- 	 * @param {function} successHandler user defined success callback
- 	 * @param {function} errorHandler user defined error callback
- 	 * @return String
- 	 */
+ 	* The senderType property in a string format
+    * @memberOf MASConnectaPluginMessage
+	* @function senderTypeAsString
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ 	* @return String
+ 	*/
 	this.senderTypeAsString = function(successHandler, errorHandler) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "senderTypeAsString", []);
 	};
 
 	/**
- 	 * The MASConnectaPluginConstants.MASSenderType in a string format
- 	 * @param {function} successHandler user defined success callback
- 	 * @param {function} errorHandler user defined error callback
- 	 * @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the MAS sender type
- 	 * @return String
- 	 */
+ 	* The MASConnectaPluginConstants.MASSenderType in a string format
+    * @memberOf MASConnectaPluginMessage
+	* @function stringFromSenderType
+	* @instance
+    * @param {successCallbackFunction} successHandler user defined success callback that is invoked on success scenario.
+    * @param {errorCallbackFunction} errorHandler user defined error callback that is invoked on failure scenario.
+ 	* @param {MASConnectaPluginConstants.MASSenderType} masSenderType specify the MAS sender type
+ 	* @return String
+ 	*/
 	this.stringFromSenderType = function(successHandler, errorHandler, masSenderType) {
-
 		return Cordova.exec(successHandler, errorHandler, "MASPluginMessage", "stringFromSenderType", [masSenderType]);
 	};
 };
@@ -197,13 +231,13 @@ module.exports = MASConnectaPluginMessage;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#clientId">clientId</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#contentEncoding">contentEncoding</a></li><li><a href="global.html#contentType">contentType</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#initializeMQTTClient">initializeMQTTClient</a></li><li><a href="global.html#initializeWithPayloadData">initializeWithPayloadData</a></li><li><a href="global.html#initializeWithPayloadImage">initializeWithPayloadImage</a></li><li><a href="global.html#initializeWithPayloadString">initializeWithPayloadString</a></li><li><a href="global.html#isConnected">isConnected</a></li><li><a href="global.html#payload">payload</a></li><li><a href="global.html#payloadTypeAsImage">payloadTypeAsImage</a></li><li><a href="global.html#payloadTypeAsString">payloadTypeAsString</a></li><li><a href="global.html#publish">publish</a></li><li><a href="global.html#receiverObjectId">receiverObjectId</a></li><li><a href="global.html#senderDisplayName">senderDisplayName</a></li><li><a href="global.html#senderObjectId">senderObjectId</a></li><li><a href="global.html#senderType">senderType</a></li><li><a href="global.html#senderTypeAsString">senderTypeAsString</a></li><li><a href="global.html#sentTime">sentTime</a></li><li><a href="global.html#stringFromSenderType">stringFromSenderType</a></li><li><a href="global.html#subscribe">subscribe</a></li><li><a href="global.html#topic">topic</a></li><li><a href="global.html#unsubscribe">unsubscribe</a></li><li><a href="global.html#version">version</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MASConnectaPlugin.html">MASConnectaPlugin</a></li><li><a href="MASConnectaPluginConstants.html">MASConnectaPluginConstants</a></li><li><a href="MASConnectaPluginMessage.html">MASConnectaPluginMessage</a></li><li><a href="MASPluginMQTTClient.html">MASPluginMQTTClient</a></li><li><a href="MASPluginMQTTConstants.html">MASPluginMQTTConstants</a></li><li><a href="MASPluginUser.html">MASPluginUser</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue May 29 2018 12:30:38 GMT+0530 (IST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 16 2018 14:32:34 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
