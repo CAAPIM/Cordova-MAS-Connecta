@@ -54,6 +54,7 @@ For more information about how to write and compile the JSDoc reference document
 - *Request a feature or have an idea?*, open an issue.
 
 ## License
-Copyright (c) 2016 CA. All rights reserved.
+Copyright (c) 2019 Broadcom. All Rights Reserved.
+The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 This software may be modified and distributed under the terms of the MIT license. See the [LICENSE](https://github.com/CAAPIM/Cordova-MAS-Connecta/blob/develop/LICENSE) file for details.
