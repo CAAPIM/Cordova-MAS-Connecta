@@ -3,11 +3,11 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
 xmlns:android="http://schemas.android.com/apk/res/android"
            id="cordova-plugin-mas-connecta"
-      version="1.9.10">
+      version="2.0.0">
     <name>MASConnecta</name>
     <description>Cordova MAS Connecta Plugin</description>
-    <license>CA Technologies Ltd.</license>
-    <keywords>cordova, MASConnecta, CA Technologies</keywords>
+    <license>Broadcom</license>
+    <keywords>cordova, MASConnecta, Broadcom</keywords>
 
     <!--- MAS-Connecta -->
     <js-module src="www/MASConnectaPlugin.js" name="MASConnectaPlugin">
@@ -31,12 +31,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <clobbers target="MASPluginMQTTMessage" />
     </js-module>
    
-    <dependency id="cordova-plugin-mas-core" version="1.9.10" />
+    <dependency id="cordova-plugin-mas-core" version="2.0.0" />
     
     <!-- iOS -->
     <platform name="ios" >
         <config-file target="config.xml" parent="/*" >
-
             <preference name="deployment-target" value="9.0"/>
 
             <feature name="MASConnectaPlugin" >
@@ -50,13 +49,12 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <header-file src="src/ios/MASPluginMQTTMessage.h" />
         <source-file src="src/ios/MASPluginMQTTMessage.m" />
 
-        <!-- <framework src="MASConnecta" type="podspec" spec="~> 1.9.10" /> -->
         <podspec> 
             <config>
                 <source url="https://github.com/CocoaPods/Specs.git"/>
             </config>
             <pods use-frameworks="true" >
-                <pod name="MASConnecta" spec="~> 1.9.10" />
+                <pod name="MASConnecta" spec="~> 2.0.00" />
             </pods>
         </podspec>
 
