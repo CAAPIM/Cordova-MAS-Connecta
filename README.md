@@ -11,7 +11,7 @@ The MAS Connecta framework comes with the following features:
 *********************************************************
 
 ## Get Started
-Follow our [documentation](http://mas.ca.com/docs/) to install Cordova and set up iOS and Android projects.
+Follow our [documentation](http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-0.html) to install Cordova and set up iOS and Android projects.
 *********************************************************
 
 ## How You Can Contribute
@@ -22,7 +22,7 @@ The reference documents for the MAS modules are generated using the JSDoc markdo
 
 To install JSDoc, follow the instructions on [JSDoc](http://usejsdoc.org/) website.
 
-The Cordova reference documents are available at our [mas.ca.com]( http://mas.ca.com/docs/cordova/latest/sdk/) site.
+The Cordova reference documents are available at our [techdocs]( http://mas.ca.com/docs/cordova/latest/sdk/) site.
 
 Example:
 An annotated comment for validateOTP method is as follows:
@@ -54,6 +54,7 @@ For more information about how to write and compile the JSDoc reference document
 - *Request a feature or have an idea?*, open an issue.
 
 ## License
-Copyright (c) 2016 CA. All rights reserved.
+Copyright (c) 2019 Broadcom. All Rights Reserved.
+The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
 
 This software may be modified and distributed under the terms of the MIT license. See the [LICENSE](https://github.com/CAAPIM/Cordova-MAS-Connecta/blob/develop/LICENSE) file for details.
