@@ -20,29 +20,6 @@
 @interface MASConnectaPlugin : CDVPlugin
 
 
-
-#pragma mark - User messaging with MQTT
-
-#pragma mark - Listening to messages
-
-- (void)startListeningToMyMessages:(CDVInvokedUrlCommand*)command;
-
-
-
-- (void)stopListeningToMyMessages:(CDVInvokedUrlCommand*)command;
-
-
-
-#pragma mark - Message sending
-
-- (void)sendMessageToUser:(CDVInvokedUrlCommand*)command;
-
-
-
-- (void)sendMessageToUserOnTopic:(CDVInvokedUrlCommand *)command;
-
-
-
 #pragma mark - Pub/Sub architecture with MQTT
 
 #pragma mark - Properties
