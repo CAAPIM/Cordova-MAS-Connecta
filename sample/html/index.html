@@ -297,92 +297,9 @@
                 });
             });
 
-            $("#startListeningToMyMessages").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
+           
 
-                MASConnectaPlugin.MASUser.startListeningToMyMessages(
-                function(result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, 
-                function(error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                });
-            });
-
-            $("#stopListeningToMyMessages").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-
-                MASConnectaPlugin.MASUser.stopListeningToMyMessages(
-                function(result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, 
-                function(error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                });
-            });
-
-            $("#magSendMessageToUserOnTopic").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-
-                var userObjectId = $("input[name='magSendToUserOnTopic']").val();
-                var topicName = $("input[name='magSendToTopicName']").val();
-                var message = $("input[name='magSendToTopicMsg']").val();
-                var arr = [userObjectId,topicName,message];
-                if(validateFields(arr) == false){
-                    return;
-                }
-                message = btoa(message);
-
-                MASConnectaPlugin.MASUser.sendMessageToUserOnTopic(
-                function(result) {
-                    
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, 
-                function(error) {
-                            
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                }, 
-                message, userObjectId, topicName);
-            });
-
-            $("#magSendMessageToUser").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-
-                var userObjectId = $("input[name='magSendToUser']").val();
-                var message = $("input[name='magSendToUserMsg']").val();
-                var arr = [userObjectId,message];
-                
-                if(validateFields(arr) == false){
-                    return;
-                }
-                message = btoa(message);
-
-                MASConnectaPlugin.MASUser.sendMessageToUser(function(result) {
-                    
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                },
-                function(error) {
-                                
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                }, 
-                message, userObjectId);
-            });
+            
 
             $("#connectBroker").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
