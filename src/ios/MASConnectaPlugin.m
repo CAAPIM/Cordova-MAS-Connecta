@@ -10,16 +10,8 @@
 //
 
 #import "MASConnectaPlugin.h"
+#import <MASFoundation/MASFoundation.h>
 
-#import <MASConnecta/MASConnecta.h>
-#import <MASConnecta/MASConnectaConstants.h>
-#import <MASIdentityManagement/MASIdentityManagement.h>
-
-
-typedef void (^OnUserMessageReceivedHandler)(MASMessage *message);
-
-
-static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 
 
 @interface MASConnectaPlugin (Private)
@@ -28,243 +20,6 @@ static OnUserMessageReceivedHandler _onUserMessageReceivedHandler_ = nil;
 @end
 
 @implementation MASConnectaPlugin
-
-
-#pragma mark - User messaging with MQTT
-
-#pragma mark - Listening to messages
-
-- (void)startListeningToMyMessages:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    
-    if ([MASUser currentUser]) {
-        
-        [[MASUser currentUser] startListeningToMyMessages:
-         ^(BOOL success, NSError *error) {
-             
-             if(success && !error) {
-                 
-                 [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                                 name:MASConnectaMessageReceivedNotification
-                                                               object:nil];
-                 
-                 [[NSNotificationCenter defaultCenter] addObserver:self
-                                                          selector:@selector(messageReceivedNotification:)
-                                                              name:MASConnectaMessageReceivedNotification
-                                                            object:nil];
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                            messageAsString:@"Started listening to topics"];
-             }
-             else {
-                 
-                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                             @"errorMessage":[error localizedDescription]};
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                        messageAsDictionary:errorInfo];
-             }
-             
-             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-         }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user"};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                               messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-
-- (void)stopListeningToMyMessages:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    
-    if ([MASUser currentUser]) {
-        
-        [[MASUser currentUser] stopListeningToMyMessages:
-         ^(BOOL success, NSError *error){
-             
-             if(success && !error) {
-                 
-                 [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                                 name:MASConnectaMessageReceivedNotification
-                                                               object:nil];
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                            messageAsString:@"Stopped listening to messages"];
-             }
-             else {
-                 
-                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                             @"errorMessage":[error localizedDescription]};
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                        messageAsDictionary:errorInfo];
-             }
-             
-             return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-         }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = @{@"errorMessage":@"No authenticated user"};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                               messageAsDictionary:errorInfo];
-        
-        return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-
-#pragma mark - Message sending
-
-- (void)sendMessageToUser:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    
-    if ([command.arguments count] > 1) {
-        
-        NSObject *message = [command.arguments objectAtIndex:0];
-        
-        NSString *userObjectId = [command.arguments objectAtIndex:1];
-        
-        [MASUser getUserByObjectId:userObjectId
-                        completion:
-         ^(MASUser * _Nullable user, NSError * _Nullable error) {
-         
-             if (user && !error) {
-                 
-                 [[MASUser currentUser] sendMessage:message toUser:user
-                        completion:
-                  ^(BOOL success, NSError * _Nullable error) {
-                      
-                      if (success && !error) {
-                          
-                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-                      }
-                      else {
-                          
-                          NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                                      @"errorMessage":[error localizedDescription]};
-                          
-                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                 messageAsDictionary:errorInfo];
-                      }
-                      
-                      [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-                 }];
-             }
-             else {
-              
-                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                             @"errorMessage":[error localizedDescription]};
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                        messageAsDictionary:errorInfo];
-                 
-                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-             }
-        }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = @{@"errorMessage":@"Invalid arguments list"};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                               messageAsDictionary:errorInfo];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-- (void)sendMessageToUserOnTopic:(CDVInvokedUrlCommand *)command
-{
-    __block CDVPluginResult *result;
-    
-    if ([command.arguments count] > 2) {
-        
-        NSObject *message = [command.arguments objectAtIndex:0];
-        
-        NSString *userObjectId = [command.arguments objectAtIndex:1];
-        
-        NSString *topicName = [command.arguments objectAtIndex:2];
-        
-        [MASUser getUserByObjectId:userObjectId
-                        completion:
-         ^(MASUser * _Nullable user, NSError * _Nullable error) {
-             
-             if (user && !error) {
-                 
-                 [[MASUser currentUser] sendMessage:message toUser:user onTopic:topicName
-                        completion:
-                  ^(BOOL success, NSError * _Nullable error) {
-                      
-                      if (success && !error) {
-                          
-                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:YES];
-                      }
-                      else {
-                          
-                          NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                                      @"errorMessage":[error localizedDescription]};
-                          
-                          result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                                 messageAsDictionary:errorInfo];
-                      }
-                      
-                      [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-                  }];
-             }
-             else {
-                 
-                 NSDictionary *errorInfo = @{@"errorCode":[NSNumber numberWithInteger:[error code]],
-                                             @"errorMessage":[error localizedDescription]};
-                 
-                 result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                        messageAsDictionary:errorInfo];
-                 
-                 [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-             }
-         }];
-    }
-    else {
-        
-        NSDictionary *errorInfo = @{@"errorMessage":@"Invalid arguments list"};
-        
-        result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                               messageAsDictionary:errorInfo];
-        
-        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }
-}
-
-
-#pragma mark - Listeners
-
-+ (void)setOnUserMessageReceivedHandler:(OnUserMessageReceivedHandler)messageReceived {
-    
-    _onUserMessageReceivedHandler_ = [messageReceived copy];
-}
-
-
-#pragma mark - Notification observers
-
-- (void)messageReceivedNotification:(NSNotification *)notification
-{
-    MASMessage *myMessage = notification.userInfo[MASConnectaMessageKey];
- 
-    if (_onUserMessageReceivedHandler_) {
-        
-        _onUserMessageReceivedHandler_(myMessage);
-    }
-}
 
 
 #pragma mark - Pub/Sub architecture with MQTT
@@ -818,75 +573,75 @@ static OnMQTTClientDisconnectHandler _onDisconnectHandler_ = nil;
     
     __block MASConnectaPlugin *blockSelf = self;
     
-    [MASConnectaPlugin setOnUserMessageReceivedHandler:^(MASMessage *message) {
-        
-        if (message && ![message.topic hasSuffix:@"error"]) {
-            
-            NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
-            
-            message.version ?
-                [messageInfo setObject:message.version forKey:@"Version"] :
-                [messageInfo setObject:@"" forKey:@"Version"];
-            
-            message.topic ?
-                [messageInfo setObject:message.topic forKey:@"Topic"] :
-                [messageInfo setObject:@"" forKey:@"Topic"];
-            
-            message.receiverObjectId ?
-                [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"] :
-                [messageInfo setObject:@"" forKey:@"ReceiverId"];
-            
-            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.senderType]
-                            forKey:@"SenderType"];
-            
-            message.senderObjectId ?
-                [messageInfo setObject:message.senderObjectId forKey:@"SenderId"] :
-                [messageInfo setObject:@"" forKey:@"SenderId"];
-            
-            message.senderDisplayName ?
-                [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"] :
-                [messageInfo setObject:@"" forKey:@"DisplayName"];
-            
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
-            
-            NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
-            
-            sentTimeStr ? [messageInfo setObject:sentTimeStr forKey:@"SentTime"] :
-                            [messageInfo setObject:@"" forKey:@"SentTime"];
-            
-            NSString *payloadStr =
-                [[NSString alloc] initWithData:message.payload encoding:NSUTF8StringEncoding];
-            
-            payloadStr ? [messageInfo setObject:payloadStr forKey:@"Payload"] :
-                            [messageInfo setObject:@"" forKey:@"Payload"];
-
-            message.contentType ?
-                [messageInfo setObject:message.contentType forKey:@"ContentType"] :
-                [messageInfo setObject:@"" forKey:@"ContentType"];
-            
-            message.contentEncoding ?
-                [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"] :
-                [messageInfo setObject:@"" forKey:@"ContentEncoding"];
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
-                                   messageAsDictionary:messageInfo];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        else {
-            
-            NSDictionary *errorInfo =
-            @{@"errorMessage":@"Error receiving message as nil"};
-            
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
-                                   messageAsDictionary:errorInfo];
-            
-            [result setKeepCallbackAsBool:YES];
-        }
-        
-        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
-    }];
+//    [MASConnectaPlugin setOnUserMessageReceivedHandler:^(MASMessage *message) {
+//        
+//        if (message && ![message.topic hasSuffix:@"error"]) {
+//            
+//            NSMutableDictionary *messageInfo = [NSMutableDictionary dictionary];
+//            
+//            message.version ?
+//                [messageInfo setObject:message.version forKey:@"Version"] :
+//                [messageInfo setObject:@"" forKey:@"Version"];
+//            
+//            message.topic ?
+//                [messageInfo setObject:message.topic forKey:@"Topic"] :
+//                [messageInfo setObject:@"" forKey:@"Topic"];
+//            
+//            message.receiverObjectId ?
+//                [messageInfo setObject:message.receiverObjectId forKey:@"ReceiverId"] :
+//                [messageInfo setObject:@"" forKey:@"ReceiverId"];
+//            
+//            [messageInfo setObject:[NSNumber numberWithUnsignedInteger:message.senderType]
+//                            forKey:@"SenderType"];
+//            
+//            message.senderObjectId ?
+//                [messageInfo setObject:message.senderObjectId forKey:@"SenderId"] :
+//                [messageInfo setObject:@"" forKey:@"SenderId"];
+//            
+//            message.senderDisplayName ?
+//                [messageInfo setObject:message.senderDisplayName forKey:@"DisplayName"] :
+//                [messageInfo setObject:@"" forKey:@"DisplayName"];
+//            
+//            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//            [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];
+//            
+//            NSString *sentTimeStr = [dateFormat stringFromDate:message.sentTime];
+//            
+//            sentTimeStr ? [messageInfo setObject:sentTimeStr forKey:@"SentTime"] :
+//                            [messageInfo setObject:@"" forKey:@"SentTime"];
+//            
+//            NSString *payloadStr =
+//                [[NSString alloc] initWithData:message.payload encoding:NSUTF8StringEncoding];
+//            
+//            payloadStr ? [messageInfo setObject:payloadStr forKey:@"Payload"] :
+//                            [messageInfo setObject:@"" forKey:@"Payload"];
+//
+//            message.contentType ?
+//                [messageInfo setObject:message.contentType forKey:@"ContentType"] :
+//                [messageInfo setObject:@"" forKey:@"ContentType"];
+//            
+//            message.contentEncoding ?
+//                [messageInfo setObject:message.contentEncoding forKey:@"ContentEncoding"] :
+//                [messageInfo setObject:@"" forKey:@"ContentEncoding"];
+//            
+//            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+//                                   messageAsDictionary:messageInfo];
+//            
+//            [result setKeepCallbackAsBool:YES];
+//        }
+//        else {
+//            
+//            NSDictionary *errorInfo =
+//            @{@"errorMessage":@"Error receiving message as nil"};
+//            
+//            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+//                                   messageAsDictionary:errorInfo];
+//            
+//            [result setKeepCallbackAsBool:YES];
+//        }
+//        
+//        [blockSelf.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+//    }];
     
     [MASConnectaPlugin setOnConnectedHandler:^(MQTTConnectionReturnCode rc) {
         
