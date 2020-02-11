@@ -18,12 +18,6 @@ var MASPluginMQTTClient = function (clientId, masMQTTConstants) {
 	this.clientId = clientId;
     this.masMQTTConstants = masMQTTConstants;
 
-    // Initialize the client
-    if (this.clientId) {
-		this.initializeMQTTClient(function(){}, function(){}, this.clientId, (this.masMQTTConstants ? this.masMQTTConstants.cleanSession : true));
-    }
-
-	
 	/**
     * Initializes the MQTT client.
     * @memberOf MASPluginMQTTClient

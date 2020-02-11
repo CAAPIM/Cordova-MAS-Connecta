@@ -88,20 +88,6 @@
                 });
             });
 
-            $("#setGrantFlowPassword").bind("click", function(event, ui) {
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MAS = new MASPlugin.MAS();
-                MAS.grantFlow(function(result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }, MASPlugin.MASGrantFlow.MASGrantFlowPassword);
-            });
-
             $("#setConfigName").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -180,127 +166,6 @@
                     }, MASPlugin.MASGrantFlow.MASGrantFlowClientCredentials);
             });
 
-            $("#userLogin").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var username = $("input[name='userLoginUsername']").val();
-                var password = $("input[name='userLoginPassword']").val();
-                MASPluginUser.loginWithUsernameAndPassword(function(result) {
-                        thisElement.removeClass("success").removeClass("failure").addClass(
-                            "success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass(
-                            "failure");
-                        displayError(thisElement, error);
-                    }, username, password);
-            });
-
-            $("#isUserAuthenticated").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                MASPluginUser.currentUser(function(result) {
-                        result.isAuthenticated(function(result) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "success");
-                                displayResult(thisElement, result);
-                            },
-                            function(error) {
-                                thisElement.removeClass("success").removeClass("failure").addClass(
-                                    "failure");
-                                displayError(thisElement, error);
-                            });
-                    },
-                    function(error) {
-                        thisElement.removeClass("success").removeClass("failure").addClass(
-                            "failure");
-                        displayError(thisElement, error);
-                    });
-            });
-
-            $("#isDeviceRegistered").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.isDeviceRegistered(function(result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }
-                );
-            });
-
-			$("#userLogoutForce").bind("click", function(event, ui) {
-                 if ($(event.target).context.tagName != 'A') return;
-
-                 $(this).find("textarea.error").hide();
-
-                 var thisElement = $(this);
-                 var force = thisElement.find("select[name='enableForceBool']").val();
-
-                 MASPluginUser.currentUser(function(currentUser) {
-                         currentUser.logout(function(result) {
-                                 thisElement.removeClass("success").removeClass("failure").addClass("success");
-                                 displayResult(thisElement, result);
-                             },
-                             function(error) {
-                                 thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                                 displayError(thisElement, error);
-                             }, force);
-                     },
-                     function(error) {
-                         if(error !== 'undefined' && error.errorMessage !== 'undefined' && error.errorMessage === 'No currently authenticated user.'){
-                            error.errorMessage = "Logoff user complete";
-                            thisElement.removeClass("success").removeClass("failure").addClass("success");
-                            displayError(thisElement, error);
-                         }else{
-                            thisElement.removeClass("success").removeClass("failure").addClass("failure");
-                            displayError(thisElement, error);
-                         }
-                     });
-             });
-
-            $("#deregisterDevice").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.deregister(function(result) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                        displayResult(thisElement, result);
-                    },
-                    function(error) {
-                        thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                        displayError(thisElement, error);
-                    }
-                );
-            });
-
-            $("#resetLocally").bind("click", function(event, ui) {
-                if ($(event.target).context.tagName != 'A') return;
-                $(this).find("textarea.error").hide();
-                var thisElement = $(this);
-                var MASDevice = new MASPlugin.MASDevice();
-                MASDevice.resetLocally(function(result) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("success");
-                    displayResult(thisElement, result);
-                }, function(error) {
-                    thisElement.removeClass("succes").removeClass("failure").addClass("failure");
-                    displayError(thisElement, error);
-                });
-            });
-
-           
-
-            
-
             $("#connectBroker").bind("click", function(event, ui) {
                 if ($(event.target).context.tagName != 'A') return;
                 $(this).find("textarea.error").hide();
@@ -339,6 +204,7 @@
                 masMQTTConstants.setWillToTopic(willMessage, willTopic, willQos, retained);
 
                 var masMQTTClient = new MASConnectaPlugin.MASMQTTClient(clientId, masMQTTConstants);
+                masMQTTClient.initializeMQTTClient(function(){}, function(){}, clientId, masMQTTConstants ? masMQTTConstants.cleanSession : true);
 
                 masMQTTClient.connect(function(result) {
                         thisElement.removeClass("succes").removeClass("failure").addClass("success");
@@ -625,12 +491,6 @@
                         </a>
                     </li>
                     <li data-icon="false">
-                        <a href="#" id="setGrantFlowPassword">MAS GrantFlow: password
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
                         <a href="#" id="setConfigName">MAS set configuration file name
                             <input type="text" name="configName" placeholder="configName"/>
                                 <textarea class='error' style="display:none;" readonly="">
@@ -661,52 +521,6 @@
                     </li>
                     <li data-icon="false">
                         <a href="#" id="stop">MAS stop
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
-                        <a href="#" id="userLogin">MASUser login with username and password
-                            <input type="text" name="userLoginUsername" placeholder="userLoginUsername:username"/>
-                            <input type="text" name="userLoginPassword" placeholder="userLoginUsername:password"/>
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
-                        <a href="#" id="isUserAuthenticated">MASUser isAuthenticated
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
-                        <a href="#" id="isDeviceRegistered">MASDevice isDeviceRegistered
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-					  <li data-role="collapsible" data-iconpos="right" data-inset="false">
-						<h2>MASUser logout</h2>
-						<ul data-role="listview" data-theme="b">
-							<li data-icon="false">
-								<a href="#" id="userLogoutForce">MASUser Logout With Force
-									<select id="enableForceBool" name="enableForceBool">
-										<option value="true">True</option>
-										<option value="false">False</option>
-									</select>
-									<textarea class='error' style="display:none;" readonly=""></textarea>
-								</a>
-							</li>
-						</ul>
-					  </li>
-                    <li data-icon="false">
-                        <a href="#" id="deregisterDevice">MASDevice deregister
-                                <textarea class='error' style="display:none;" readonly="">
-                                </textarea>
-                        </a>
-                    </li>
-                    <li data-icon="false">
-                        <a href="#" id="resetLocally">MASDevice resetLocally
                                 <textarea class='error' style="display:none;" readonly="">
                                 </textarea>
                         </a>
