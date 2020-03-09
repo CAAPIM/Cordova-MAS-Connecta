@@ -49,15 +49,6 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         <header-file src="src/ios/MASPluginMQTTMessage.h" />
         <source-file src="src/ios/MASPluginMQTTMessage.m" />
 
-        <podspec> 
-            <config>
-                <source url="https://github.com/CocoaPods/Specs.git"/>
-            </config>
-            <pods use-frameworks="true" >
-                <pod name="MASConnecta" spec="~> 2.1.00" />
-            </pods>
-        </podspec>
-
     </platform>
 
     <!-- Android -->
