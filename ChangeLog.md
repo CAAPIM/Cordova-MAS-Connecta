@@ -1,3 +1,18 @@
+# Version 2.1.00
+
+### Bug fixes
+- None
+
+### New features
+- None
+
+### Deprecated methods
+- None
+
+### Removed methods
+- User-to-User messaging removed. Only support for MQTT connect available.
+
+
 # Version 2.0.00
 
 ### Bug fixes

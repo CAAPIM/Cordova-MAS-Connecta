@@ -1,17 +1,16 @@
 # Cordova-MAS-Connecta
-Cordova-MAS-Connecta is the core messaging framework of the Cordova Mobile SDK, which is part of the CA Mobile API Gateway. It gives developers the ability to create social collaborative apps where users can message and send data to each other.
+Cordova-MAS-Connecta is the core messaging framework of the Layer7 Cordova Mobile SDK, which is part of the Layer7 Mobile API Gateway. It gives developers the ability to create social collaborative apps where users can subscribe and publish to a topic directly connecting to a MQTT broker, or via Layer7 Mobile API Gateway serving as a MQTT proxy.
 *********************************************************
 
 ## Features
 
 The MAS Connecta framework comes with the following features:
 
-- Secure and reliable User to User messaging
-- MQTT client with built-in mutual SSL and OAuth support
-*********************************************************
+- MQTT client with built-in mutual SSL
+**************************************
 
 ## Get Started
-Follow our [documentation](http://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-0.html) to install Cordova and set up iOS and Android projects.
+Follow our [documentation](https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-1/Cordova/Cordova_2-1.html) to install Cordova and set up iOS and Android projects.
 *********************************************************
 
 ## How You Can Contribute
@@ -22,7 +21,7 @@ The reference documents for the MAS modules are generated using the JSDoc markdo
 
 To install JSDoc, follow the instructions on [JSDoc](http://usejsdoc.org/) website.
 
-The Cordova reference documents are available at our [techdocs]( http://mas.ca.com/docs/cordova/latest/sdk/) site.
+The Cordova reference documents are available at our [techdocs]( https://techdocs.broadcom.com/content/broadcom/techdocs/us/en/ca-enterprise-software/layer7-api-management/mobile-sdk-for-ca-mobile-api-gateway/2-1/Cordova/CordovaTR_2-1/MASConnecta.html) site.
 
 Example:
 An annotated comment for validateOTP method is as follows:
